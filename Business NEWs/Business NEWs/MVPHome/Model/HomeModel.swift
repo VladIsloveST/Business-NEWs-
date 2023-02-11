@@ -1,5 +1,5 @@
 //
-//  Presenter.swift
+//  HomeModel.swift
 //  Business NEWs
 //
 //  Created by Mac on 11.02.2023.
