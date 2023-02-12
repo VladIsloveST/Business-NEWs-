@@ -9,9 +9,15 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    // MARK: - Public Properties
+    // MARK: - Properties
     
-    private let sections = MockData.shared.articleData
+    private var sections = MockData.shared.articleData
+    
+    private let myRefreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
     
     // MARK: - IBOutlets
     
@@ -19,6 +25,7 @@ class HomeViewController: UIViewController {
         didSet {
             newsCollectionView.dataSource = self
             newsCollectionView.delegate = self
+            newsCollectionView.refreshControl = myRefreshControl
         }
     }
     
@@ -26,19 +33,26 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         newsCollectionView.collectionViewLayout = createLayout()
-        
     }
     
     // MARK: - Private Methods
+    
+    @objc private func refresh(sender: UIRefreshControl) {
+        let newPortrait = SectionType.portrait([Article(title: "")])
+        sections.append(newPortrait)
+        
+        newsCollectionView.reloadData()
+        sender.endRefreshing()
+    }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [ weak self ] sectionIndex, layoutEnvironment in
             guard let self = self else { return nil }
             let section = self.sections[sectionIndex]
             switch section {
-            case .portrait:
+            case .story:
                 let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(70), heightDimension: .absolute(70)), subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
@@ -48,7 +62,7 @@ class HomeViewController: UIViewController {
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
                 section.supplementariesFollowContentInsets = false
                 return section
-            case .story:
+            case .portrait:
                 let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalHeight(0.6)), subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
@@ -57,7 +71,6 @@ class HomeViewController: UIViewController {
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
                 section.supplementariesFollowContentInsets = false
                 return section
-            
             }
         }
     }

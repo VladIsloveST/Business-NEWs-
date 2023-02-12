@@ -14,21 +14,11 @@ struct MockData {
     private let portraits: SectionType = {
         .portrait([ .init(title: ""),
                     .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: "")
         ])
-        
     }()
-    private let story: SectionType = {
+    
+    private let stories: SectionType = {
         .story([ .init(title: ""),
-                 .init(title: ""),
-                 .init(title: ""),
                  .init(title: ""),
                  .init(title: ""),
                  .init(title: ""),
@@ -37,7 +27,9 @@ struct MockData {
         ])
     }()
     
+    
+    
     var articleData: [SectionType] {
-        [portraits, story]
+        [stories, portraits]
     }
 }
