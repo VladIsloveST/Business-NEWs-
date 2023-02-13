@@ -96,11 +96,11 @@ extension HomeViewController: UICollectionViewDataSource {
         switch sections[indexPath.section] {
             
         case .portrait(_):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "portraitCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "portraitCell", for: indexPath) as! PortraitCollectionViewCell
             
             return cell
         case .story(_):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath) as! StoryCollectionViewCell
             return cell
         }
     }
