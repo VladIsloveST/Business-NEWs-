@@ -7,89 +7,52 @@
 
 import Foundation
 
-enum Result<T> {
-    case success(T?)
-    case fail(String)
+enum NetworkError: Error {
+    case statusCodeIsUnknown
+    case emptyData
+    case errorWithData
+    case stusCode(_ statusCode: Int)
+    
 }
-/*
-class NetworkManager {
-    private let baseUrl = "https://todolistmy.mocklab.io/"
-    
-    func fetchAllTaks(complition: @escaping((Result<[Task]>) -> Void)) {
-        let allListMethod = "alllist"
-       fetchRequest(methodPath: allListMethod, complition: complition)
-    }
-    
-    func fetchShoppingList(complition: @escaping((Result<[ShoppingList]>) -> Void)) {
-            let shoppinglistsMethod = "shoppinglists"
-            fetchRequest(methodPath: shoppinglistsMethod, complition: complition)
-    }
-    
-    func fetchDoneTasks(complition: @escaping((Result<[Task]>) -> Void)) {
-        let doneListMethod = "alllist?status=done"
-        fetchRequest(methodPath: doneListMethod, complition: complition)
+
+protocol NetworkServiceProtocol {
+    func getArticle(complition: @escaping ( Result<[Article]?, Error> )-> Void)
 }
+
+class NetworkService: NetworkServiceProtocol {
+    private let baseApiKey = "e70eac065c3b4e8b9520a03dc1643d26"
     
-    func addTask(with name: String, taskDescr: String, complition: @escaping((Result<String>) -> Void)) {
-        let methodPath = "addtask"
-        fetchRequest(
-            methodPath: methodPath,
-            httpMethod: "POST",
-            httpBody: configRequestBody(params: [
-                "name" : name,
-                "description": taskDescr
-            ]),
-            complition: complition
-        )
-    }
-    
-    private func fetchRequest<T: Codable>(
-        methodPath: String,
-        httpMethod: String = "GET",
-        httpBody: Data? = nil,
-        complition: @escaping((Result<T>) -> Void)
-    ) {
-        guard let allListMethodUrl = URL(string: baseUrl + methodPath) else {
-            return
-        }
+    func getArticle(complition: @escaping (Result<[Article]?, Error>) -> Void) {
+        let urlTechCrunch = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey="
+        guard let url = URL(string: urlTechCrunch + baseApiKey) else { return }
         
-        var request = URLRequest(url: allListMethodUrl)
-        request.httpMethod = httpMethod
-        request.httpBody = httpBody
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, response, error in
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                complition(.fail("Statuscode is unknown"))
+                complition(.failure(NetworkError.statusCodeIsUnknown))
                 return
             }
             
-            if error != nil  {
-                complition(.fail("error\(error)"))
+            if let error = error {
+                complition(.failure(error))
                 return
             }
             
             if statusCode >= 200 && statusCode <= 299 {
                 guard let data = data else {
-                    complition(.fail("empty data"))
+                    complition(.failure(NetworkError.emptyData))
                     return
                 }
                 
-                let decoder = JSONDecoder()
-                if let result = try? decoder.decode(T.self, from: data) {
+                do {
+                    let result = try JSONDecoder().decode([Article].self, from: data)
                     complition(.success(result))
-                } else { complition(.fail("error with data")) }
+                } catch {
+                    complition(.failure(NetworkError.errorWithData))
+                }
             } else {
-                complition(.fail("Stus code\(statusCode)"))
+                complition(.failure(NetworkError.stusCode(statusCode)))
             }
         }.resume()
     }
-    
-    func configRequestBody(params: [String: String]?) -> Data? {
-        guard let params = params else {
-            return nil
-        }
-        
-        return try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
-    }
 }
-*/
+
