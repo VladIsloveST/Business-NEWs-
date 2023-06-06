@@ -21,17 +21,16 @@ class SelectedArticlesViewController: UIViewController {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var newsCollectionView: UICollectionView! {
-        didSet {
-            newsCollectionView.dataSource = self
-            newsCollectionView.delegate = self
-        }
-    }
+    @IBOutlet weak var newsCollectionView: UICollectionView!
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        newsCollectionView.dataSource = self
+        newsCollectionView.delegate = self
+        
         newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
     }
@@ -39,7 +38,7 @@ class SelectedArticlesViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func refresh(sender: UIRefreshControl) {
-        let newPortrait = types.append(.portrait([Article(title: "")]))
+        types.append(.portrait([ArticleData(title: "")]))
         newsCollectionView.reloadData()
         sender.endRefreshing()
     }

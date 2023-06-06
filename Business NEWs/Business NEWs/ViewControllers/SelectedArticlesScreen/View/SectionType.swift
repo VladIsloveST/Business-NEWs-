@@ -8,8 +8,8 @@
 import Foundation
 
 enum SectionType {
-    case portrait([Article])
-    case story([Article])
+    case portrait([ArticleData])
+    case story([ArticleData])
     
     var name: String {
         switch self {
