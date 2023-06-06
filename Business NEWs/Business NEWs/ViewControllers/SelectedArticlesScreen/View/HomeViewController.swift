@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class SelectedArticlesViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -86,7 +86,7 @@ class HomeViewController: UIViewController {
 
 // MARK: - Collection View Data Source
 
-extension HomeViewController: UICollectionViewDataSource {
+extension SelectedArticlesViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return types.count
     }
@@ -131,6 +131,6 @@ extension HomeViewController: UICollectionViewDataSource {
 
 // MARK: - Collection View Delegate
 
-extension HomeViewController: UICollectionViewDelegate {
+extension SelectedArticlesViewController: UICollectionViewDelegate {
     
 }
