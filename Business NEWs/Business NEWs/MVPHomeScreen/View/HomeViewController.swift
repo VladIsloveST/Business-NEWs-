@@ -11,7 +11,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var sections = MockData.shared.articleData
+    private var types = MockData.shared.articleData
     
     private let myRefreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -25,7 +25,6 @@ class HomeViewController: UIViewController {
         didSet {
             newsCollectionView.dataSource = self
             newsCollectionView.delegate = self
-            newsCollectionView.refreshControl = myRefreshControl
         }
     }
     
@@ -33,50 +32,55 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
     }
     
     // MARK: - Private Methods
     
     @objc private func refresh(sender: UIRefreshControl) {
-        let newPortrait = SectionType.portrait([Article(title: "")])
-        sections.append(newPortrait)
-        
+        let newPortrait = types.append(.portrait([Article(title: "")]))
         newsCollectionView.reloadData()
         sender.endRefreshing()
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { [ weak self ] sectionIndex, layoutEnvironment in
+        UICollectionViewCompositionalLayout { [ weak self ] sectionIndex, _ in
             guard let self = self else { return nil }
-            let section = self.sections[sectionIndex]
+            let section = self.types[sectionIndex]
             switch section {
             case .story:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(70), heightDimension: .absolute(70)), subitems: [item])
-                let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .continuous
-                section.interGroupSpacing = 10
-                section.contentInsets = .init(top: 0, leading: 10, bottom: 30, trailing: 10)
+                let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                          height: .fractionalHeight(1))
+                let group = CompositionalLayout.createGroup(aligment: .horizontal,
+                                                            width: .absolute(70),
+                                                            height: .absolute(70),
+                                                            subitems: item)
+                let section = CompositionalLayout.createSection(group: group,
+                                                                interGroupSpacing: 10,
+                                                                scrollingBehavior: .continuous)
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
-                section.supplementariesFollowContentInsets = false
                 return section
             case .portrait:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalHeight(0.6)), subitems: [item])
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 10
-                section.contentInsets = .init(top: 0, leading: 10, bottom: 30, trailing: 10)
+                let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                          height: .fractionalHeight(1))
+                let group = CompositionalLayout.createGroup(aligment: .vertical,
+                                                            width: .fractionalWidth(0.9),
+                                                            height: .fractionalWidth(0.6),
+                                                            subitems: item)
+                let section = CompositionalLayout.createSection(group: group,
+                                                                interGroupSpacing: 10)
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
-                section.supplementariesFollowContentInsets = false
                 return section
             }
         }
     }
     
     private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementaryItem {
-        .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                heightDimension: .estimated(50)),
+              elementKind: UICollectionView.elementKindSectionHeader,
+              alignment: .top)
     }
 }
 
@@ -84,21 +88,29 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sections.count
+        return types.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].count
+        types[section].count
     }
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        switch sections[indexPath.section] {
+        switch types[indexPath.section] {
             
         case .portrait(_):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "portraitCell", for: indexPath) as! PortraitCollectionViewCell
+            switch indexPath.item {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath) as! StoryCollectionViewCell
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "portraitCell", for: indexPath) as! PortraitCollectionViewCell
+                
+                return cell
+            }
             
-            return cell
+            
         case .story(_):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath) as! StoryCollectionViewCell
             return cell
@@ -109,7 +121,7 @@ extension HomeViewController: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerReusableView", for: indexPath) as! CollectionViewHeaderReusableView
-            header.headerLabel.text = sections[indexPath.section].name
+            header.headerLabel.text = types[indexPath.section].name
             return header
         default:
             return UICollectionReusableView()

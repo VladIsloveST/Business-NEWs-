@@ -11,9 +11,9 @@ struct MockData {
     
     static let shared = MockData()
     
-    private let portraits: SectionType = {
+    private var portraits: SectionType = {
         .portrait([ .init(title: ""),
-                    .init(title: ""),
+                    .init(title: "")
         ])
     }()
     
@@ -27,9 +27,8 @@ struct MockData {
         ])
     }()
     
-    
-    
-    var articleData: [SectionType] {
+    var articleData: [SectionType] {  // computed property
         [stories, portraits]
     }
+    
 }

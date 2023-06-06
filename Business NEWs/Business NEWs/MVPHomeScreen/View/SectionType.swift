@@ -11,17 +11,6 @@ enum SectionType {
     case portrait([Article])
     case story([Article])
     
-    var items: [Article] {
-        switch self {
-        case .portrait(let items), .story(let items):
-            return items
-        }
-    }
-    
-    var count: Int {
-        return items.count
-    }
-    
     var name: String {
         switch self {
         case .portrait:
@@ -30,4 +19,12 @@ enum SectionType {
             return "story"
         }
     }
+    
+    var count: Int {
+        switch self {
+        case let .portrait(items), let .story(items):
+            return items.count
+        }
+    }
+
 }
