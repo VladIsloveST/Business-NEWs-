@@ -80,7 +80,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="newsCollectionView" destination="yEq-FF-gO9" id="nv5-f4-5oW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
