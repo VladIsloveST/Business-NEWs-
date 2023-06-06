@@ -16,15 +16,16 @@ enum NetworkError: Error {
 }
 
 protocol NetworkServiceProtocol {
-    func getArticle(complition: @escaping ( Result<[Article]?, Error> )-> Void)
+    func getArticle(complition: @escaping ( Result<Articles, Error> )-> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
+    
     private let baseApiKey = "e70eac065c3b4e8b9520a03dc1643d26"
     
-    func getArticle(complition: @escaping (Result<[Article]?, Error>) -> Void) {
-        let urlTechCrunch = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey="
-        guard let url = URL(string: urlTechCrunch + baseApiKey) else { return }
+    func getArticle(complition: @escaping (Result<Articles, Error>) -> Void) {
+        let urlTechCrunch = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=" + baseApiKey
+        guard let url = URL(string: urlTechCrunch) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
@@ -44,7 +45,7 @@ class NetworkService: NetworkServiceProtocol {
                 }
                 
                 do {
-                    let result = try JSONDecoder().decode([Article].self, from: data)
+                    let result = try JSONDecoder().decode(Articles.self, from: data)
                     complition(.success(result))
                 } catch {
                     complition(.failure(NetworkError.errorWithData))

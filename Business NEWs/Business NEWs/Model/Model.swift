@@ -7,13 +7,17 @@
 
 import Foundation
 
-struct Article: Codable {
+struct Articles: Codable {
+    let articles: [ArticleData]
+}
+
+struct ArticleData: Codable {
 //    let source: Source
 //    let autor: String
     let title: String
-//    let description: String
-//    let url: URL
-//    let urlToImage: URL
+//    let description: String?
+//    let url: String?
+//    let urlToImage: String?
 //    let publishedAt: String
 //    let content: String
 }
