@@ -28,9 +28,6 @@ class SelectedArticlesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        newsCollectionView.dataSource = self
-        newsCollectionView.delegate = self
-        
         newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
     }

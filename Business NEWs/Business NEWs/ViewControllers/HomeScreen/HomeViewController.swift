@@ -11,6 +11,10 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var articlesTableView: UITableView!
     
+    private let menuCollectionView = MenuCollectionView()
+    
+    var presenter: ViewOutPut!
+    
     lazy var activityIndicatory: UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView(style: .large)
         activityView.frame = CGRect(x: view.center.x - 25,
@@ -22,11 +26,26 @@ class HomeViewController: UIViewController {
         return activityView
     }()
     
-    var presenter: ViewOutPut!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        articlesTableView.contentInset.top = 61
+        articlesTableView.horizontalScrollIndicatorInsets.top = 60
+        
         activityIndicatory.startAnimating()
+        //searchBar.delegate = self
+        setupMenu()
+    }
+    
+    private func setupMenu() {
+        view.addSubview(menuCollectionView)
+        
+        menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            menuCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
+            menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
+            menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
 }
 
@@ -45,6 +64,14 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        
+        print(text)
+    }
 }
 
 extension HomeViewController: ViewInPut {
