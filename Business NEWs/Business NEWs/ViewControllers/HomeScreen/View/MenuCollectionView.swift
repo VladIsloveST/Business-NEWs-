@@ -18,15 +18,16 @@ class MenuCollectionView: UICollectionView {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
         
         configure()
+     //   setupHorizontalBar()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+   
+    
     private func configure() {
-        //categoryFlowLayout.minimumInteritemSpacing = 0
-        //categoryFlowLayout.scrollDirection = .horizontal
         self.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
         backgroundColor = .none

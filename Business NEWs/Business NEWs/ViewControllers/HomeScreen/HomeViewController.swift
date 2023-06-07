@@ -29,12 +29,47 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //articlesTableView.bounces = false
+        
         articlesTableView.contentInset.top = 61
         articlesTableView.horizontalScrollIndicatorInsets.top = 60
         
         activityIndicatory.startAnimating()
-        //searchBar.delegate = self
         setupMenu()
+        setupNavBarButtons()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+       // navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "Home"
+    }
+    
+    private func setupNavBarButtons() {
+        let searchImage = UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysOriginal)
+        let searchBarButtonItem = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(handleSearch))
+        
+        let moreImage = UIImage(systemName: "ellipsis")?.withRenderingMode(.alwaysOriginal)
+        let moreButtonItem = UIBarButtonItem(image: moreImage, style: .plain, target: self, action: #selector(handleMore))
+        navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
+        
+        let menuImage = UIImage(systemName: "line.horizontal.3")?.withRenderingMode(.alwaysOriginal)
+        let menuButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: #selector(handleMenu))
+        navigationItem.leftBarButtonItem = menuButtonItem
+    }
+    
+    @objc func handleMenu() {
+        
+    }
+    
+    @objc func handleSearch() {
+        let searchViewController = SearchViewController()
+        navigationController?.pushViewController(searchViewController, animated: true)
+    }
+    
+    @objc func handleMore() {
+        print(321)
     }
     
     private func setupMenu() {
