@@ -11,11 +11,11 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var articlesTableView: UITableView!
     
-    private let menuCollectionView = MenuCollectionView()
-    
     var presenter: ViewOutPut!
     
-    let loadingIndicator: ProgressView = {
+    private let menuCollectionView = MenuCollectionView()
+    
+    private let loadingIndicator: ProgressView = {
         let progress = ProgressView(lineWidth: 5)
         progress.translatesAutoresizingMaskIntoConstraints = false
         return progress
@@ -24,10 +24,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        articlesTableView.bounces = false
         navigationItem.title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        articlesTableView.bounces = false
         articlesTableView.contentInset.top = 70
         articlesTableView.horizontalScrollIndicatorInsets.top = 60
         
@@ -66,7 +66,7 @@ class HomeViewController: UIViewController {
     
     private func setupIndicatot() {
         view.addSubview(loadingIndicator)
-
+        
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor
                 .constraint(equalTo: self.view.centerXAnchor),
@@ -81,35 +81,68 @@ class HomeViewController: UIViewController {
     
     private func setupMenu() {
         view.addSubview(menuCollectionView)
-        
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            menuCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
-            
-            menuCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            menuCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
+            menuCollectionView.topAnchor
+                .constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor,
+                            multiplier: 0),
+            menuCollectionView.widthAnchor
+                .constraint(equalToConstant: view.frame.width),
+            menuCollectionView.heightAnchor
+                .constraint(equalToConstant: 60)
         ])
     }
 }
 
+// MARK: - Table View Data Source
+
 extension HomeViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        presenter.typesOfArticles.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.articles?.articles.count ?? 0
+        presenter.typesOfArticles[section].numberOfArticles
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = articlesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let article = presenter.articles?.articles[indexPath.row]
-        cell.textLabel?.text = article?.title
-        return cell
+        let typesOfArticles = presenter.typesOfArticles[indexPath.section]
+        switch typesOfArticles {
+        case .apple(let appleType):
+            let techCrunch = appleType.articles[indexPath.row]
+            let cell = articlesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = techCrunch.title
+            return cell
+            
+        case .business(let businessType):
+            let techCrunch = businessType.articles[indexPath.row]
+            let cell = articlesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = techCrunch.title
+            return cell
+            
+        case .techCrunch(let techCrunchType):
+            let techCrunch = techCrunchType.articles[indexPath.row]
+            let cell = articlesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = techCrunch.title
+            return cell
+            
+        case .wallStreet(let wallStreetType):
+            let techCrunch = wallStreetType.articles[indexPath.row]
+            let cell = articlesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = techCrunch.title
+            return cell
+        }
     }
 }
+
+// MARK: - Table View Delegate
 
 extension HomeViewController: UITableViewDelegate {
     
 }
+
+// MARK: - Search Bar Delegate
 
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

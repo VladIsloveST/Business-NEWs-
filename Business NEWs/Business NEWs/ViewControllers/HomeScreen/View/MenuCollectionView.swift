@@ -56,7 +56,6 @@ class MenuCollectionView: UICollectionView {
     
     private func configure() {
         
-        backgroundColor = .none
         translatesAutoresizingMaskIntoConstraints = false
         bounces = false
         showsHorizontalScrollIndicator = false
@@ -75,6 +74,10 @@ extension MenuCollectionView: UICollectionViewDelegate {
         
         let x = CGFloat(indexPath.item) * frame.width/4
         leftAnchorConstraint.constant = x
+        
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
     }
 }
 

@@ -13,23 +13,20 @@ class MenuCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont(name: "Devanagari Sangam MN Bold", size: 18)
+        label.font = UIFont(name: "Helvetica Neue Medium", size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    
     override var isSelected: Bool {
         didSet {
             nameCategoryLabel.font = self.isSelected ?
-            UIFont(name: "Arial Bold", size: 18) : UIFont(name: "Devanagari Sangam MN Bold", size: 18)
-            
+            UIFont(name: "Helvetica Neue Bold", size: 18) : UIFont(name: "Helvetica Neue Medium", size: 18)
         }
     }
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        
         setupViews()
         setConstrains()
     }
@@ -45,7 +42,8 @@ class MenuCollectionViewCell: UICollectionViewCell {
     
     private func setConstrains() {
         NSLayoutConstraint.activate([
-            nameCategoryLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            nameCategoryLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
+            nameCategoryLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
             nameCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
