@@ -13,16 +13,17 @@ protocol ViewInPut: AnyObject {
 }
 
 protocol ViewOutPut: AnyObject {
+    var typesOfArticles: [TypeOfArticles] { get set }
     init(view: ViewInPut, networkService: NetworkServiceProtocol)
     func getArticles()
-    var articles: Articles? { get set }
 }
 
 class Presenter: ViewOutPut {
     
     weak var view: ViewInPut?
-    let networkService: NetworkServiceProtocol
-    var articles: Articles?
+    private let group = DispatchGroup()
+    private let networkService: NetworkServiceProtocol
+    var typesOfArticles: [TypeOfArticles] = []
     
     required init(view: ViewInPut, networkService: NetworkServiceProtocol) {
         self.view = view
@@ -31,17 +32,60 @@ class Presenter: ViewOutPut {
     }
     
     func getArticles() {
-        networkService.getArticle { [weak self] result in
+        group.enter()
+        networkService.getArticlesFromApple { [weak self] result in
             guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let articles):
-                    self.articles = articles
-                    self.view?.success()
-                case .failure(let error):
-                    self.view?.failer(error: error)
-                }
+                        
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.apple(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
             }
+            self.group.leave()
+        }
+        
+        group.enter()
+        networkService.getArticlesFromBusiness { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.business(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
+            }
+            self.group.leave()
+        }
+        
+        group.enter()
+        networkService.getArticlesFromTechCrunch { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.techCrunch(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
+            }
+            self.group.leave()
+        }
+        
+        group.enter()
+        networkService.getArticlesFromWallStreet { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.wallStreet(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
+            }
+            self.group.leave()
+        }
+        
+        group.notify(queue: DispatchQueue.main){
+            self.view?.success()
         }
     }
 }
