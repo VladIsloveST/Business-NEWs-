@@ -15,35 +15,27 @@ class HomeViewController: UIViewController {
     
     var presenter: ViewOutPut!
     
-    lazy var activityIndicatory: UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView(style: .large)
-        activityView.frame = CGRect(x: view.center.x - 25,
-                                    y: view.center.y - 50,
-                                    width: 50,
-                                    height: 50)
-        view.addSubview(activityView)
-        view.isUserInteractionEnabled = false
-        return activityView
+    let loadingIndicator: ProgressView = {
+        let progress = ProgressView(lineWidth: 5)
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        return progress
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //articlesTableView.bounces = false
+        articlesTableView.bounces = false
+        navigationItem.title = "Home"
+        navigationController?.navigationBar.prefersLargeTitles = true
         
-        articlesTableView.contentInset.top = 61
+        articlesTableView.contentInset.top = 70
         articlesTableView.horizontalScrollIndicatorInsets.top = 60
         
-        activityIndicatory.startAnimating()
+        loadingIndicator.isAnimating = true
+        
         setupMenu()
         setupNavBarButtons()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-       // navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "Home"
+        setupIndicatot()
     }
     
     private func setupNavBarButtons() {
@@ -72,13 +64,31 @@ class HomeViewController: UIViewController {
         print(321)
     }
     
+    private func setupIndicatot() {
+        view.addSubview(loadingIndicator)
+
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor
+                .constraint(equalTo: self.view.centerXAnchor),
+            loadingIndicator.centerYAnchor
+                .constraint(equalTo: self.view.centerYAnchor),
+            loadingIndicator.widthAnchor
+                .constraint(equalToConstant: 50),
+            loadingIndicator.heightAnchor
+                .constraint(equalTo: self.loadingIndicator.widthAnchor)
+        ])
+    }
+    
     private func setupMenu() {
         view.addSubview(menuCollectionView)
         
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             menuCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
-            menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
+            
+            menuCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            menuCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
             menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
@@ -111,7 +121,7 @@ extension HomeViewController: UISearchBarDelegate {
 
 extension HomeViewController: ViewInPut {
     func success() {
-        self.activityIndicatory.stopAnimating()
+        loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
         articlesTableView.reloadData()
     }

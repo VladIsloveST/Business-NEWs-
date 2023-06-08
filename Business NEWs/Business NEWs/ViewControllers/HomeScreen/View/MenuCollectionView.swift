@@ -10,25 +10,51 @@ import UIKit
 
 class MenuCollectionView: UICollectionView {
     
-    private let nameCategoryArray = ["Like", "and", "subscribe", "chanel"]
+    private let nameCategoryArray = ["like", "and", "subscribe", "chanel"]
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
+    
+    private var horizontalBarView: UIView = {
+        let horizontalView = UIView()
+        horizontalView.backgroundColor = .black
+        horizontalView.translatesAutoresizingMaskIntoConstraints = false
+        return horizontalView
+    }()
+    
+    private var leftAnchorConstraint = NSLayoutConstraint()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
         
         configure()
-     //   setupHorizontalBar()
+        setupHorizontalBar()
+    }
+    
+    override func layoutSubviews() {
+        super .layoutSubviews()
+        
+        horizontalBarView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 3)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-   
+    private func setupHorizontalBar() {
+        
+        addSubview(horizontalBarView)
+        
+        leftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        
+        NSLayoutConstraint.activate([
+            leftAnchorConstraint,
+            horizontalBarView.topAnchor.constraint(equalTo: self.topAnchor),
+            horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier:  1/4),
+            horizontalBarView.heightAnchor.constraint(equalToConstant: 6)
+        ])
+    }
     
     private func configure() {
-        self.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
         backgroundColor = .none
         translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +72,9 @@ class MenuCollectionView: UICollectionView {
 extension MenuCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
+        
+        let x = CGFloat(indexPath.item) * frame.width/4
+        leftAnchorConstraint.constant = x
     }
 }
 
@@ -62,7 +91,6 @@ extension MenuCollectionView: UICollectionViewDataSource {
         cell.nameCategoryLabel.text = nameCategoryArray[indexPath.item]
         return cell
     }
-
 }
 
 // MARK: - Collection View Delegate Flow Layout
@@ -74,7 +102,7 @@ extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
 //        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
 //        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         
-        return CGSize(width: (frame.width - 40)/4, height: frame.height)
+        return CGSize(width: frame.width/4, height: frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

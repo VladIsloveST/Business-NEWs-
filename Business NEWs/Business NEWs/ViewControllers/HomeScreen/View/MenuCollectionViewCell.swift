@@ -12,24 +12,18 @@ class MenuCollectionViewCell: UICollectionViewCell {
     let nameCategoryLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.textColor = .white
-        label.font = UIFont(name: "Arial Bold", size: 18)
+        label.textColor = .black
+        label.font = UIFont(name: "Devanagari Sangam MN Bold", size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let horizontalBarView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     
     override var isSelected: Bool {
         didSet {
-            backgroundColor = self.isSelected ? .red : .darkGray
-            nameCategoryLabel.textColor = self.isSelected ? .gray : .white
-            horizontalBarView.backgroundColor = self.isSelected ? .black : .none
+            nameCategoryLabel.font = self.isSelected ?
+            UIFont(name: "Arial Bold", size: 18) : UIFont(name: "Devanagari Sangam MN Bold", size: 18)
+            
         }
     }
     
@@ -45,23 +39,14 @@ class MenuCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        horizontalBarView.backgroundColor = .none
-        backgroundColor = .darkGray
+        backgroundColor = .white
         addSubview(nameCategoryLabel)
-        addSubview(horizontalBarView)
     }
     
     private func setConstrains() {
         NSLayoutConstraint.activate([
             nameCategoryLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             nameCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor),
-            horizontalBarView.heightAnchor.constraint(equalToConstant: 5)
         ])
     }
 }
