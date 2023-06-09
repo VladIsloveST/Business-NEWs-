@@ -26,26 +26,6 @@ class NetworkService: NetworkServiceProtocol {
     
     private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     
-    func getArticlesFromApple(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromBusiness(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromTechCrunch(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/top-headlines?sources=techcrunch&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromWallStreet(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/everything?domains=wsj.com&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
     private func getArticlefrom(url: String, complition: @escaping (Result<Articles, Error>) -> Void) {
         let urlTechCrunch = url + baseApiKey
         guard let url = URL(string: urlTechCrunch) else { return }
@@ -77,6 +57,26 @@ class NetworkService: NetworkServiceProtocol {
                 complition(.failure(NetworkError.stusCode(statusCode)))
             }
         }.resume()
+    }
+    
+    func getArticlesFromApple(complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
+        getArticlefrom(url: url, complition: complition)
+    }
+    
+    func getArticlesFromBusiness(complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&"
+        getArticlefrom(url: url, complition: complition)
+    }
+    
+    func getArticlesFromTechCrunch(complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/top-headlines?sources=techcrunch&"
+        getArticlefrom(url: url, complition: complition)
+    }
+    
+    func getArticlesFromWallStreet(complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/everything?domains=wsj.com&"
+        getArticlefrom(url: url, complition: complition)
     }
 }
 
