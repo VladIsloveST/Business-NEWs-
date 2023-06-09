@@ -21,7 +21,8 @@ class MenuCollectionView: UICollectionView {
         return horizontalView
     }()
     
-    private var leftAnchorConstraint = NSLayoutConstraint()
+    var leftAnchorConstraint = NSLayoutConstraint()
+    var homeController: HomeViewController?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
@@ -72,12 +73,14 @@ extension MenuCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
         
-        let x = CGFloat(indexPath.item) * frame.width/4
-        leftAnchorConstraint.constant = x
-        
-        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            self.layoutIfNeeded()
-        }, completion: nil)
+//        let x = CGFloat(indexPath.item) * frame.width/4
+//        leftAnchorConstraint.constant = x
+//        
+//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+//            self.layoutIfNeeded()
+//        }, completion: nil)
+        print("didSelectItemAt")
+        homeController?.scrollToMenu(index: indexPath.item)
     }
 }
 
