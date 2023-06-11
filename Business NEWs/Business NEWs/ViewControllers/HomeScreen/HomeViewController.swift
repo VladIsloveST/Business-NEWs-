@@ -7,32 +7,22 @@
 
 import UIKit
 
-
 class HomeViewController: UIViewController {
     
     @IBOutlet weak var articlesCollectionView: UICollectionView!
-    var presenter: ViewOutPut!
-    lazy private var menuCollectionView: MenuCollectionView = {
-        let menuBar = MenuCollectionView()
-        menuBar.homeController = self
-        return menuBar
-    }()
     
-    private let loadingIndicator: ProgressView = {
-        let progress = ProgressView(lineWidth: 5)
-        progress.translatesAutoresizingMaskIntoConstraints = false
-        return progress
-    }()
+    var presenter: ViewOutPut!
+    private let menuCollectionView = MenuCollectionView()
+    private let loadingIndicator = ProgressView(lineWidth: 5)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
         
-        articlesCollectionView.bounces = false
-        articlesCollectionView.contentInset.top = 70
-        articlesCollectionView.horizontalScrollIndicatorInsets.top = 60
+        menuCollectionView.homeController = self
         
         loadingIndicator.isAnimating = true
         
@@ -42,15 +32,28 @@ class HomeViewController: UIViewController {
         setupCollectionView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+    }
+    
     private func  setupCollectionView() {
         
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
         
         articlesCollectionView.register(
-            UINib(nibName: "ArticleCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "ArticleCollectionViewCell")
+            UINib(nibName: ArticleCollectionViewCell.identifier , bundle: nil),
+            forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
+        
         articlesCollectionView.isPagingEnabled = true
+        articlesCollectionView.showsHorizontalScrollIndicator = false
+        articlesCollectionView.bounces = false
+        
+        articlesCollectionView.contentInset.top = 70
+        articlesCollectionView.horizontalScrollIndicatorInsets.top = 60
         
         if let flowLayoutm = articlesCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayoutm.scrollDirection = .horizontal
@@ -59,14 +62,14 @@ class HomeViewController: UIViewController {
     }
     
     private func setupNavBarButtons() {
-        let searchImage = UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysOriginal)
-        let searchBarButtonItem = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(handleSearch))
-        let moreImage = UIImage(systemName: "ellipsis")?.withRenderingMode(.alwaysOriginal)
-        let moreButtonItem = UIBarButtonItem(image: moreImage, style: .plain, target: self, action: #selector(handleMore))
+        let searchBarButtonItem = UIBarButtonItem(
+            imageSystemName: "magnifyingglass", target: self, action: #selector(handleSearch))
+        let moreButtonItem = UIBarButtonItem(
+            imageSystemName: "ellipsis",target: self, action: #selector(handleMore))
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
-    
-        let menuImage = UIImage(systemName: "line.horizontal.3")?.withRenderingMode(.alwaysOriginal)
-        let menuButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: #selector(handleMenu))
+        
+        let menuButtonItem = UIBarButtonItem(
+            imageSystemName: "line.horizontal.3", target: self, action: #selector(handleMenu))
         navigationItem.leftBarButtonItem = menuButtonItem
     }
     
@@ -80,7 +83,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc func handleMore() {
-       // scrollToMenu(index: 2)
+        print("More")
     }
     
     func scrollToMenu(index: Int) {
@@ -88,9 +91,9 @@ class HomeViewController: UIViewController {
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
-    
     private func setupIndicatot() {
         view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor
@@ -110,8 +113,7 @@ class HomeViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             menuCollectionView.topAnchor
-                .constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor,
-                            multiplier: 0),
+                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             menuCollectionView.widthAnchor
                 .constraint(equalToConstant: view.frame.width),
             menuCollectionView.heightAnchor
@@ -135,6 +137,11 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        //        let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.section].articlesOfTheSamePublisher
+        //        let article = articlesOfTheSamePublisher[indexPath.row]
+        //        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        //        cell.articlesLabel.text = article.title
+        //        return cell
         
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         
@@ -142,33 +149,32 @@ extension HomeViewController: UICollectionViewDataSource {
         cell.backgroundColor = colorArray[indexPath.row]
         return cell
         
-//        let typesOfArticles = presenter.typesOfArticles[indexPath.section]
-//        switch typesOfArticles {
-//        case .apple(let appleType):
-//            let apple = appleType.articles[indexPath.row]
-//            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as? CustomCollectionViewCell else { return UICollectionViewCell() }
-//            cell.articlesLabel.text = apple.title
-//            return cell
-//
-//        case .business(let businessType):
-//            let business = businessType.articles[indexPath.row]
-//            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as? CustomCollectionViewCell else { return UICollectionViewCell() }
-//            cell.articlesLabel.text = business.title
-//            return cell
-//
-//        case .techCrunch(let techCrunchType):
-//            let techCrunch = techCrunchType.articles[indexPath.row]
-//            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as? CustomCollectionViewCell else { return UICollectionViewCell() }
-//            cell.articlesLabel.text = techCrunch.title
-//            return cell
-//        default: return UICollectionViewCell()
-
-//        case .wallStreet(let wallStreetType):
-//            let wallStreet = wallStreetType.articles[indexPath.row]
-//            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "HomeCell", for: indexPath) as? CustomCollectionViewCell else { return UICollectionViewCell() }
-//            cell.articlesLabel.text = wallStreet.title
-//            return cell
-//        }
+        //        let typesOfArticles = presenter.typesOfArticles[indexPath.section]
+        //        switch typesOfArticles {
+        //        case .apple(let appleType):
+        //            let apple = appleType.articles[indexPath.row]
+        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        //            cell.articlesLabel.text = apple.title
+        //            return cell
+        //
+        //        case .business(let businessType):
+        //            let business = businessType.articles[indexPath.row]
+        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        //            cell.articlesLabel.text = business.title
+        //            return cell
+        //
+        //        case .techCrunch(let techCrunchType):
+        //            let techCrunch = techCrunchType.articles[indexPath.row]
+        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        //            cell.articlesLabel.text = techCrunch.title
+        //            return cell
+        //
+        //        case .wallStreet(let wallStreetType):
+        //            let wallStreet = wallStreetType.articles[indexPath.row]
+        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        //            cell.articlesLabel.text = wallStreet.title
+        //            return cell
+        //        }
     }
 }
 
@@ -177,6 +183,13 @@ extension HomeViewController: UICollectionViewDataSource {
 extension HomeViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         menuCollectionView.leftAnchorConstraint.constant = scrollView.contentOffset.x / 4
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
     }
 }
 
@@ -188,16 +201,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        CGSize(width: view.frame.width, height: view.frame.height)
-    }
-}
-
-// MARK: - Search Bar Delegate
-
-extension HomeViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text, !text.isEmpty else { return }
-        print(text)
+        CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
 }
 

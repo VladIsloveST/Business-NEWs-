@@ -34,7 +34,7 @@ class MenuCollectionView: UICollectionView {
     override func layoutSubviews() {
         super .layoutSubviews()
         
-        horizontalBarView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 3)
+        horizontalBarView.roundCorners(corners: [.topLeft, .topRight], radius: 3)
     }
     
     required init?(coder: NSCoder) {
@@ -49,7 +49,7 @@ class MenuCollectionView: UICollectionView {
         
         NSLayoutConstraint.activate([
             leftAnchorConstraint,
-            horizontalBarView.topAnchor.constraint(equalTo: self.topAnchor),
+            horizontalBarView.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
             horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier:  1/4),
             horizontalBarView.heightAnchor.constraint(equalToConstant: 6)
         ])
@@ -72,14 +72,6 @@ class MenuCollectionView: UICollectionView {
 extension MenuCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
-        
-//        let x = CGFloat(indexPath.item) * frame.width/4
-//        leftAnchorConstraint.constant = x
-//        
-//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-//            self.layoutIfNeeded()
-//        }, completion: nil)
-        print("didSelectItemAt")
         homeController?.scrollToMenu(index: indexPath.item)
     }
 }
@@ -89,7 +81,7 @@ extension MenuCollectionView: UICollectionViewDelegate {
 extension MenuCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return nameCategoryArray.count
+        nameCategoryArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -104,9 +96,9 @@ extension MenuCollectionView: UICollectionViewDataSource {
 extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-//        let categoryFont = UIFont(name: "Arial Bold", size: 18)
-//        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
-//        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+        //        let categoryFont = UIFont(name: "Arial Bold", size: 18)
+        //        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
+        //        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         
         return CGSize(width: frame.width/4, height: frame.height)
     }
