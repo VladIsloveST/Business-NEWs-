@@ -10,7 +10,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    private var myArray = ["First","Second","Third"]
+    private var myArray = ["First, First, First, First, First, First,First, Firstmmm","Second","Third"]
     
     lazy var searchHistoryTableView: UITableView = {
         let tableView = UITableView()
@@ -73,10 +73,13 @@ extension SearchViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? SearchCell else { return UITableViewCell() }
-        cell.textLabel?.text = "\(myArray[indexPath.row])"
+        cell.searchLabel.text = "\(myArray[indexPath.row])"
         cell.didDelete = { [unowned self] in
             self.myArray.remove(at: indexPath.row)
             self.searchHistoryTableView.reloadData()
+        }
+        cell.didRevert = { [unowned self] in
+            self.mySearchBar.text = myArray[indexPath.row]
         }
         return cell
     }
@@ -84,9 +87,9 @@ extension SearchViewController: UITableViewDataSource {
 
 // MARK: - Table View Delegate
 
-//extension SearchViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print("Num: \(indexPath.row)")
-//        print("Value: \(myArray[indexPath.row])")
-//    }
-//}
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Num: \(indexPath.row)")
+        print("Value: \(myArray[indexPath.row])")
+    }
+}
