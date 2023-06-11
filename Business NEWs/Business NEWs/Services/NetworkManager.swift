@@ -8,10 +8,13 @@
 import Foundation
 
 enum NetworkError: Error {
-    case statusCodeIsUnknown
     case emptyData
-    case errorWithData
-    case stusCode(_ statusCode: Int)
+    case unableToDecode
+    case statusCodeIsUnknown
+    case redirection
+    case clientError
+    case serverError
+    case requestFailed
     
 }
 
@@ -24,6 +27,7 @@ protocol NetworkServiceProtocol {
 
 class NetworkService: NetworkServiceProtocol {
     
+    private let endpoint = "https://newsapi.org/v2/"
     private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     
     private func getArticlefrom(url: String, complition: @escaping (Result<Articles, Error>) -> Void) {
@@ -41,7 +45,8 @@ class NetworkService: NetworkServiceProtocol {
                 return
             }
             
-            if statusCode >= 200 && statusCode <= 299 {
+            switch statusCode {
+            case 200...299:
                 guard let data = data else {
                     complition(.failure(NetworkError.emptyData))
                     return
@@ -51,31 +56,38 @@ class NetworkService: NetworkServiceProtocol {
                     let result = try JSONDecoder().decode(Articles.self, from: data)
                     complition(.success(result))
                 } catch {
-                    complition(.failure(NetworkError.errorWithData))
+                    complition(.failure(NetworkError.unableToDecode))
                 }
-            } else {
-                complition(.failure(NetworkError.stusCode(statusCode)))
+                
+            case 300...399:
+                complition(.failure(NetworkError.redirection))
+            case 400...499:
+                complition(.failure(NetworkError.clientError))
+            case 500...599:
+                complition(.failure(NetworkError.serverError))
+            default:
+                complition(.failure(NetworkError.requestFailed))
             }
         }.resume()
     }
     
     func getArticlesFromApple(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
+        let url =  endpoint + "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
         getArticlefrom(url: url, complition: complition)
     }
     
     func getArticlesFromBusiness(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&"
+        let url = endpoint + "top-headlines?country=us&category=business&"
         getArticlefrom(url: url, complition: complition)
     }
     
     func getArticlesFromTechCrunch(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/top-headlines?sources=techcrunch&"
+        let url = endpoint + "top-headlines?sources=techcrunch&"
         getArticlefrom(url: url, complition: complition)
     }
     
     func getArticlesFromWallStreet(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/everything?domains=wsj.com&"
+        let url = endpoint + "everything?domains=wsj.com&"
         getArticlefrom(url: url, complition: complition)
     }
 }

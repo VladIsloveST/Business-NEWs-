@@ -35,7 +35,7 @@ class Presenter: ViewOutPut {
         group.enter()
         networkService.getArticlesFromApple { [weak self] result in
             guard let self = self else { return }
-                        
+            
             switch result {
             case .success(let items):
                 self.typesOfArticles.append(.apple(items))

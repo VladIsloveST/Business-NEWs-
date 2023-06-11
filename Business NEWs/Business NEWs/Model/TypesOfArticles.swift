@@ -38,4 +38,17 @@ enum TypeOfArticles {
             return typeOfArticles.articles.count
         }
     }
+    
+    var articlesOfTheSamePublisher: [ArticleData] {
+        switch self {
+        case .apple(let articles):
+            return articles.articles
+        case .business(let articles):
+            return articles.articles
+        case .techCrunch(let articles):
+            return articles.articles
+        case .wallStreet(let articles):
+            return articles.articles
+        }
+    }
 }

@@ -179,10 +179,10 @@
                             <constraint firstItem="PMI-OH-wvE" firstAttribute="bottom" secondItem="Oqs-1a-6VX" secondAttribute="bottom" id="y43-Ed-eqT"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="ZxR-nv-SYc"/>
+                    <navigationItem key="navigationItem" leftItemsSupplementBackButton="YES" largeTitleDisplayMode="always" id="ZxR-nv-SYc"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="articlesCollectionView" destination="Oqs-1a-6VX" id="D7l-Ai-6An"/>
+                        <outlet property="articlesCollectionView" destination="Oqs-1a-6VX" id="5Bb-Gq-Nda"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cfu-uJ-iEs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

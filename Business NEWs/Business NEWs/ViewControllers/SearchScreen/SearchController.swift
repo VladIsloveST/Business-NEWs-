@@ -10,11 +10,13 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    private let myArray = ["First","Second","Third"]
-    lazy var myTableView: UITableView = {
+    private var myArray = ["First","Second","Third"]
+    
+    lazy var searchHistoryTableView: UITableView = {
         let tableView = UITableView()
         tableView.frame = view.bounds
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
+        tableView.register(SearchCell.self, forCellReuseIdentifier: "MyCell")
+        tableView.tableHeaderView = mySearchBar
         return tableView
     }()
     
@@ -25,28 +27,26 @@ class SearchViewController: UIViewController {
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()
-        navigationItem.titleView = searchBar
         return searchBar
     }()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        myTableView.dataSource = self
-        myTableView.delegate = self
+        navigationItem.title = "Search"
+        
+        searchHistoryTableView.dataSource = self
+       // searchHistoryTableView.delegate = self
         mySearchBar.delegate = self
-        view.addSubview(myTableView)
-
+        
+        view.addSubview(searchHistoryTableView)
+        
         setupNavBarButtons()
     }
     
     private func setupNavBarButtons() {
-        let backImage = UIImage(systemName: "chevron.backward")?.withRenderingMode(.alwaysOriginal)
-        let backButtonItem = UIBarButtonItem(image: backImage,
-                                             style: .plain,
-                                             target: self,
-                                             action: #selector(handleBack))
+        let backButtonItem = UIBarButtonItem(
+            imageSystemName: "chevron.backward", target: self, action: #selector(handleBack))
         navigationItem.leftBarButtonItem = backButtonItem
     }
     
@@ -55,11 +55,16 @@ class SearchViewController: UIViewController {
     }
 }
 
+// MARK: - Search Bar Delegate
+
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        print(text)
     }
 }
+
+// MARK: - Table View Data Source
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -67,15 +72,21 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath as IndexPath)
-        cell.textLabel!.text = "\(myArray[indexPath.row])"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? SearchCell else { return UITableViewCell() }
+        cell.textLabel?.text = "\(myArray[indexPath.row])"
+        cell.didDelete = { [unowned self] in
+            self.myArray.remove(at: indexPath.row)
+            self.searchHistoryTableView.reloadData()
+        }
         return cell
     }
 }
 
-extension SearchViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Num: \(indexPath.row)")
-        print("Value: \(myArray[indexPath.row])")
-    }
-}
+// MARK: - Table View Delegate
+
+//extension SearchViewController: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        print("Num: \(indexPath.row)")
+//        print("Value: \(myArray[indexPath.row])")
+//    }
+//}
