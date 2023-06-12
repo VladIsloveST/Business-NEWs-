@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 class SearchViewController: UIViewController {
-
-    private var myArray = ["First, First, First, First, First, First,First, Firstmmm","Second","Third"]
+    
+    var presenter: SearchViewOutPut!
     
     lazy var searchHistoryTableView: UITableView = {
         let tableView = UITableView()
@@ -36,7 +36,7 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Search"
         
         searchHistoryTableView.dataSource = self
-       // searchHistoryTableView.delegate = self
+        searchHistoryTableView.delegate = self
         mySearchBar.delegate = self
         
         view.addSubview(searchHistoryTableView)
@@ -68,18 +68,18 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myArray.count
+        return presenter.mockData.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? SearchCell else { return UITableViewCell() }
-        cell.searchLabel.text = "\(myArray[indexPath.row])"
+        cell.searchLabel.text = "\(presenter.mockData[indexPath.row])"
         cell.didDelete = { [unowned self] in
-            self.myArray.remove(at: indexPath.row)
-            self.searchHistoryTableView.reloadData()
+            self.presenter.delete(indexPath.row)
+            showUpdateData()
         }
         cell.didRevert = { [unowned self] in
-            self.mySearchBar.text = myArray[indexPath.row]
+            self.mySearchBar.text = presenter.mockData[indexPath.row]
         }
         return cell
     }
@@ -90,6 +90,12 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Num: \(indexPath.row)")
-        print("Value: \(myArray[indexPath.row])")
+        print("Value: \(presenter.mockData[indexPath.row])")
+    }
+}
+
+extension SearchViewController: SearchViewInPut {
+    func showUpdateData() {
+        self.searchHistoryTableView.reloadData()
     }
 }

@@ -26,3 +26,16 @@ class AssemblyBuilder: NSObject {
         
     }
 }
+
+protocol Builder {
+    static func createSearchBuilder() -> UIViewController
+}
+
+class ModuleBuilder: Builder {
+    static func createSearchBuilder() -> UIViewController {
+        let searchView = SearchViewController()
+        let searchPresenter = PresenterSearchContoller(view: searchView)
+        searchView.presenter = searchPresenter
+        return searchView
+    }
+}

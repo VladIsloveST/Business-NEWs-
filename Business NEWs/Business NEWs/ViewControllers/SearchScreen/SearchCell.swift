@@ -20,6 +20,7 @@ class SearchCell: UITableViewCell {
         let button = UIButton()
         let image = UIImage(systemName: "xmark")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
+        button.backgroundColor = .orange
         return button
     }()
     
@@ -64,6 +65,7 @@ class SearchCell: UITableViewCell {
         NSLayoutConstraint.activate([
             deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -25),
             deleteButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            deleteButton.widthAnchor.constraint(equalToConstant: 25),
             
             revertButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20),
             revertButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),

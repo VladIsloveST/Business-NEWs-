@@ -78,7 +78,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc func handleSearch() {
-        let searchViewController = SearchViewController()
+        let searchViewController = ModuleBuilder.createSearchBuilder()
         navigationController?.pushViewController(searchViewController, animated: true)
     }
     
