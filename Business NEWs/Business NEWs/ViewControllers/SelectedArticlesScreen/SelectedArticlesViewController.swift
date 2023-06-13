@@ -13,11 +13,7 @@ class SelectedArticlesViewController: UIViewController {
     
     private var types = MockData.shared.articleData
     
-    private let myRefreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return refreshControl
-    }()
+    private let myRefreshControl = UIRefreshControl()
     
     private let newsCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
@@ -30,6 +26,7 @@ class SelectedArticlesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        myRefreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
@@ -39,8 +36,7 @@ class SelectedArticlesViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func refresh(sender: UIRefreshControl) {
-        types.append(.portrait([ArticleData(title: "")]))
-        newsCollectionView.reloadData()
+        print("refresh")
         sender.endRefreshing()
     }
     
@@ -58,7 +54,9 @@ class SelectedArticlesViewController: UIViewController {
             UINib(nibName: PortraitCollectionViewCell.identifier , bundle: nil),
             forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
         
-        newsCollectionView.register(CollectionReusableView.self, forSupplementaryViewOfKind: CollectionReusableView.identifier, withReuseIdentifier: CollectionReusableView.identifier)
+        newsCollectionView.register(CollectionReusableView.self,
+                                    forSupplementaryViewOfKind: CollectionReusableView.kind,
+                                    withReuseIdentifier: CollectionReusableView.identifier)
         
         
         view.addSubview(newsCollectionView)
@@ -148,7 +146,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionReusableView.identifier, for: indexPath) as! CollectionReusableView
-            header.cellTitleLble?.text = types[indexPath.section].name
+            header.cellTitleLble.text = types[indexPath.section].name
             return header
         default:
             return UICollectionReusableView()

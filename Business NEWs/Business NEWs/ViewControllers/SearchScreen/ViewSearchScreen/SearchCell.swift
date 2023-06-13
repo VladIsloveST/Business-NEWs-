@@ -20,7 +20,6 @@ class SearchCell: UITableViewCell {
         let button = UIButton()
         let image = UIImage(systemName: "xmark")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
-        button.backgroundColor = .orange
         return button
     }()
     

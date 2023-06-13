@@ -27,15 +27,13 @@ struct CompositionalLayout {
                             subitems: NSCollectionLayoutItem...) -> NSCollectionLayoutGroup {
         switch aligment {
         case .vertical:
-            return NSCollectionLayoutGroup.vertical(layoutSize:
-                    .init(widthDimension: width,
-                          heightDimension: height),
-                                                    subitems: subitems)
+            return NSCollectionLayoutGroup.vertical(
+                layoutSize: .init(widthDimension: width, heightDimension: height),
+                subitems: subitems)
         case .horizontal:
-            return NSCollectionLayoutGroup.horizontal(layoutSize:
-                    .init(widthDimension: width,
-                          heightDimension: height),
-                                                      subitems: subitems)
+            return NSCollectionLayoutGroup.horizontal(
+                layoutSize: .init(widthDimension: width, heightDimension: height),
+                subitems: subitems)
         }
     }
     

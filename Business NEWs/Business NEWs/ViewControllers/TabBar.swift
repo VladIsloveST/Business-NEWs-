@@ -8,28 +8,28 @@
 import UIKit
 
 class TabBar: UITabBarController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
         setupVCs()
     }
     
-    func setupVCs() {
-            viewControllers = [
-                createNavController(for: SelectedArticlesViewController(),
-                                    title: NSLocalizedString("Saved", comment: ""),
-                                    imageName: "bookmark"),
-                createNavController(for: ModuleBuilder.createHomeBuilder(),
-                                    title: NSLocalizedString("Home", comment: ""),
-                                    imageName: "house"),
-                createNavController(for: SettingsViewController(),
-                                    title: NSLocalizedString("Settings", comment: ""),
-                                    imageName: "gearshape")
-            ]
+    fileprivate func setupVCs() {
+        viewControllers = [
+            createNavController(for: SelectedArticlesViewController(),
+                                title: "Saved",
+                                imageName: "bookmark"),
+            createNavController(for: ModuleBuilder.createHomeBuilder(),
+                                title: "Home",
+                                imageName: "house"),
+            createNavController(for: SettingsViewController(),
+                                title: "Settings",
+                                imageName: "gearshape")
+        ]
     }
     
     fileprivate func createNavController(for rootViewController: UIViewController,
