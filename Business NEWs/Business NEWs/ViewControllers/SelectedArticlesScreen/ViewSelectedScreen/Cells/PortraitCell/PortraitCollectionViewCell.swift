@@ -12,6 +12,6 @@ class PortraitCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = .orange
     }
-
 }
