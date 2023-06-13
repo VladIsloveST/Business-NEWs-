@@ -27,7 +27,7 @@ class ProgressView: UIView {
     }
     
     // MARK: - Initialization
-    init(lineWidth: CGFloat) {
+    init(lineWidth: CGFloat = 5) {
         self.lineWidth = lineWidth
         super.init(frame: .zero)
         self.backgroundColor = .clear

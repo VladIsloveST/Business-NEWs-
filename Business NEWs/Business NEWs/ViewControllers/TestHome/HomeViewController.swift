@@ -9,21 +9,24 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    @IBOutlet weak var articlesCollectionView: UICollectionView!
+    //@IBOutlet weak var articlesCollectionView: UICollectionView!
     
     var presenter: ViewOutPut!
+    
+    private let articlesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 0
+        let colView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return colView
+    }()
+    
     private let menuCollectionView = MenuCollectionView()
-    private let loadingIndicator = ProgressView(lineWidth: 5)
+    private let loadingIndicator = ProgressView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = "Home"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
-        
-        menuCollectionView.homeController = self
-        
+
         loadingIndicator.isAnimating = true
         
         setupMenu()
@@ -34,7 +37,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        navigationItem.title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
     }
@@ -52,37 +55,39 @@ class HomeViewController: UIViewController {
         articlesCollectionView.showsHorizontalScrollIndicator = false
         articlesCollectionView.bounces = false
         
-        articlesCollectionView.contentInset.top = 70
-        articlesCollectionView.horizontalScrollIndicatorInsets.top = 60
+        view.addSubview(articlesCollectionView)
+        articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        if let flowLayoutm = articlesCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayoutm.scrollDirection = .horizontal
-            flowLayoutm.minimumLineSpacing = 0
-        }
+        NSLayoutConstraint.activate([
+            articlesCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
+            articlesCollectionView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor),
+            articlesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
     }
     
     private func setupNavBarButtons() {
         let searchBarButtonItem = UIBarButtonItem(
-            imageSystemName: "magnifyingglass", target: self, action: #selector(handleSearch))
+            imageSystemName: "magnifyingglass", target: self, action: #selector(didTapSearchButton))
         let moreButtonItem = UIBarButtonItem(
-            imageSystemName: "ellipsis",target: self, action: #selector(handleMore))
+            imageSystemName: "ellipsis",target: self, action: #selector(didTapMoreButton))
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
         
         let menuButtonItem = UIBarButtonItem(
-            imageSystemName: "line.horizontal.3", target: self, action: #selector(handleMenu))
+            imageSystemName: "line.horizontal.3", target: self, action: #selector(didTapMenuButton))
         navigationItem.leftBarButtonItem = menuButtonItem
     }
     
-    @objc func handleMenu() {
+    @objc func didTapMenuButton() {
         print("Menu")
     }
     
-    @objc func handleSearch() {
+    @objc func didTapSearchButton() {
         let searchViewController = ModuleBuilder.createSearchBuilder()
         navigationController?.pushViewController(searchViewController, animated: true)
     }
     
-    @objc func handleMore() {
+    @objc func didTapMoreButton() {
         print("More")
     }
     
@@ -90,6 +95,8 @@ class HomeViewController: UIViewController {
         let indexPath = IndexPath(item: index, section: 0)
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
+    
+    
     
     private func setupIndicatot() {
         view.addSubview(loadingIndicator)
@@ -108,6 +115,8 @@ class HomeViewController: UIViewController {
     }
     
     private func setupMenu() {
+        menuCollectionView.homeController = self
+
         view.addSubview(menuCollectionView)
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
