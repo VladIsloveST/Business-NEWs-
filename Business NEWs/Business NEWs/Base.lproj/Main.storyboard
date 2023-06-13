@@ -68,13 +68,13 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GJe-y9-7yS">
                                     <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="portraitCell" id="qiP-gf-1Gh" customClass="PortraitCollectionViewCell" customModule="Business_NEWs" customModuleProvider="target">
-                                        <rect key="frame" x="123.66666666666667" y="50" width="128" height="128"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="portraitCell" id="qiP-gf-1Gh">
+                                        <rect key="frame" x="123.66666666666667" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fLC-xJ-UUe">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -82,8 +82,8 @@
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemGrayColor"/>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="storyCell" id="eaA-3X-FhU" customClass="StoryCollectionViewCell" customModule="Business_NEWs" customModuleProvider="target">
-                                        <rect key="frame" x="60.666666666666664" y="188" width="254" height="227"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="storyCell" id="eaA-3X-FhU">
+                                        <rect key="frame" x="60.666666666666664" y="138" width="254" height="227"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Z2l-vX-N0b">
                                             <rect key="frame" x="0.0" y="0.0" width="254" height="227"/>
@@ -93,31 +93,6 @@
                                         <size key="customSize" width="254" height="227"/>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="headerReusableView" id="JQq-gD-b8W" customClass="CollectionViewHeaderReusableView" customModule="Business_NEWs" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLs-nH-FEe">
-                                            <rect key="frame" x="23" y="8" width="329" height="34"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="TLs-nH-FEe" firstAttribute="top" secondItem="JQq-gD-b8W" secondAttribute="topMargin" id="Fbn-Sz-66r"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="TLs-nH-FEe" secondAttribute="trailing" constant="15" id="L9w-wn-SOD"/>
-                                        <constraint firstItem="TLs-nH-FEe" firstAttribute="bottom" secondItem="JQq-gD-b8W" secondAttribute="bottomMargin" id="Nhu-R1-Rpd"/>
-                                        <constraint firstItem="TLs-nH-FEe" firstAttribute="leading" secondItem="JQq-gD-b8W" secondAttribute="leadingMargin" constant="15" id="TGx-ig-2sG"/>
-                                    </constraints>
-                                    <connections>
-                                        <outlet property="headerLabel" destination="TLs-nH-FEe" id="zmo-vC-y49"/>
-                                    </connections>
-                                </collectionReusableView>
-                                <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="sfw-So-X5Y"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="VUO-o7-Ls5"/>
-                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -130,9 +105,6 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Saved" image="bookmark" catalog="system" selectedImage="bookmark.fill" id="bE8-mS-qNO"/>
-                    <connections>
-                        <outlet property="newsCollectionView" destination="yEq-FF-gO9" id="Mft-Tm-JRr"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

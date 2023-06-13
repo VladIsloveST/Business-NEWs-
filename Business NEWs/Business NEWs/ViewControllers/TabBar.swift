@@ -20,10 +20,10 @@ class TabBar: UITabBarController {
     
     func setupVCs() {
             viewControllers = [
-                createNavController(for: ModuleBuilder.createSearchBuilder(),
+                createNavController(for: SelectedArticlesViewController(),
                                     title: NSLocalizedString("Saved", comment: ""),
                                     imageName: "bookmark"),
-                createNavController(for: HomeViewController(),
+                createNavController(for: ModuleBuilder.createHomeBuilder(),
                                     title: NSLocalizedString("Home", comment: ""),
                                     imageName: "house"),
                 createNavController(for: SettingsViewController(),
