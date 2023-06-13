@@ -8,30 +8,14 @@
 import Foundation
 import UIKit
 
-//protocol AssemblyBuilderProtocol {
-//    static func createHomeModule() -> UIViewController
-//}
-
-class AssemblyBuilder: NSObject {
-    
-    @IBOutlet weak var viewController: HomeViewController!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        guard let view = viewController else { return }
-        let networkService = NetworkService()
-        let presenter = Presenter(view: view, networkService: networkService)
-        view.presenter = presenter
-        
-    }
-}
 
 protocol Builder {
+   // static func createHomeBuilder() -> UIViewController
     static func createSearchBuilder() -> UIViewController
 }
 
 class ModuleBuilder: Builder {
+    
     static func createSearchBuilder() -> UIViewController {
         let searchView = SearchViewController()
         let searchPresenter = PresenterSearchContoller(view: searchView)

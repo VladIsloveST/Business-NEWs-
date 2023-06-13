@@ -8,10 +8,10 @@
 import UIKit
 
 class PortraitCollectionViewCell: UICollectionViewCell {
+    static let identifier = "PortraitCollectionViewCell"
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
 }

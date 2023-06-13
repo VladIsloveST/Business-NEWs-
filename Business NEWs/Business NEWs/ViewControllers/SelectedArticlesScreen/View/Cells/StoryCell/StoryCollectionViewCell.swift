@@ -8,6 +8,7 @@
 import UIKit
 
 class StoryCollectionViewCell: UICollectionViewCell {
+    static let identifier = "StoryCollectionViewCell"
 
     override func awakeFromNib() {
         super.awakeFromNib()

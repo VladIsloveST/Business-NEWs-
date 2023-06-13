@@ -8,9 +8,7 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    
-    //@IBOutlet weak var articlesCollectionView: UICollectionView!
-    
+        
     var presenter: ViewOutPut!
     
     private let articlesCollectionView: UICollectionView = {
@@ -96,8 +94,6 @@ class HomeViewController: UIViewController {
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
-    
-    
     private func setupIndicatot() {
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -135,8 +131,8 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        //presenter.typesOfArticles.count
-        1
+        presenter.typesOfArticles.count
+        //1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -19,10 +19,13 @@ class SelectedArticlesViewController: UIViewController {
         return refreshControl
     }()
     
-    // MARK: - IBOutlets
+    private let newsCollectionView: UICollectionView = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        let colView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        return colView
+    }()
     
-    @IBOutlet weak var newsCollectionView: UICollectionView!
-    
+        
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -30,6 +33,7 @@ class SelectedArticlesViewController: UIViewController {
         
         newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
+        setupCollectionView()
     }
     
     // MARK: - Private Methods
@@ -38,6 +42,34 @@ class SelectedArticlesViewController: UIViewController {
         types.append(.portrait([ArticleData(title: "")]))
         newsCollectionView.reloadData()
         sender.endRefreshing()
+    }
+    
+    private func  setupCollectionView() {
+        
+        newsCollectionView.delegate = self
+        newsCollectionView.dataSource = self
+
+        
+        newsCollectionView.register(
+            UINib(nibName: StoryCollectionViewCell.identifier , bundle: nil),
+            forCellWithReuseIdentifier: StoryCollectionViewCell.identifier)
+        
+        newsCollectionView.register(
+            UINib(nibName: PortraitCollectionViewCell.identifier , bundle: nil),
+            forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
+        
+        newsCollectionView.register(CollectionReusableView.self, forSupplementaryViewOfKind: CollectionReusableView.identifier, withReuseIdentifier: CollectionReusableView.identifier)
+        
+        
+        view.addSubview(newsCollectionView)
+        newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            newsCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
+            newsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            newsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -98,17 +130,16 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         case .portrait(_):
             switch indexPath.item {
             case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath) as! StoryCollectionViewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
                 return cell
             default:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "portraitCell", for: indexPath) as! PortraitCollectionViewCell
-                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCollectionViewCell.identifier, for: indexPath) as! PortraitCollectionViewCell
                 return cell
             }
             
             
         case .story(_):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storyCell", for: indexPath) as! StoryCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
             return cell
         }
     }
@@ -116,8 +147,8 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerReusableView", for: indexPath) as! CollectionViewHeaderReusableView
-            header.headerLabel.text = types[indexPath.section].name
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionReusableView.identifier, for: indexPath) as! CollectionReusableView
+            header.cellTitleLble?.text = types[indexPath.section].name
             return header
         default:
             return UICollectionReusableView()
