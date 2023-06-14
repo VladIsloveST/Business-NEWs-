@@ -7,10 +7,18 @@
 
 import UIKit
 
+protocol HomeViewControllerDelegate: AnyObject {
+    func didTapMenuButton()
+}
+
 class HomeViewController: UIViewController {
-        
+    
+    weak var delegate: HomeViewControllerDelegate?
+    
     var presenter: ViewOutPut!
     
+    private let menuCollectionView = MenuCollectionView()
+    private let loadingIndicator = ProgressView()
     private let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -19,25 +27,18 @@ class HomeViewController: UIViewController {
         return colView
     }()
     
-    private let menuCollectionView = MenuCollectionView()
-    private let loadingIndicator = ProgressView()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         loadingIndicator.isAnimating = true
         
         setupMenu()
         setupNavBarButtons()
         setupIndicatot()
         setupCollectionView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        
         navigationItem.title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
     }
     
     private func  setupCollectionView() {
@@ -77,7 +78,8 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didTapMenuButton() {
-        print("Menu")
+        delegate?.didTapMenuButton()
+        //print("Menu")
     }
     
     @objc func didTapSearchButton() {
@@ -112,7 +114,7 @@ class HomeViewController: UIViewController {
     
     private func setupMenu() {
         menuCollectionView.homeController = self
-
+        
         view.addSubview(menuCollectionView)
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -131,8 +133,8 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        presenter.typesOfArticles.count
-        //1
+        //presenter.typesOfArticles.count
+        1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

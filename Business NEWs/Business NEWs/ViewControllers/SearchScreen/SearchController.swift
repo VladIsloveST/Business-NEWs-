@@ -32,7 +32,7 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.title = "Search"
         
         searchHistoryTableView.dataSource = self
