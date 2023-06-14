@@ -20,25 +20,23 @@ class TabBar: UITabBarController {
     
     fileprivate func setupVCs() {
         viewControllers = [
-            createNavController(for: SelectedArticlesViewController(),
+            createNavController(SelectedArticlesViewController(),
                                 title: "Saved",
-                                imageName: "bookmark"),
-            createNavController(for: ModuleBuilder.createHomeBuilder(),
-                                title: "Home",
-                                imageName: "house"),
-            createNavController(for: SettingsViewController(),
+                                systemImageName: "bookmark"),
+            createTabBarItem(ContainerViewController(),
+                             title: "Home",
+                             systemImageName: "house"),
+            createNavController(SettingsViewController(),
                                 title: "Settings",
-                                imageName: "gearshape")
+                                systemImageName: "gearshape")
         ]
     }
     
-    fileprivate func createNavController(for rootViewController: UIViewController,
+    fileprivate func createNavController(_ viewController: UIViewController,
                                          title: String,
-                                         imageName: String) -> UIViewController {
+                                         systemImageName: String) -> UIViewController {
+        let rootViewController = createTabBarItem(viewController, title: title, systemImageName: systemImageName)
         let navController = UINavigationController(rootViewController: rootViewController)
-        navController.tabBarItem.title = title
-        let image = UIImage(systemName: imageName)
-        navController.tabBarItem.image = image
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title
         return navController
