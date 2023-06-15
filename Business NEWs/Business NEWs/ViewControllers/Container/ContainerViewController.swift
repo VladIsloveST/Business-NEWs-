@@ -15,7 +15,6 @@ class ContainerViewController: UIViewController {
     }
     
     private var menuState: MenuState = .closed
-    
     private let menuVC = MenuViewController()
     private let homeVC = ModuleBuilder.createHomeBuilder()
     var navVC: UINavigationController?
@@ -26,6 +25,7 @@ class ContainerViewController: UIViewController {
     }
     
     func addChildVCs() {
+        menuVC.delegate = self
         addChild(menuVC)
         view.addSubview(menuVC.view)
         menuVC.didMove(toParent: self)
@@ -41,6 +41,10 @@ class ContainerViewController: UIViewController {
 
 extension ContainerViewController: HomeViewControllerDelegate {
     func didTapMenuButton() {
+        toggleMenu(complition: nil)
+    }
+    
+    func toggleMenu(complition: (() -> Void)? ) {
         switch menuState {
         case .closed:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
@@ -51,7 +55,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
                     self?.menuState = .opened
                 }
             }
-
+            
         case .opened:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseOut) {
                 
@@ -59,9 +63,30 @@ extension ContainerViewController: HomeViewControllerDelegate {
             } completion: { [weak self] done in
                 if done {
                     self?.menuState = .closed
+                    DispatchQueue.main.async {
+                         complition?()
+                    }
                 }
             }
+        }
+    }
+}
 
+extension ContainerViewController: MenuViewControllerDelegate {
+    func didSelect(menuItem: MenuViewController.MenuOptions) {
+        toggleMenu { [weak self] in
+            switch menuItem {
+            case .home:
+                break
+            case .info:
+                break
+            case .appRating:
+                break
+            case .shareApp:
+                break
+            case .settings:
+                break
+            }
         }
     }
 }
