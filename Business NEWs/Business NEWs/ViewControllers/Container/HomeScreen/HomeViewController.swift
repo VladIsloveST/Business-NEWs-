@@ -16,6 +16,7 @@ class HomeViewController: UIViewController {
     weak var delegate: HomeViewControllerDelegate?
     
     var presenter: ViewOutPut!
+    var searchViewController = ModuleBuilder.createSearchBuilder()
     
     private let menuCollectionView = MenuCollectionView()
     private let loadingIndicator = ProgressView()
@@ -39,6 +40,7 @@ class HomeViewController: UIViewController {
         
         navigationItem.title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = .white
     }
     
     private func  setupCollectionView() {
@@ -83,7 +85,6 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didTapSearchButton() {
-        let searchViewController = ModuleBuilder.createSearchBuilder()
         navigationController?.pushViewController(searchViewController, animated: true)
     }
     
