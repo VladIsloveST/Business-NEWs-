@@ -11,14 +11,18 @@ struct MockData {
     
     static let shared = MockData()
     
-    private var portraits: SectionType = {
-        .portrait([ .init(title: ""),
+    private var recent: SectionType = {
+        .recent([ .init(title: ""),
+                    .init(title: ""),
+                    .init(title: ""),
+                    .init(title: ""),
+                    .init(title: ""),
                     .init(title: "")
         ])
     }()
     
-    private let stories: SectionType = {
-        .story([ .init(title: ""),
+    private let outdated: SectionType = {
+        .outdated([ .init(title: ""),
                  .init(title: ""),
                  .init(title: ""),
                  .init(title: ""),
@@ -28,7 +32,7 @@ struct MockData {
     }()
     
     var articleData: [SectionType] {  // computed property
-        [stories, portraits]
+        [outdated, recent]
     }
     
 }

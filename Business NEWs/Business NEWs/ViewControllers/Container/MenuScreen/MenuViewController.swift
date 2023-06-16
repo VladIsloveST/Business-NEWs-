@@ -58,7 +58,9 @@ class MenuViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.bounds.size.width, height: view.bounds.size.height)
+        tableView.frame = CGRect(x: 0, y: view.safeAreaInsets.top,
+                                 width: view.bounds.size.width,
+                                 height: view.bounds.size.height)
     }
 }
 

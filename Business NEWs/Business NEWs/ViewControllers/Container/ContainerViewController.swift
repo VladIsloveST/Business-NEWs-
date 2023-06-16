@@ -49,7 +49,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
         case .closed:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
                 
-                self.navVC?.view.frame.origin.x = self.homeVC.view.frame.size.width/2
+                self.navVC?.view.frame.origin.x = self.homeVC.view.frame.size.width/2.5
             } completion: { [weak self] done in
                 if done {
                     self?.menuState = .opened

@@ -8,21 +8,21 @@
 import Foundation
 
 enum SectionType {
-    case portrait([ArticleData])
-    case story([ArticleData])
+    case recent([ArticleData])
+    case outdated([ArticleData])
     
     var name: String {
         switch self {
-        case .portrait:
-            return "portrait"
-        case .story:
-            return "story"
+        case .recent:
+            return "Recent"
+        case .outdated:
+            return "Outdated"
         }
     }
     
     var count: Int {
         switch self {
-        case let .portrait(items), let .story(items):
+        case let .recent(items), let .outdated(items):
             return items.count
         }
     }

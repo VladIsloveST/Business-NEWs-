@@ -33,6 +33,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.barTintColor = .white
         navigationItem.title = "Search"
         
         searchHistoryTableView.dataSource = self
