@@ -64,6 +64,8 @@ class SelectedArticlesViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             newsCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
+            newsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             newsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             newsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
@@ -75,27 +77,25 @@ class SelectedArticlesViewController: UIViewController {
             guard let self = self else { return nil }
             let section = self.types[sectionIndex]
             switch section {
-            case .story:
+            case .outdated:
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
                                                           height: .fractionalHeight(1))
                 let group = CompositionalLayout.createGroup(aligment: .horizontal,
-                                                            width: .absolute(70),
-                                                            height: .absolute(70),
+                                                            width: .fractionalWidth(0.4),
+                                                            height: .fractionalHeight(0.3),
                                                             subitems: item)
                 let section = CompositionalLayout.createSection(group: group,
-                                                                interGroupSpacing: 10,
                                                                 scrollingBehavior: .continuous)
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
                 return section
-            case .portrait:
+            case .recent:
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
                                                           height: .fractionalHeight(1))
                 let group = CompositionalLayout.createGroup(aligment: .vertical,
-                                                            width: .fractionalWidth(0.9),
-                                                            height: .fractionalWidth(0.6),
+                                                            width: .fractionalWidth(1),
+                                                            height: .fractionalHeight(0.4),
                                                             subitems: item)
-                let section = CompositionalLayout.createSection(group: group,
-                                                                interGroupSpacing: 10)
+                let section = CompositionalLayout.createSection(group: group)
                 section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
                 return section
             }
@@ -113,6 +113,7 @@ class SelectedArticlesViewController: UIViewController {
 // MARK: - Collection View Data Source
 
 extension SelectedArticlesViewController: UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return types.count
     }
@@ -125,7 +126,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         
         switch types[indexPath.section] {
             
-        case .portrait(_):
+        case .recent(_):
             switch indexPath.item {
             case 0:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
@@ -136,7 +137,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
             }
             
             
-        case .story(_):
+        case .outdated(_):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
             return cell
         }
@@ -146,7 +147,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionReusableView.identifier, for: indexPath) as! CollectionReusableView
-            header.cellTitleLble.text = types[indexPath.section].name
+            header.cellTitleLable.text = types[indexPath.section].name
             return header
         default:
             return UICollectionReusableView()

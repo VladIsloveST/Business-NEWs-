@@ -38,13 +38,13 @@ struct CompositionalLayout {
     }
     
     static func createSection(group: NSCollectionLayoutGroup,
-                              interGroupSpacing: CGFloat,
+                              interGroupSpacing: CGFloat = 15,
                               scrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior = .none ) -> NSCollectionLayoutSection {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = scrollingBehavior
         section.interGroupSpacing = interGroupSpacing
         section.supplementariesFollowContentInsets = false
-        section.contentInsets = .init(top: 0, leading: 10, bottom: 30, trailing: 10)
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
         return section
     }
 }

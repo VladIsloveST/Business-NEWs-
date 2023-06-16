@@ -12,15 +12,21 @@ class CollectionReusableView: UICollectionReusableView {
     static var identifier = "CollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
     
-    var cellTitleLble = UILabel()
+    var cellTitleLable: UILabel = {
+        var label = UILabel()
+        label.textColor = .black
+        label.font = UIFont(name: "Helvetica Neue Bold", size: 22)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    private var headerSeparator = UIView()
     
     func setup(_ title: String) {
-        cellTitleLble.text = title
+        cellTitleLable.text = title
     }
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        cellTitleLble.font = UIFont(name: "Helvetica Neue Medium", size: 25)
         setupViews()
         setConstrains()
     }
@@ -31,15 +37,23 @@ class CollectionReusableView: UICollectionReusableView {
     
     private func setupViews() {
         backgroundColor = .white
-        addSubview(cellTitleLble)
+        addSubview(cellTitleLable)
+        addSubview(headerSeparator)
     }
     
     private func setConstrains() {
         
-        cellTitleLble.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cellTitleLble.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20),
-            cellTitleLble.centerYAnchor.constraint(equalTo: centerYAnchor)
+            cellTitleLable.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 15),
+            cellTitleLable.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+        
+        headerSeparator.backgroundColor = .black
+        headerSeparator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            headerSeparator.heightAnchor.constraint(equalToConstant: 1),
+            headerSeparator.widthAnchor.constraint(equalToConstant: self.frame.width - 30),
+            headerSeparator.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
 }

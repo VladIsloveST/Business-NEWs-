@@ -16,7 +16,6 @@ class HomeViewController: UIViewController {
     weak var delegate: HomeViewControllerDelegate?
     
     var presenter: ViewOutPut!
-    var searchViewController = ModuleBuilder.createSearchBuilder()
     
     private let menuCollectionView = MenuCollectionView()
     private let loadingIndicator = ProgressView()
@@ -81,10 +80,10 @@ class HomeViewController: UIViewController {
     
     @objc func didTapMenuButton() {
         delegate?.didTapMenuButton()
-        //print("Menu")
     }
     
     @objc func didTapSearchButton() {
+        let searchViewController = ModuleBuilder.createSearchBuilder()
         navigationController?.pushViewController(searchViewController, animated: true)
     }
     
