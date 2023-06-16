@@ -46,13 +46,9 @@ class SelectedArticlesViewController: UIViewController {
         newsCollectionView.dataSource = self
 
         
-        newsCollectionView.register(
-            UINib(nibName: StoryCollectionViewCell.identifier , bundle: nil),
-            forCellWithReuseIdentifier: StoryCollectionViewCell.identifier)
+        newsCollectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.identifier)
         
-        newsCollectionView.register(
-            UINib(nibName: PortraitCollectionViewCell.identifier , bundle: nil),
-            forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
+        newsCollectionView.register(PortraitCollectionViewCell.self, forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
         
         newsCollectionView.register(CollectionReusableView.self,
                                     forSupplementaryViewOfKind: CollectionReusableView.kind,
@@ -129,16 +125,16 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         case .recent(_):
             switch indexPath.item {
             case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as? StoryCollectionViewCell else { return UICollectionViewCell() }
                 return cell
             default:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCollectionViewCell.identifier, for: indexPath) as! PortraitCollectionViewCell
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCollectionViewCell.identifier, for: indexPath) as? PortraitCollectionViewCell else { return UICollectionViewCell() }
                 return cell
             }
             
             
         case .outdated(_):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as! StoryCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as? StoryCollectionViewCell else { return UICollectionViewCell() }
             return cell
         }
     }

@@ -14,5 +14,4 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
 }
