@@ -10,7 +10,7 @@ import UIKit
 
 class MenuCollectionView: UICollectionView {
     
-    private let nameCategoryArray = ["Apple", "Business", "TechCrunch", "Wall St."]
+    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple",  "Business"]
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
