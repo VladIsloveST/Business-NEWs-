@@ -9,24 +9,24 @@ import Foundation
 import UIKit
 
 
-protocol Builder {
-    static func createHomeBuilder() -> UIViewController
-    static func createSearchBuilder() -> UIViewController
+protocol AssemblyBuilderProtocol {
+    func createHomeBuilder(router: RouterProtocol) -> UIViewController
+    func createSearchBuilder(router: RouterProtocol) -> UIViewController
 }
 
-class ModuleBuilder: Builder {
+class ModuleBuilder: AssemblyBuilderProtocol {
     
-    static func createHomeBuilder() -> UIViewController {
+    func createHomeBuilder(router: RouterProtocol) -> UIViewController {
         let homeView = HomeViewController()
         let networkService = NetworkService()
-        let presenter = Presenter(view: homeView, networkService: networkService)
+        let presenter = Presenter(view: homeView, networkService: networkService, router: router)
         homeView.presenter = presenter
         return homeView
     }
     
-    static func createSearchBuilder() -> UIViewController {
+    func createSearchBuilder(router: RouterProtocol) -> UIViewController {
         let searchView = SearchViewController()
-        let searchPresenter = PresenterSearchContoller(view: searchView)
+        let searchPresenter = PresenterSearchContoller(view: searchView, router: router)
         searchView.presenter = searchPresenter
         return searchView
     }

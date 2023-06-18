@@ -83,8 +83,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didTapSearchButton() {
-        let searchViewController = ModuleBuilder.createSearchBuilder()
-        navigationController?.pushViewController(searchViewController, animated: true)
+        presenter.tapOnTheSearch()
     }
     
     @objc func didTapMoreButton() {

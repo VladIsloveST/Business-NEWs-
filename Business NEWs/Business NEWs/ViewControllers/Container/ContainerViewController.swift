@@ -16,26 +16,26 @@ class ContainerViewController: UIViewController {
     
     private var menuState: MenuState = .closed
     private let menuVC = MenuViewController()
-    private let homeVC = ModuleBuilder.createHomeBuilder()
-    var navVC: UINavigationController?
-    
+    private var navgationController = UINavigationController()
+     
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildVCs()
     }
     
-    func addChildVCs() {
+    private func addChildVCs() {
         menuVC.delegate = self
         addChild(menuVC)
         view.addSubview(menuVC.view)
         menuVC.didMove(toParent: self)
         
-        (homeVC as? HomeViewController)?.delegate = self
-        let navVC = UINavigationController(rootViewController: homeVC)
-        addChild(navVC)
-        view.addSubview(navVC.view)
-        navVC.didMove(toParent: self)
-        self.navVC = navVC
+        let assembly = ModuleBuilder()
+        let router = HomeRouter(navigatinController: navgationController, assemblyBuilder: assembly)
+        router.initialViewController()
+        (navgationController.viewControllers.first as? HomeViewController)?.delegate = self
+        addChild(navgationController)
+        view.addSubview(navgationController.view)
+        navgationController.didMove(toParent: self)
     }
 }
 
@@ -49,7 +49,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
         case .closed:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
                 
-                self.navVC?.view.frame.origin.x = self.homeVC.view.frame.size.width/2.5
+                self.navgationController.view.frame.origin.x = (self.navgationController.view.frame.size.width)/2.5
             } completion: { [weak self] done in
                 if done {
                     self?.menuState = .opened
@@ -59,7 +59,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
         case .opened:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseOut) {
                 
-                self.navVC?.view.frame.origin.x = 0
+                self.navgationController.view.frame.origin.x = 0
             } completion: { [weak self] done in
                 if done {
                     self?.menuState = .closed

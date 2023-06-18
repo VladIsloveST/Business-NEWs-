@@ -21,7 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         home.selectedIndex = 1
         self.window?.rootViewController = home
         window?.makeKeyAndVisible()
-        window?.makeKeyAndVisible()
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

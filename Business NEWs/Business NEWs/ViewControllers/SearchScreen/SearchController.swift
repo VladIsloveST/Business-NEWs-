@@ -52,7 +52,7 @@ class SearchViewController: UIViewController {
     }
     
     @objc func handleBack() {
-        navigationController?.popViewController(animated: true)
+        presenter.turnBack()
     }
 }
 

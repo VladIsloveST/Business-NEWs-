@@ -14,8 +14,10 @@ protocol ViewInPut: AnyObject {
 
 protocol ViewOutPut: AnyObject {
     var typesOfArticles: [TypeOfArticles] { get set }
-    init(view: ViewInPut, networkService: NetworkServiceProtocol)
+    init(view: ViewInPut, networkService: NetworkServiceProtocol, router: RouterProtocol)
+    func tapOnTheSearch()
     func getArticles()
+    
 }
 
 class Presenter: ViewOutPut {
@@ -23,12 +25,18 @@ class Presenter: ViewOutPut {
     weak var view: ViewInPut?
     private let group = DispatchGroup()
     private let networkService: NetworkServiceProtocol
+    var router: RouterProtocol?
     var typesOfArticles: [TypeOfArticles] = []
     
-    required init(view: ViewInPut, networkService: NetworkServiceProtocol) {
+    required init(view: ViewInPut, networkService: NetworkServiceProtocol, router: RouterProtocol) {
         self.view = view
         self.networkService = networkService
+        self.router = router
         getArticles()
+    }
+    
+    func tapOnTheSearch() {
+        router?.showSearch()
     }
     
     func getArticles() {
