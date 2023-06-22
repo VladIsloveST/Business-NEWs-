@@ -38,7 +38,6 @@ class HomeViewController: UIViewController {
         setupCollectionView()
         
         navigationItem.title = "Home"
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .white
     }
     
@@ -57,13 +56,40 @@ class HomeViewController: UIViewController {
         
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             articlesCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
             articlesCollectionView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor),
             articlesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
+    }
+    
+    private func setupMenu() {
+        menuCollectionView.homeController = self
+        
+        view.addSubview(menuCollectionView)
+        menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            menuCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
+            menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+    private func setupIndicatot() {
+        
+        view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor
+                .constraint(equalTo: self.view.centerXAnchor),
+            loadingIndicator.centerYAnchor
+                .constraint(equalTo: self.view.centerYAnchor),
+            loadingIndicator.widthAnchor
+                .constraint(equalToConstant: 50),
+            loadingIndicator.heightAnchor
+                .constraint(equalTo: self.loadingIndicator.widthAnchor)
+        ])
     }
     
     private func setupNavBarButtons() {
@@ -93,38 +119,6 @@ class HomeViewController: UIViewController {
     func scrollToMenu(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
-    }
-    
-    private func setupIndicatot() {
-        view.addSubview(loadingIndicator)
-        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor
-                .constraint(equalTo: self.view.centerXAnchor),
-            loadingIndicator.centerYAnchor
-                .constraint(equalTo: self.view.centerYAnchor),
-            loadingIndicator.widthAnchor
-                .constraint(equalToConstant: 50),
-            loadingIndicator.heightAnchor
-                .constraint(equalTo: self.loadingIndicator.widthAnchor)
-        ])
-    }
-    
-    private func setupMenu() {
-        menuCollectionView.homeController = self
-        
-        view.addSubview(menuCollectionView)
-        menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            menuCollectionView.topAnchor
-                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuCollectionView.widthAnchor
-                .constraint(equalToConstant: view.frame.width),
-            menuCollectionView.heightAnchor
-                .constraint(equalToConstant: 60)
-        ])
     }
 }
 

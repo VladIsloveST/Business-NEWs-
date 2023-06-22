@@ -23,13 +23,6 @@ class TabBar: UITabBarController {
     
     fileprivate func setupVCs() {
         
-//        let settingVC = SettingsViewController()
-//        let nav = UINavigationController(rootViewController: settingVC)
-//        nav.modalPresentationStyle = .pageSheet
-//        if let sheet = nav.sheetPresentationController {
-//            sheet.detents = [.medium(), .large()]
-//        }
-        
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
                                 title: "Saved",
@@ -53,9 +46,3 @@ class TabBar: UITabBarController {
         return navController
     }
 }
-
-//extension TabBar: UITabBarControllerDelegate {
-//    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-//        item.badgeColor = .blue
-//    }
-//}
