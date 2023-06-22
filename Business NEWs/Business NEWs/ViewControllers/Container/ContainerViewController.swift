@@ -30,6 +30,7 @@ class ContainerViewController: UIViewController {
         menuVC.didMove(toParent: self)
         
         let assembly = ModuleBuilder()
+        navgationController.navigationBar.prefersLargeTitles = true
         let router = HomeRouter(navigatinController: navgationController, assemblyBuilder: assembly)
         router.initialViewController()
         (navgationController.viewControllers.first as? HomeViewController)?.delegate = self
