@@ -11,14 +11,11 @@ class TabBar: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-  //      self.tabBarController?.delegate = self
-        
+                
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .white
         tabBar.tintColor = .label
         setupVCs()
-        
     }
     
     fileprivate func setupVCs() {
@@ -39,7 +36,8 @@ class TabBar: UITabBarController {
     fileprivate func createNavController(_ viewController: UIViewController,
                                          title: String,
                                          systemImageName: String) -> UIViewController {
-        let rootViewController = createTabBarItem(viewController, title: title, systemImageName: systemImageName)
+        let rootViewController = createTabBarItem(viewController, title: title,
+                                                  systemImageName: systemImageName)
         let navController = UINavigationController(rootViewController: rootViewController)
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title

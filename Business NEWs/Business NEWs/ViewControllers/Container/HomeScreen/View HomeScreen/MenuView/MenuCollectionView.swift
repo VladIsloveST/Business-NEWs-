@@ -10,7 +10,7 @@ import UIKit
 
 class MenuCollectionView: UICollectionView {
     
-    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple",  "Business"]
+    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple",  "Business", "Wall St.", "TechCrunch", "Apple",  "Business"]
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
@@ -57,11 +57,16 @@ class MenuCollectionView: UICollectionView {
     
     private func configure() {
         
+        categoryFlowLayout.minimumInteritemSpacing = 5
+        categoryFlowLayout.scrollDirection = .horizontal
+        
         translatesAutoresizingMaskIntoConstraints = false
         bounces = false
         showsHorizontalScrollIndicator = false
+        
         delegate = self
         dataSource = self
+        
         register(MenuCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         selectItem(at: [0,0], animated: true, scrollPosition: [])
     }
@@ -72,6 +77,7 @@ class MenuCollectionView: UICollectionView {
 extension MenuCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         homeController?.scrollToMenu(index: indexPath.item)
     }
 }
@@ -96,14 +102,10 @@ extension MenuCollectionView: UICollectionViewDataSource {
 extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        //        let categoryFont = UIFont(name: "Arial Bold", size: 18)
-        //        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
-        //        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+        let categoryFont = UIFont(name: "Arial Bold", size: 18)
+        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
+        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         
-        return CGSize(width: frame.width/4, height: frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return CGSize(width: categoryWidth, height: frame.height)
     }
 }
