@@ -17,6 +17,8 @@ class HomeViewController: UIViewController {
     
     var presenter: ViewOutPut!
     
+    private let myRefreshControl = UIRefreshControl()
+
     private let menuCollectionView = MenuCollectionView()
     private let loadingIndicator = ProgressView()
     private let articlesCollectionView: UICollectionView = {
@@ -30,6 +32,9 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        myRefreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        articlesCollectionView.refreshControl = myRefreshControl
+        
         loadingIndicator.isAnimating = true
         
         setupMenu()
@@ -39,6 +44,11 @@ class HomeViewController: UIViewController {
         
         navigationItem.title = "Home"
         navigationController?.navigationBar.backgroundColor = .white
+    }
+    
+    @objc private func refresh(sender: UIRefreshControl) {
+        print("refresh")
+        sender.endRefreshing()
     }
     
     private func  setupCollectionView() {
@@ -52,7 +62,6 @@ class HomeViewController: UIViewController {
         
         articlesCollectionView.isPagingEnabled = true
         articlesCollectionView.showsHorizontalScrollIndicator = false
-        articlesCollectionView.bounces = false
         
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false

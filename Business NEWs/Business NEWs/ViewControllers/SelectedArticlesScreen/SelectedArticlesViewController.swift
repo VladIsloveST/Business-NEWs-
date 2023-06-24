@@ -12,9 +12,7 @@ class SelectedArticlesViewController: UIViewController {
     // MARK: - Properties
     
     private var types = MockData.shared.articleData
-    
-    private let myRefreshControl = UIRefreshControl()
-    
+        
     private let newsCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
@@ -26,19 +24,12 @@ class SelectedArticlesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        myRefreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
-        newsCollectionView.refreshControl = myRefreshControl
         newsCollectionView.collectionViewLayout = createLayout()
         setupCollectionView()
     }
     
     // MARK: - Private Methods
-    
-    @objc private func refresh(sender: UIRefreshControl) {
-        print("refresh")
-        sender.endRefreshing()
-    }
     
     private func  setupCollectionView() {
         
