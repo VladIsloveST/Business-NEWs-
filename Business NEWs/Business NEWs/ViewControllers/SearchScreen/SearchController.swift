@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
     
     var presenter: SearchViewOutPut!
     
+    private var timer: Timer?
+    
     lazy var searchHistoryTableView: UITableView = {
         let tableView = UITableView()
         tableView.frame = view.bounds
@@ -61,7 +63,11 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text, !text.isEmpty else { return }
-        print(text)
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            print("My Search Bar \(text)")
+        })
     }
 }
 

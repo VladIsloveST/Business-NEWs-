@@ -20,7 +20,7 @@ protocol SearchViewOutPut: AnyObject {
 
 class PresenterSearchContoller: SearchViewOutPut {
     
-    var mockData = ["First, First, First, First, First, First,First, Firstmmm","Second","Third"]
+    var mockData = ["First", "First", "First", "First", "First", "First", "First", "Second", "Third"]
     var router: RouterProtocol?
     weak var view: SearchViewInPut?
     
