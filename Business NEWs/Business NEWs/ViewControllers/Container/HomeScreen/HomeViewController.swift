@@ -62,6 +62,7 @@ class HomeViewController: UIViewController {
         
         articlesCollectionView.isPagingEnabled = true
         articlesCollectionView.showsHorizontalScrollIndicator = false
+        //articlesCollectionView.bounces = false
         
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -141,7 +142,7 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //presenter.typesOfArticles[section].numberOfArticles
-        4
+        8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -154,7 +155,7 @@ extension HomeViewController: UICollectionViewDataSource {
         
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         
-        let colorArray: [UIColor] = [.lightGray, .yellow, .systemPink, .orange]
+        let colorArray: [UIColor] = [.lightGray, .yellow, .systemPink, .orange, .lightGray, .yellow, .systemPink, .orange]
         cell.backgroundColor = colorArray[indexPath.row]
         return cell
         
