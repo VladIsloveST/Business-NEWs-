@@ -41,7 +41,7 @@ class Presenter: ViewOutPut {
     
     func getArticles() {
         group.enter()
-        networkService.getArticlesFromApple { [weak self] result in
+        networkService.getArticlesFromCategory(.apple) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -54,7 +54,7 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromBusiness { [weak self] result in
+        networkService.getArticlesFromCategory(.business) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -67,7 +67,7 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromTechCrunch { [weak self] result in
+        networkService.getArticlesFromCategory(.techCrunch) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -80,7 +80,7 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromWallStreet { [weak self] result in
+        networkService.getArticlesFromCategory(.wallStreet) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

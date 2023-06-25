@@ -102,9 +102,9 @@ extension MenuCollectionView: UICollectionViewDataSource {
 extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let categoryFont = UIFont(name: "Arial Bold", size: 18)
-        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
-        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+//        let categoryFont = UIFont(name: "Arial Bold", size: 18)
+//        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
+//        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         
         return CGSize(width: frame.width/4, height: frame.height)
     }

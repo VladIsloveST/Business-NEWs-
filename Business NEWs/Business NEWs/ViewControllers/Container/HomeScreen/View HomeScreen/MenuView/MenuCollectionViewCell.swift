@@ -23,7 +23,8 @@ class MenuCollectionViewCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             nameCategoryLabel.font = self.isSelected ?
-            UIFont(name: "Helvetica Neue Bold", size: 18) : UIFont(name: "Helvetica Neue Medium", size: 18)
+            UIFont(name: "Helvetica Neue Bold", size: 18) :
+            UIFont(name: "Helvetica Neue Medium", size: 18)
         }
     }
     
