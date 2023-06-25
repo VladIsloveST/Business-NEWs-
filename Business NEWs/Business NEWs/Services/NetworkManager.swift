@@ -7,6 +7,18 @@
 
 import Foundation
 
+enum ComponentsOfUrl: String {
+    case endpoint = "https://newsapi.org/v2/"
+    case baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
+}
+
+enum CategoriesOfArticles: String {
+    case apple = "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
+    case business = "top-headlines?country=us&category=business&"
+    case techCrunch = "top-headlines?sources=techcrunch&"
+    case wallStreet = "everything?domains=wsj.com&"
+}
+
 enum NetworkError: Error {
     case emptyData
     case unableToDecode
@@ -19,19 +31,13 @@ enum NetworkError: Error {
 }
 
 protocol NetworkServiceProtocol {
-    func getArticlesFromApple(complition: @escaping (Result<Articles, Error>)-> Void)
-    func getArticlesFromBusiness(complition: @escaping (Result<Articles, Error>)-> Void)
-    func getArticlesFromTechCrunch(complition: @escaping (Result<Articles, Error>)-> Void)
-    func getArticlesFromWallStreet(complition: @escaping (Result<Articles, Error>)-> Void)
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>)-> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
     
-    private let endpoint = "https://newsapi.org/v2/"
-    private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
-    
     private func getArticlefrom(url: String, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let urlTechCrunch = url + baseApiKey
+        let urlTechCrunch = url + ComponentsOfUrl.baseApiKey.rawValue
         guard let url = URL(string: urlTechCrunch) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -71,23 +77,8 @@ class NetworkService: NetworkServiceProtocol {
         }.resume()
     }
     
-    func getArticlesFromApple(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url =  endpoint + "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromBusiness(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = endpoint + "top-headlines?country=us&category=business&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromTechCrunch(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = endpoint + "top-headlines?sources=techcrunch&"
-        getArticlefrom(url: url, complition: complition)
-    }
-    
-    func getArticlesFromWallStreet(complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = endpoint + "everything?domains=wsj.com&"
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = ComponentsOfUrl.endpoint.rawValue + name.rawValue
         getArticlefrom(url: url, complition: complition)
     }
 }
