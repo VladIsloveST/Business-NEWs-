@@ -21,6 +21,7 @@ class MenuCollectionView: UICollectionView {
         return horizontalView
     }()
     
+    
     var leftAnchorConstraint = NSLayoutConstraint()
     var homeController: HomeViewController?
     
@@ -57,7 +58,6 @@ class MenuCollectionView: UICollectionView {
     
     private func configure() {
         
-        categoryFlowLayout.minimumInteritemSpacing = 5
         categoryFlowLayout.scrollDirection = .horizontal
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -106,6 +106,10 @@ extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
         let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
         let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         
-        return CGSize(width: categoryWidth, height: frame.height)
+        return CGSize(width: frame.width/4, height: frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        0
     }
 }

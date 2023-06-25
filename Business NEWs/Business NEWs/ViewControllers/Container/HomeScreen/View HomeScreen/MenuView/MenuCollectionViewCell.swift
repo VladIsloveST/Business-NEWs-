@@ -18,6 +18,8 @@ class MenuCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private var separatorLine = UIView()
+    
     override var isSelected: Bool {
         didSet {
             nameCategoryLabel.font = self.isSelected ?
@@ -29,10 +31,25 @@ class MenuCollectionViewCell: UICollectionViewCell {
         super .init(frame: frame)
         setupViews()
         setConstrains()
+        addSeparatorLineView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func addSeparatorLineView(){
+        separatorLine.backgroundColor = .darkGray
+        
+        addSubview(separatorLine)
+        
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            separatorLine.widthAnchor.constraint(equalTo: widthAnchor),
+            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
+        ])
     }
     
     private func setupViews() {
