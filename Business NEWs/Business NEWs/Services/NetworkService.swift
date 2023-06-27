@@ -1,5 +1,5 @@
 //
-//  NetworkManager.swift
+//  NetworkService.swift
 //  Business NEWs
 //
 //  Created by Mac on 14.02.2023.
@@ -7,12 +7,8 @@
 
 import Foundation
 
-enum ComponentsOfUrl: String {
-    case endpoint = "https://newsapi.org/v2/"
-    case baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
-}
-
 enum CategoriesOfArticles: String {
+    case baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     case apple = "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
     case business = "top-headlines?country=us&category=business&"
     case techCrunch = "top-headlines?sources=techcrunch&"
@@ -37,7 +33,7 @@ protocol NetworkServiceProtocol {
 class NetworkService: NetworkServiceProtocol {
     
     private func getArticlefrom(url: String, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let urlTechCrunch = url + ComponentsOfUrl.baseApiKey.rawValue
+        let urlTechCrunch = url + CategoriesOfArticles.baseApiKey.rawValue
         guard let url = URL(string: urlTechCrunch) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -78,7 +74,7 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = ComponentsOfUrl.endpoint.rawValue + name.rawValue
+        let url = "https://newsapi.org/v2/" + name.rawValue
         getArticlefrom(url: url, complition: complition)
     }
 }

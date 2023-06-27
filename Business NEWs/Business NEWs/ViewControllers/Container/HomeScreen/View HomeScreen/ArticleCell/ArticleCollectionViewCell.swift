@@ -29,8 +29,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        
-        
         collectionView.register(PortraitCollectionViewCell.self, forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
         
         addSubview(collectionView)
