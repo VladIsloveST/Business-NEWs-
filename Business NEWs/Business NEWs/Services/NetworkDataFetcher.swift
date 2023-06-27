@@ -7,11 +7,44 @@
 
 import Foundation
 
-class NetworkDataFetcher {
+enum CategoriesOfArticles: String {
+    case apple = "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
+    case business = "top-headlines?country=us&category=business&"
+    case techCrunch = "top-headlines?sources=techcrunch&"
+    case wallStreet = "everything?domains=wsj.com&"
+}
+
+protocol NetworkDataFetcherProtocol {
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>)-> Void)
+}
+
+class NetworkDataFetcher: NetworkDataFetcherProtocol {
     
     let networkService = NetworkService()
     
-    func fetchTracks(url: String, response: @escaping (HTTPURLResponse?) -> Void ) {
+    private func fetchTracks(url: String, response: @escaping (Result<Articles, Error>) -> Void ) {
         
+        networkService.requestFrom(urlWitoutApiKey: url) { result in
+            switch result {
+                
+            case .success(let data):
+                do {
+                    let articles = try JSONDecoder().decode(Articles.self, from: data)
+                    response(.success(articles))
+                } catch let jsonError{
+                    print("\(jsonError). Unable to decode")
+                }
+            case .failure(let error):
+                print(error)
+                response(.failure(error))
+            }
+        }
+    }
+    
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/" + name.rawValue
+        fetchTracks(url: url, response: complition)
     }
 }
+
+

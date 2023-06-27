@@ -6,76 +6,54 @@
 //
 
 import Foundation
-
-enum CategoriesOfArticles: String {
-    case baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
-    case apple = "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
-    case business = "top-headlines?country=us&category=business&"
-    case techCrunch = "top-headlines?sources=techcrunch&"
-    case wallStreet = "everything?domains=wsj.com&"
-}
+import UIKit
 
 enum NetworkError: Error {
+    case missingURL
+    case responseAbsent
     case emptyData
-    case unableToDecode
-    case statusCodeIsUnknown
     case redirection
     case clientError
     case serverError
-    case requestFailed
-    
+    case statusCodeIsUnknown
 }
 
-protocol NetworkServiceProtocol {
-    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>)-> Void)
+enum StatusCodeResult<Error> {
+    case success
+    case failure(Error)
 }
 
-class NetworkService: NetworkServiceProtocol {
+class NetworkService {
+    private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     
-    private func getArticlefrom(url: String, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let urlTechCrunch = url + CategoriesOfArticles.baseApiKey.rawValue
-        guard let url = URL(string: urlTechCrunch) else { return }
+    func requestFrom(urlWitoutApiKey: String, complition: @escaping (Result<Data, Error>) -> Void) {
+        let url = urlWitoutApiKey + baseApiKey
+        guard let url = URL(string: url) else {
+            return complition(.failure(NetworkError.missingURL)) }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                complition(.failure(NetworkError.statusCodeIsUnknown))
-                return
-            }
-            
             if let error = error {
                 complition(.failure(error))
                 return
             }
             
-            switch statusCode {
-            case 200...299:
+            guard let response = (response as? HTTPURLResponse) else {
+                return complition(.failure(NetworkError.responseAbsent)) }
+            
+            let result = self.handleNetworkResponse(response)
+            switch result {
+                
+            case .success:
                 guard let data = data else {
                     complition(.failure(NetworkError.emptyData))
                     return
                 }
+                complition(.success(data))
+            case .failure(let networkError):
+                complition(.failure(networkError))
                 
-                do {
-                    let result = try JSONDecoder().decode(Articles.self, from: data)
-                    complition(.success(result))
-                } catch {
-                    complition(.failure(NetworkError.unableToDecode))
-                }
-                
-            case 300...399:
-                complition(.failure(NetworkError.redirection))
-            case 400...499:
-                complition(.failure(NetworkError.clientError))
-            case 500...599:
-                complition(.failure(NetworkError.serverError))
-            default:
-                complition(.failure(NetworkError.requestFailed))
             }
         }.resume()
-    }
-    
-    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/" + name.rawValue
-        getArticlefrom(url: url, complition: complition)
     }
 }
 

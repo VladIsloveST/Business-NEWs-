@@ -18,8 +18,8 @@ class ModuleBuilder: AssemblyBuilderProtocol {
     
     func createHomeBuilder(router: RouterProtocol) -> UIViewController {
         let homeView = HomeViewController()
-        let networkService = NetworkService()
-        let presenter = Presenter(view: homeView, networkService: networkService, router: router)
+        let networkDataFetcher = NetworkDataFetcher()
+        let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher, router: router)
         homeView.presenter = presenter
         return homeView
     }

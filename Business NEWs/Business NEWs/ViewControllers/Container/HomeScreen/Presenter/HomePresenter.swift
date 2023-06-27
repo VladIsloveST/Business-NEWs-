@@ -14,7 +14,7 @@ protocol ViewInPut: AnyObject {
 
 protocol ViewOutPut: AnyObject {
     var typesOfArticles: [TypeOfArticles] { get set }
-    init(view: ViewInPut, networkService: NetworkServiceProtocol, router: RouterProtocol)
+    init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol)
     func tapOnTheSearch()
     func getArticles()
     
@@ -24,13 +24,13 @@ class Presenter: ViewOutPut {
     
     weak var view: ViewInPut?
     private let group = DispatchGroup()
-    private let networkService: NetworkServiceProtocol
+    private let networkDataFetcher: NetworkDataFetcherProtocol
     var router: RouterProtocol?
     var typesOfArticles: [TypeOfArticles] = []
     
-    required init(view: ViewInPut, networkService: NetworkServiceProtocol, router: RouterProtocol) {
+    required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol) {
         self.view = view
-        self.networkService = networkService
+        self.networkDataFetcher = networkDataFetcher
         self.router = router
         getArticles()
     }
@@ -41,9 +41,7 @@ class Presenter: ViewOutPut {
     
     func getArticles() {
         group.enter()
-        networkService.getArticlesFromCategory(.apple) { [weak self] result in
-            guard let self = self else { return }
-            
+        networkDataFetcher.getArticlesFromCategory(.apple) { result in
             switch result {
             case .success(let items):
                 self.typesOfArticles.append(.apple(items))
@@ -54,7 +52,20 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromCategory(.business) { [weak self] result in
+        networkDataFetcher.getArticlesFromCategory(.apple) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.apple(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
+            }
+            self.group.leave()
+        }
+        
+        group.enter()
+        networkDataFetcher.getArticlesFromCategory(.business) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -67,7 +78,7 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromCategory(.techCrunch) { [weak self] result in
+        networkDataFetcher.getArticlesFromCategory(.techCrunch) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -80,7 +91,7 @@ class Presenter: ViewOutPut {
         }
         
         group.enter()
-        networkService.getArticlesFromCategory(.wallStreet) { [weak self] result in
+        networkDataFetcher.getArticlesFromCategory(.wallStreet) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
