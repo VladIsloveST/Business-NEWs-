@@ -10,8 +10,8 @@ import UIKit
 
 enum NetworkError: Error {
     case missingURL
-    case responseAbsent
     case emptyData
+    case responseAbsent
     case redirection
     case clientError
     case serverError
@@ -25,6 +25,16 @@ enum StatusCodeResult<Error> {
 
 class NetworkService {
     private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
+    
+    private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {
+        switch response.statusCode {
+        case 200...299: return .success
+        case 300...399: return .failure(NetworkError.redirection)
+        case 400...499: return .failure(NetworkError.clientError)
+        case 500...599: return .failure(NetworkError.serverError)
+        default: return .failure(NetworkError.statusCodeIsUnknown)
+        }
+    }
     
     func requestFrom(urlWitoutApiKey: String, complition: @escaping (Result<Data, Error>) -> Void) {
         let url = urlWitoutApiKey + baseApiKey
