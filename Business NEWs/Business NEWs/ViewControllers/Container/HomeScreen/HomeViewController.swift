@@ -17,10 +17,12 @@ class HomeViewController: UIViewController {
     
     var presenter: ViewOutPut!
     
-    private let myRefreshControl = UIRefreshControl()
+    private let refreshControl = UIRefreshControl()
 
     private let menuCollectionView = MenuCollectionView()
+    
     private let loadingIndicator = ProgressView()
+    
     private let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -32,8 +34,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        myRefreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        articlesCollectionView.refreshControl = myRefreshControl
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        articlesCollectionView.refreshControl = refreshControl
         
         loadingIndicator.isAnimating = true
         
@@ -52,17 +54,13 @@ class HomeViewController: UIViewController {
     }
     
     private func  setupCollectionView() {
-        
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
         
-        articlesCollectionView.register(
-            UINib(nibName: ArticleCollectionViewCell.identifier , bundle: nil),
-            forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
+        articlesCollectionView.register(ArticleCollectionViewCell.self, forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
         
         articlesCollectionView.isPagingEnabled = true
         articlesCollectionView.showsHorizontalScrollIndicator = false
-        //articlesCollectionView.bounces = false
         
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -154,9 +152,6 @@ extension HomeViewController: UICollectionViewDataSource {
         //        return cell
         
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        
-        let colorArray: [UIColor] = [.lightGray, .yellow, .systemPink, .orange, .lightGray, .yellow, .systemPink, .orange]
-        cell.backgroundColor = colorArray[indexPath.row]
         return cell
         
         //        let typesOfArticles = presenter.typesOfArticles[indexPath.section]

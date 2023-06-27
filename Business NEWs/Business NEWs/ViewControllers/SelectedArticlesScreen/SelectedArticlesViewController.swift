@@ -48,7 +48,6 @@ class SelectedArticlesViewController: UIViewController {
         
         view.addSubview(newsCollectionView)
         newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-
         NSLayoutConstraint.activate([
             newsCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
             newsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
