@@ -23,6 +23,7 @@ class MenuCollectionView: UICollectionView {
     
     
     var leftAnchorConstraint = NSLayoutConstraint()
+
     var homeController: HomeViewController?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -31,7 +32,7 @@ class MenuCollectionView: UICollectionView {
         configure()
         setupHorizontalBar()
     }
-    
+
     override func layoutSubviews() {
         super .layoutSubviews()
         
@@ -58,6 +59,7 @@ class MenuCollectionView: UICollectionView {
     
     private func configure() {
         
+        categoryFlowLayout.minimumInteritemSpacing = 0
         categoryFlowLayout.scrollDirection = .horizontal
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -102,14 +104,10 @@ extension MenuCollectionView: UICollectionViewDataSource {
 extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-//        let categoryFont = UIFont(name: "Arial Bold", size: 18)
-//        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
-//        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
-        
-        return CGSize(width: frame.width/4, height: frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        0
+        let categoryFont = UIFont(name: "Arial Bold", size: 18)
+        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
+        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+
+        return CGSize(width: categoryWidth, height: frame.height)
     }
 }
