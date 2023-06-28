@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 protocol AssemblyBuilderProtocol {
     func createHomeBuilder(router: RouterProtocol) -> UIViewController
     func createSearchBuilder(router: RouterProtocol) -> UIViewController
