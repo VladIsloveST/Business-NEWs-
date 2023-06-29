@@ -65,6 +65,13 @@ extension ArticleCollectionViewCell: UICollectionViewDelegate {
 // MARK: - Collection View Delegate Flow Layout
 extension ArticleCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+//        let widnestCellWigth = bounds.width - collectionView.contentInset.left - collectionView.contentInset.left
+//        let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]
+//        let size = CGSize(width: widnestCellWigth, height: 2000)
+//        let estimatedFrame = NSString(string: wikipedia[indexPath.row]).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+//        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 25)
+        
         CGSize(width: frame.width - 30, height: frame.height / 2 )
     }
     
