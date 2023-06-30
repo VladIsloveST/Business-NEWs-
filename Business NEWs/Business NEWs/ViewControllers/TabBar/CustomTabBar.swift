@@ -16,7 +16,7 @@ class CustomTabBar: UITabBar {
     public lazy var middleButton: UIButton = {
         
         let middleButton = CustomButtonBehavior()
-        middleButton.frame.size = CGSize(width: 60, height: 50)
+        middleButton.frame.size = CGSize(width: 65, height: 50)
         middleButton.isSelected = false
     
         var filled = UIButton.Configuration.filled()

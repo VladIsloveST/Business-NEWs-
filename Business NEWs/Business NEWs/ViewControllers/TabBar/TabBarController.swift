@@ -7,15 +7,22 @@
 
 import UIKit
 
-class TabBar: UITabBarController {
+class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        delegate = self
                 
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .white
         tabBar.tintColor = .label
         setupVCs()
+        
+        guard let tabBar = self.tabBar as? CustomTabBar else { return }
+        tabBar.didTapButton = { [unowned self] in
+            self.routeToSettings()
+        }
     }
     
     fileprivate func setupVCs() {
@@ -57,5 +64,22 @@ class TabBar: UITabBarController {
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title
         return navController
+    }
+}
+
+// MARK: - UITabBarController Delegate
+extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
+            return true
+        }
+        
+        // Your middle tab bar item index.
+        // In my case it's 2.
+        if selectedIndex == 2 {
+            return false
+        }
+        
+        return true
     }
 }
