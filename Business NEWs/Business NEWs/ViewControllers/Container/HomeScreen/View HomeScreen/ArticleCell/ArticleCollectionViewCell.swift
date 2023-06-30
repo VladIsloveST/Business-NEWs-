@@ -14,7 +14,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.contentInset.top = 15
-        //cv.showsVerticalScrollIndicator = false
         cv.backgroundColor = .white
         return cv
     }()
@@ -52,7 +51,6 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCollectionViewCell.identifier, for: indexPath) as? PortraitCollectionViewCell else { return UICollectionViewCell() }
-        //cell.backgroundColor = .yellow
         return cell
     }
 }
