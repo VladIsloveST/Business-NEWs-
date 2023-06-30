@@ -12,12 +12,8 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        delegate = self
-                
-        view.backgroundColor = .systemBackground
-        UITabBar.appearance().barTintColor = .white
-        tabBar.tintColor = .label
-        setupVCs()
+        configureTabBar()
+        setupViewControllers()
         
         guard let tabBar = self.tabBar as? CustomTabBar else { return }
         tabBar.didTapButton = { [unowned self] in
@@ -25,23 +21,29 @@ class TabBarController: UITabBarController {
         }
     }
     
-    fileprivate func setupVCs() {
+    fileprivate func configureTabBar() {
+        setValue(CustomTabBar(frame: tabBar.frame), forKey: "tabBar")
+        delegate = self
+        tabBar.tintColor = .label
+        view.backgroundColor = .systemBackground
+    }
+    
+    fileprivate func setupViewControllers() {
         
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
                                 title: "Saved",
-                                systemImageName: "bookmark"),
+                                systemImageName: "bookmark",
+                                selectedImageName: "bookmark.fill"),
             createTabBarItem(ContainerViewController(),
                              title: "Home",
-                             systemImageName: "house"),
+                             imageName: "house",
+                             selectedImageName: "house.fill"),
             UIViewController()
-//            createNavController(SettingsViewController(),
-//                                title: "Settings",
-//                                systemImageName: "gearshape")
         ]
     }
     
-    func routeToSettings() {
+    fileprivate func routeToSettings() {
         if #available(iOS 15.0, *) {
             let settingsVC = SettingsViewController()
             if let sheet = settingsVC.sheetPresentationController {
@@ -55,11 +57,12 @@ class TabBarController: UITabBarController {
         }
     }
     
-    fileprivate func createNavController(_ viewController: UIViewController,
-                                         title: String,
-                                         systemImageName: String) -> UIViewController {
+    fileprivate func createNavController(_ viewController: UIViewController, title: String,
+                                         systemImageName: String,
+                                         selectedImageName: String) -> UIViewController {
         let rootViewController = createTabBarItem(viewController, title: title,
-                                                  systemImageName: systemImageName)
+                                                  imageName: systemImageName,
+                                                  selectedImageName: selectedImageName)
         let navController = UINavigationController(rootViewController: rootViewController)
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title
@@ -69,13 +72,12 @@ class TabBarController: UITabBarController {
 
 // MARK: - UITabBarController Delegate
 extension TabBarController: UITabBarControllerDelegate {
+    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
             return true
         }
         
-        // Your middle tab bar item index.
-        // In my case it's 2.
         if selectedIndex == 2 {
             return false
         }
