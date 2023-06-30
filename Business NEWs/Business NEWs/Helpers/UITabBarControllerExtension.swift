@@ -17,3 +17,9 @@ extension UITabBarController  {
         return viewController
     }
 }
+
+extension UITabBar {
+    var thirdItemPosition: CGFloat {
+        return frame.width / 2 + frame.width / 3
+    }
+}
