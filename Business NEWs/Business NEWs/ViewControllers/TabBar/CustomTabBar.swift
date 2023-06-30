@@ -20,7 +20,7 @@ class CustomTabBar: UITabBar {
         middleButton.isSelected = false
     
         var filled = UIButton.Configuration.filled()
-        filled.attributedTitle = AttributedString("Saved", attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10)]))
+        filled.attributedTitle = AttributedString("Settings", attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10)]))
         filled.titleAlignment = .center
 
         filled.baseForegroundColor = .systemGray
@@ -63,11 +63,11 @@ class CustomButtonBehavior: UIButton {
         didSet {
             if isSelected {
                 configuration?.baseForegroundColor = .systemBlue
-                guard let image = UIImage(systemName: "bookmark.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19)) else { return }
+                guard let image = UIImage(systemName: "gearshape.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19)) else { return }
                 setImage(image, for: .normal)
             } else {
                 configuration?.baseForegroundColor = .systemGray
-                guard let image = UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19)) else { return }
+                guard let image = UIImage(systemName: "gearshape", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19)) else { return }
                 setImage(image, for: .normal)
             }
         }
