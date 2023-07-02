@@ -10,6 +10,8 @@ import UIKit
 class ArticleCollectionViewCell: UICollectionViewCell {
     static let identifier = "ArticleCollectionViewCell"
     
+    private let refreshControl = UIRefreshControl()
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -22,6 +24,18 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         setupCollectionView()
+        setuopRefreshControl()
+    }
+    
+    func setuopRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
+    }
+    
+    @objc private func refresh(sender: UIRefreshControl) {
+        print("refresh")
+        sender.endRefreshing()
     }
     
     func setupCollectionView() {

@@ -13,6 +13,16 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemPink
+        adjustBottomSheet()
+    }
+    
+    private func adjustBottomSheet() {
+        let sheet = self.sheetPresentationController
+        sheet?.detents = [.medium(), .large()]
+        sheet?.prefersScrollingExpandsWhenScrolledToEdge = false
+        sheet?.prefersGrabberVisible = true
+        sheet?.largestUndimmedDetentIdentifier = .medium
+        sheet?.preferredCornerRadius = 20
     }
 
 }
