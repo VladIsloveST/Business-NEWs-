@@ -96,6 +96,7 @@ class HomeViewController: UIViewController {
             imageSystemName: "magnifyingglass", target: self, action: #selector(didTapSearchButton))
         let moreButtonItem = UIBarButtonItem(
             imageSystemName: "ellipsis",target: self, action: #selector(didTapMoreButton))
+        moreButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
         
         let menuButtonItem = UIBarButtonItem(
