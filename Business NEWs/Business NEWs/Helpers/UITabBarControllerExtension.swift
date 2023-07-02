@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 extension UITabBarController  {
-    func createTabBarItem(_ viewController: UIViewController, title: String, imageName: String, selectedImageName: String) -> UIViewController {
-        
+    func createTabBarItem(_ viewController: UIViewController, title: String,
+                          imageName: String, selectedImageName: String) -> UIViewController {
         viewController.tabBarItem.title = title
         let image = UIImage(systemName: imageName)
         viewController.tabBarItem.image = image
