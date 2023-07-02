@@ -46,13 +46,6 @@ class TabBarController: UITabBarController {
     fileprivate func routeToSettings() {
         if #available(iOS 15.0, *) {
             let settingsVC = SettingsViewController()
-            if let sheet = settingsVC.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.prefersGrabberVisible = true
-                sheet.largestUndimmedDetentIdentifier = .medium
-                sheet.preferredCornerRadius = 20
-            }
             present(settingsVC, animated: true)
         }
     }
