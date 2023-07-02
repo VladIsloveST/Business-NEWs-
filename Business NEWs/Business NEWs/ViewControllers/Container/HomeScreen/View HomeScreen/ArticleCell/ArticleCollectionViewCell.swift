@@ -10,8 +10,6 @@ import UIKit
 class ArticleCollectionViewCell: UICollectionViewCell {
     static let identifier = "ArticleCollectionViewCell"
     
-    private let refreshControl = UIRefreshControl()
-    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -20,36 +18,40 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         return cv
     }()
     
+    private let refreshControl = UIRefreshControl()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupCollectionView()
         setuopRefreshControl()
     }
     
-    func setuopRefreshControl() {
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-        
-    }
-    
-    @objc private func refresh(sender: UIRefreshControl) {
-        print("refresh")
-        sender.endRefreshing()
-    }
-    
+    // MARK: - Actions
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        collectionView.register(PortraitCollectionViewCell.self, forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
-        
+        collectionView.register(PortraitCollectionViewCell.self,
+                                forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.widthAnchor.constraint(equalTo: widthAnchor),
             collectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
+        collectionView.refreshControl = refreshControl
+    }
+    
+    func setuopRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl.backgroundColor = .clear
+        refreshControl.tintColor = .black
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching more articles...", attributes: [NSAttributedString.Key.strokeColor : UIColor.black])
+    }
+    
+    @objc private func refresh(sender: UIRefreshControl) {
+        print("refresh")
+        sender.endRefreshing()
     }
     
     required init?(coder: NSCoder) {
@@ -84,7 +86,7 @@ extension ArticleCollectionViewCell: UICollectionViewDelegateFlowLayout {
 //        let estimatedFrame = NSString(string: wikipedia[indexPath.row]).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
 //        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 25)
         
-        CGSize(width: frame.width - 30, height: frame.height / 2 )
+        CGSize(width: frame.width - 30, height: frame.height / 2)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

@@ -14,7 +14,6 @@ protocol AssemblyBuilderProtocol {
 }
 
 class ModuleBuilder: AssemblyBuilderProtocol {
-    
     func createHomeBuilder(router: RouterProtocol) -> UIViewController {
         let homeView = HomeViewController()
         let networkDataFetcher = NetworkDataFetcher()
