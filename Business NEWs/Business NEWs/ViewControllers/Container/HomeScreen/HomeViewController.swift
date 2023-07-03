@@ -17,10 +17,6 @@ class HomeViewController: UIViewController {
     
     var presenter: ViewOutPut!
     
-    private let menuCollectionView = MenuCollectionView()
-    
-    private let loadingIndicator = ProgressView()
-    
     private let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -28,6 +24,11 @@ class HomeViewController: UIViewController {
         let colView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         return colView
     }()
+    
+    private let menuCollectionView = MenuCollectionView()
+    
+    
+    private let loadingIndicator = ProgressView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,12 +48,8 @@ class HomeViewController: UIViewController {
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
         
-        articlesCollectionView.isPagingEnabled = true
-        articlesCollectionView.showsHorizontalScrollIndicator = false
-        articlesCollectionView.bounces = false
-        
-        articlesCollectionView.register(ArticleCollectionViewCell.self, forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
-        
+        articlesCollectionView.register(ArticleCollectionViewCell.self,
+                                        forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -60,12 +57,12 @@ class HomeViewController: UIViewController {
             articlesCollectionView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor),
             articlesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
+        articlesCollectionView.isPagingEnabled = true
+        articlesCollectionView.showsHorizontalScrollIndicator = false
+        articlesCollectionView.bounces = false
     }
     
     private func setupMenu() {
-        menuCollectionView.homeController = self
-        
         view.addSubview(menuCollectionView)
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -73,10 +70,10 @@ class HomeViewController: UIViewController {
             menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
             menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
         ])
+        menuCollectionView.homeController = self
     }
     
     private func setupIndicatot() {
-        
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

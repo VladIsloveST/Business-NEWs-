@@ -10,12 +10,12 @@ import UIKit
 class ArticleCollectionViewCell: UICollectionViewCell {
     static let identifier = "ArticleCollectionViewCell"
     
-    lazy var collectionView: UICollectionView = {
+    lazy var articlCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.contentInset.top = 15
-        cv.backgroundColor = .white
-        return cv
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.contentInset.top = 15
+        collectionView.backgroundColor = .white
+        return collectionView
     }()
     
     private let refreshControl = UIRefreshControl()
@@ -28,18 +28,18 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Actions
     func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        articlCollectionView.delegate = self
+        articlCollectionView.dataSource = self
         
-        collectionView.register(PortraitCollectionViewCell.self,
+        articlCollectionView.register(PortraitCollectionViewCell.self,
                                 forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
-        addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(articlCollectionView)
+        articlCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.widthAnchor.constraint(equalTo: widthAnchor),
-            collectionView.heightAnchor.constraint(equalTo: heightAnchor)
+            articlCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
+            articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
-        collectionView.refreshControl = refreshControl
+        articlCollectionView.refreshControl = refreshControl
     }
     
     func setuopRefreshControl() {
