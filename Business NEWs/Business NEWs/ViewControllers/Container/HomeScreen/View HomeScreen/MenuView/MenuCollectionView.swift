@@ -14,28 +14,20 @@ class MenuCollectionView: UICollectionView {
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
-    private var horizontalBarView: UIView = {
-        let horizontalView = UIView()
-        horizontalView.backgroundColor = .black
-        horizontalView.translatesAutoresizingMaskIntoConstraints = false
-        return horizontalView
-    }()
-    
+    private var horizontalBarView = UIView()
     
     var leftAnchorConstraint = NSLayoutConstraint()
-
+    
     var homeController: HomeViewController?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
-        
         configure()
         setupHorizontalBar()
     }
 
     override func layoutSubviews() {
         super .layoutSubviews()
-        
         horizontalBarView.roundCorners(corners: [.topLeft, .topRight], radius: 3)
     }
     
@@ -44,20 +36,21 @@ class MenuCollectionView: UICollectionView {
     }
     
     private func setupHorizontalBar() {
-        
         addSubview(horizontalBarView)
-        
+        horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
         leftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
-        
         NSLayoutConstraint.activate([
             leftAnchorConstraint,
             horizontalBarView.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
             horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier:  1/4),
             horizontalBarView.heightAnchor.constraint(equalToConstant: 6)
         ])
+        horizontalBarView.backgroundColor = .black
     }
     
     private func configure() {
+        delegate = self
+        dataSource = self
         
         categoryFlowLayout.minimumInteritemSpacing = 0
         categoryFlowLayout.scrollDirection = .horizontal
@@ -65,10 +58,7 @@ class MenuCollectionView: UICollectionView {
         translatesAutoresizingMaskIntoConstraints = false
         bounces = false
         showsHorizontalScrollIndicator = false
-        
-        delegate = self
-        dataSource = self
-        
+       
         register(MenuCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         selectItem(at: [0,0], animated: true, scrollPosition: [])
     }
@@ -87,7 +77,6 @@ extension MenuCollectionView: UICollectionViewDelegate {
 // MARK: - Collection View Data Source
 
 extension MenuCollectionView: UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         nameCategoryArray.count
     }
@@ -102,12 +91,12 @@ extension MenuCollectionView: UICollectionViewDataSource {
 // MARK: - Collection View Delegate Flow Layout
 
 extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let categoryFont = UIFont(name: "Arial Bold", size: 18)
         let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
         let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
-
         return CGSize(width: categoryWidth, height: frame.height)
     }
 }

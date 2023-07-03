@@ -31,8 +31,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         articlCollectionView.delegate = self
         articlCollectionView.dataSource = self
         
-        articlCollectionView.register(PortraitCollectionViewCell.self,
-                                forCellWithReuseIdentifier: PortraitCollectionViewCell.identifier)
+        articlCollectionView.register(PortraitCell.self,
+                                forCellWithReuseIdentifier: PortraitCell.identifier)
         addSubview(articlCollectionView)
         articlCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -66,7 +66,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCollectionViewCell.identifier, for: indexPath) as? PortraitCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return UICollectionViewCell() }
         return cell
     }
 }

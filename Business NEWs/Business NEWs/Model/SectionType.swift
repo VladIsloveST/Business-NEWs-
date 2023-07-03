@@ -16,7 +16,7 @@ enum SectionType {
         case .recent:
             return "Recent"
         case .outdated:
-            return "Outdated"
+            return "Viewed"
         }
     }
     

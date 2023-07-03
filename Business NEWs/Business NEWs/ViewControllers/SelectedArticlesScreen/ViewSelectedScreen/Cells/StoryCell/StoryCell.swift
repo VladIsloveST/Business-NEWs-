@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StoryCollectionViewCell: UICollectionViewCell {
+class StoryCell: UICollectionViewCell {
     static let identifier = "StoryCollectionViewCell"
 
     override init(frame: CGRect) {
