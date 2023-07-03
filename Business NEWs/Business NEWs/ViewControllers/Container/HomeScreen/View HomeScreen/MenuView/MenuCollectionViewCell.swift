@@ -9,12 +9,12 @@ import UIKit
 
 class MenuCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     let nameCategoryLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont(name: "Helvetica Neue Medium", size: 18)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -38,28 +38,26 @@ class MenuCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addSeparatorLineView(){
-        separatorLine.backgroundColor = .darkGray
-        
-        addSubview(separatorLine)
-        
-        separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            separatorLine.heightAnchor.constraint(equalToConstant: 1),
-            separatorLine.widthAnchor.constraint(equalTo: widthAnchor),
-            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
-        ])
-    }
-  
+    // MARK: - Private Methods
     private func addCategoryLabel() {
-        backgroundColor = .white
         addSubview(nameCategoryLabel)
-        
+        nameCategoryLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameCategoryLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
             nameCategoryLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
             nameCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+        backgroundColor = .white
+    }
+    
+    private func addSeparatorLineView(){
+        addSubview(separatorLine)
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            separatorLine.widthAnchor.constraint(equalTo: widthAnchor),
+            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
+        ])
+        separatorLine.backgroundColor = .darkGray
     }
 }

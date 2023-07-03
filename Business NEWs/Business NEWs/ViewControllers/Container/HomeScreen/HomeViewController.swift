@@ -13,6 +13,7 @@ protocol HomeViewControllerDelegate: AnyObject {
 
 class HomeViewController: UIViewController {
     
+    // MARK: - Properties
     weak var delegate: HomeViewControllerDelegate?
     
     var presenter: ViewOutPut!
@@ -26,13 +27,11 @@ class HomeViewController: UIViewController {
     }()
     
     private let menuCollectionView = MenuCollectionView()
-    
-    
     private let loadingIndicator = ProgressView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         loadingIndicator.isAnimating = true
         
         setupMenu()
@@ -77,28 +76,23 @@ class HomeViewController: UIViewController {
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor
-                .constraint(equalTo: self.view.centerXAnchor),
-            loadingIndicator.centerYAnchor
-                .constraint(equalTo: self.view.centerYAnchor),
-            loadingIndicator.widthAnchor
-                .constraint(equalToConstant: 50),
-            loadingIndicator.heightAnchor
-                .constraint(equalTo: self.loadingIndicator.widthAnchor)
+            loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            loadingIndicator.widthAnchor.constraint(equalToConstant: 50),
+            loadingIndicator.heightAnchor.constraint(equalTo: self.loadingIndicator.widthAnchor)
         ])
     }
     
     private func setupNavBarButtons() {
+        let menuButtonItem = UIBarButtonItem(
+            imageSystemName: "line.horizontal.3", target: self, action: #selector(didTapMenuButton))
         let searchBarButtonItem = UIBarButtonItem(
             imageSystemName: "magnifyingglass", target: self, action: #selector(didTapSearchButton))
         let moreButtonItem = UIBarButtonItem(
             imageSystemName: "ellipsis",target: self, action: #selector(didTapMoreButton))
         moreButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
-        navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
-        
-        let menuButtonItem = UIBarButtonItem(
-            imageSystemName: "line.horizontal.3", target: self, action: #selector(didTapMenuButton))
         navigationItem.leftBarButtonItem = menuButtonItem
+        navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
     }
     
     @objc func didTapMenuButton() {
@@ -106,7 +100,6 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didTapSearchButton() {
-
         presenter.tapOnTheSearch()
     }
     
@@ -121,7 +114,6 @@ class HomeViewController: UIViewController {
 }
 
 // MARK: - Table View Data Source
-
 extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         //presenter.typesOfArticles.count
@@ -174,7 +166,6 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 // MARK: - Collection View Delegate
-
 extension HomeViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         menuCollectionView.leftAnchorConstraint.constant = scrollView.contentOffset.x / 4
@@ -189,7 +180,6 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 // MARK: - Collection View Delegate Flow Layout
-
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
