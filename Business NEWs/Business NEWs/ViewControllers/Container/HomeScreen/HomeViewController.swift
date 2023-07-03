@@ -28,11 +28,14 @@ class HomeViewController: UIViewController {
     
     private let menuCollectionView = MenuCollectionView()
     private let loadingIndicator = ProgressView()
+    private var topMenu = UIMenu()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         loadingIndicator.isAnimating = true
+        
+        setupTopMenu()
         
         setupMenu()
         setupNavBarButtons()
@@ -89,7 +92,7 @@ class HomeViewController: UIViewController {
         let searchBarButtonItem = UIBarButtonItem(
             imageSystemName: "magnifyingglass", target: self, action: #selector(didTapSearchButton))
         let moreButtonItem = UIBarButtonItem(
-            imageSystemName: "ellipsis",target: self, action: #selector(didTapMoreButton))
+            imageSystemName: "ellipsis", target: self, menu: topMenu)
         moreButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
         navigationItem.leftBarButtonItem = menuButtonItem
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
@@ -103,8 +106,14 @@ class HomeViewController: UIViewController {
         presenter.tapOnTheSearch()
     }
     
-    @objc func didTapMoreButton() {
-        print("More")
+    func setupTopMenu() {
+        let copy =  UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc"),
+                             handler: { _ in print("copy") })
+        let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"),
+                             handler: { _ in print("Share") })
+        let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"),attributes: .destructive ,
+                              handler: { _ in print("Delete") })
+        topMenu = UIMenu(title: "Options", options: .displayInline, children: [copy, share, delete])
     }
     
     func scrollToMenu(index: Int) {

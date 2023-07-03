@@ -104,7 +104,7 @@ class SelectedArticlesViewController: UIViewController {
     @objc func toggle() {
         let isOpen = leftConstraint.isActive == true
         leftConstraint.isActive = isOpen ? false : true
-        UIView.animate(withDuration: 1, animations: {
+        UIView.animate(withDuration: 0.7, animations: {
             self.navigationItem.titleView?.alpha = isOpen ? 0 : 1
             self.navigationItem.titleView?.layoutIfNeeded()
         })

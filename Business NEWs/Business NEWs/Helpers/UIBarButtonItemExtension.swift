@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIBarButtonItem {
-    convenience public init(imageSystemName: String, target: Any?, action: Selector) {
+    convenience public init(imageSystemName: String, target: Any?, action: Selector? = nil, menu: UIMenu? = nil) {
         
         let frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         let button: UIButton = UIButton(frame: frame)
@@ -16,10 +16,14 @@ extension UIBarButtonItem {
                             withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))
         button.setImage(image, for: .normal)
         button.tintColor = .black
-        button.addTarget(target, action: action, for: .touchUpInside)
+        button.showsMenuAsPrimaryAction = true
+        button.menu = menu
+        if let action = action { button.addTarget(target, action: action, for: .touchUpInside) }
+        button.addAction(UIAction(handler: { _ in
+            button.imageView?.alpha = 0.5
+        }), for: .touchDown)
         let customView = UIView(frame: frame)
         customView.addSubview(button)
         self.init(customView: customView)
     }
 }
-
