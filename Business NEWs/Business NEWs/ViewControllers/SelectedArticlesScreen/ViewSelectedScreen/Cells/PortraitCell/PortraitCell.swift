@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PortraitCollectionViewCell: UICollectionViewCell {
+class PortraitCell: UICollectionViewCell {
     static let identifier = "PortraitCollectionViewCell"
     
     let buttonSaving: UIButton = {
