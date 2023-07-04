@@ -43,12 +43,14 @@ class SearchCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func didTapRevert() {
+    @objc
+    private func didTapRevert() {
         print("didTapRevert")
         didRevert()
     }
     
-    @objc private func didTapDelete() {
+    @objc
+    private func didTapDelete() {
         print("didTapDelete")
         didDelete()
     }

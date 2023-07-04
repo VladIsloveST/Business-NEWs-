@@ -98,15 +98,17 @@ class HomeViewController: UIViewController {
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
     }
     
-    @objc func didTapMenuButton() {
+    @objc
+    private func didTapMenuButton() {
         delegate?.didTapMenuButton()
     }
     
-    @objc func didTapSearchButton() {
+    @objc
+    private func didTapSearchButton() {
         presenter.tapOnTheSearch()
     }
     
-    func setupTopMenu() {
+    private func setupTopMenu() {
         let copy =  UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc"),
                              handler: { _ in print("copy") })
         let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"),

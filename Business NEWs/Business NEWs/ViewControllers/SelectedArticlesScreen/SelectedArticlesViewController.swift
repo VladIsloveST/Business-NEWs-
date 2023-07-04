@@ -101,7 +101,8 @@ class SelectedArticlesViewController: UIViewController {
                                                             target: self, action: #selector(toggle))
     }
     
-    @objc func toggle() {
+    @objc
+    private func toggle() {
         let isOpen = leftConstraint.isActive == true
         leftConstraint.isActive = isOpen ? false : true
         UIView.animate(withDuration: 0.7, animations: {

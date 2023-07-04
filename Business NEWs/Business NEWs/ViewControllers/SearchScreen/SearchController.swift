@@ -53,7 +53,8 @@ class SearchViewController: UIViewController {
         navigationItem.leftBarButtonItem = backButtonItem
     }
     
-    @objc func handleBack() {
+    @objc
+    private func handleBack() {
         presenter.turnBack()
     }
 }

@@ -49,7 +49,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching more articles...", attributes: [NSAttributedString.Key.strokeColor : UIColor.black])
     }
     
-    @objc private func refresh(sender: UIRefreshControl) {
+    @objc
+    private func refresh(sender: UIRefreshControl) {
         print("refresh")
         sender.endRefreshing()
     }

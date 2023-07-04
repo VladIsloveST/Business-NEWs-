@@ -137,7 +137,8 @@ class PortraitCell: UICollectionViewCell {
         ])
     }
     
-    @objc private func tappedSelect() {
+    @objc
+    private func tappedSelect() {
         switch buttonSaving.isSelected {
         case true:
             print("Not Selected")

@@ -11,7 +11,6 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemPink
         adjustBottomSheet()
     }
@@ -24,5 +23,4 @@ class SettingsViewController: UIViewController {
         sheet?.largestUndimmedDetentIdentifier = .medium
         sheet?.preferredCornerRadius = 20
     }
-
 }

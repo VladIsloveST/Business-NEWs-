@@ -45,12 +45,14 @@ class CustomTabBar: UITabBar {
     }
     
     // MARK: - Actions
-    @objc func middleButtonAction(sender: UIButton) {
+    @objc
+    private func middleButtonAction(sender: UIButton) {
         middleButton.isSelected = false
         didTapButton?()
     }
     
-    @objc func buttonAction(sender: UIButton) {
+    @objc
+    private func buttonAction(sender: UIButton) {
         middleButton.isSelected = true
     }
 }
