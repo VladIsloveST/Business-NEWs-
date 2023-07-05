@@ -1,5 +1,5 @@
 //
-//  SearchCell.swift
+//  HistoryCollectionViewCell.swift
 //  Business NEWs
 //
 //  Created by Mac on 11.06.2023.
@@ -9,12 +9,13 @@ import Foundation
 import UIKit
 
 
-class SearchCell: UITableViewCell {
+class HistoryCollectionViewCell: UICollectionViewCell {
+    static let identifier = HistoryCollectionViewCell.description()
     
     var didDelete: () -> () = {}
     var didRevert: () -> () = {}
     
-    let searchLabel = UILabel()
+    var searchLabel = UILabel()
     
     private let deleteButton: UIButton = {
         let button = UIButton()
@@ -30,12 +31,13 @@ class SearchCell: UITableViewCell {
         return button
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super .init(style: style, reuseIdentifier: reuseIdentifier)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         revertButton.addTarget(self, action: #selector(didTapRevert), for: .touchUpInside)
-
+        
         setupConstraints()
     }
     
