@@ -56,7 +56,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             separatorLine.heightAnchor.constraint(equalToConstant: 1),
             separatorLine.widthAnchor.constraint(equalTo: widthAnchor),
-            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
+            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30)
         ])
         separatorLine.backgroundColor = .darkGray
     }

@@ -29,10 +29,9 @@ class SearchViewController: UIViewController {
     
     lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.searchBarStyle = UISearchBar.Style.default
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
-        searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
@@ -40,7 +39,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchResultCollectioView.backgroundColor = .orange
+        //searchResultCollectioView.backgroundColor = .orange
         
         searchBar.delegate = self
         
@@ -154,8 +153,6 @@ extension SearchViewController: UICollectionViewDataSource {
                 as? SearchCollectionReusableView else { return UICollectionReusableView() }
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            header.backgroundColor = .brown
-            
             header.addSubview(searchBar)
             return header
         default:
