@@ -16,7 +16,10 @@ class SearchViewController: UIViewController {
     
     var historyCollectionView = HistoryCollectionView()
     
-    lazy var mySearchBar:UISearchBar = {
+    var heightAnchorDown: NSLayoutConstraint?
+    var heightAnchorUp: NSLayoutConstraint?
+    
+    lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = UISearchBar.Style.default
         searchBar.placeholder = " Search..."
@@ -33,11 +36,22 @@ class SearchViewController: UIViewController {
         navigationItem.title = "Search"
         
         
-        mySearchBar.delegate = self
+        searchBar.delegate = self
         
         
-        
+        setUpHistoryView()
         setupNavBarButtons()
+    }
+    
+    private func setUpHistoryView() {
+        view.addSubview(historyCollectionView)
+        heightAnchorDown = historyCollectionView.heightAnchor.constraint(equalToConstant: 120)
+        heightAnchorUp = historyCollectionView.heightAnchor.constraint(equalToConstant: 0)
+        NSLayoutConstraint.activate([
+            historyCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 30),
+            historyCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            historyCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor)
+        ])
     }
     
     private func setupNavBarButtons() {
@@ -62,6 +76,10 @@ extension SearchViewController: UISearchBarDelegate {
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
             print("My Search Bar \(text)")
         })
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
     }
 }
 
