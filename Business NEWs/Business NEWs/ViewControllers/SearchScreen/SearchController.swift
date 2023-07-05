@@ -14,13 +14,7 @@ class SearchViewController: UIViewController {
     
     private var timer: Timer?
     
-    lazy var searchHistoryTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.frame = view.bounds
-        tableView.register(SearchCell.self, forCellReuseIdentifier: "MyCell")
-        tableView.tableHeaderView = mySearchBar
-        return tableView
-    }()
+    var historyCollectionView = HistoryCollectionView()
     
     lazy var mySearchBar:UISearchBar = {
         let searchBar = UISearchBar()
@@ -38,11 +32,10 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .white
         navigationItem.title = "Search"
         
-        searchHistoryTableView.dataSource = self
-        searchHistoryTableView.delegate = self
+        
         mySearchBar.delegate = self
         
-        view.addSubview(searchHistoryTableView)
+        
         
         setupNavBarButtons()
     }
@@ -72,27 +65,6 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
-// MARK: - Table View Data Source
-
-extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.mockData.count 
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? SearchCell else { return UITableViewCell() }
-        cell.searchLabel.text = "\(presenter.mockData[indexPath.row])"
-        cell.didDelete = { [unowned self] in
-            self.presenter.delete(indexPath.row)
-            showUpdateData()
-        }
-        cell.didRevert = { [unowned self] in
-            self.mySearchBar.text = presenter.mockData[indexPath.row]
-        }
-        return cell
-    }
-}
-
 // MARK: - Table View Delegate
 
 extension SearchViewController: UITableViewDelegate {
@@ -104,6 +76,6 @@ extension SearchViewController: UITableViewDelegate {
 
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
-        self.searchHistoryTableView.reloadData()
+        //self.searchHistoryTableView.reloadData()
     }
 }

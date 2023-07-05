@@ -37,7 +37,7 @@ class HistoryCollectionView: UICollectionView {
         delegate = self
         dataSource = self
         
-        register(PopOverCollectionViewCell.self, forCellWithReuseIdentifier: PopOverCollectionViewCell.identifier)
+        register(HistoryCollectionViewCell.self, forCellWithReuseIdentifier: HistoryCollectionViewCell.identifier)
     }
 }
 
@@ -49,10 +49,10 @@ extension HistoryCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: PopOverCollectionViewCell.identifier, for: indexPath) as? PopOverCollectionViewCell else { return UICollectionViewCell() }
+            withReuseIdentifier: HistoryCollectionViewCell.identifier, for: indexPath) as? HistoryCollectionViewCell else { return UICollectionViewCell() }
         let text = cellConfigureArray[0][indexPath.row]
-        let iconName = cellConfigureArray[1][indexPath.row]
-        cell.setConfigure(iconName: iconName, text: text)
+        //let iconName = cellConfigureArray[1][indexPath.row]
+        cell.searchLabel.text = text
         return cell
     }
 }
