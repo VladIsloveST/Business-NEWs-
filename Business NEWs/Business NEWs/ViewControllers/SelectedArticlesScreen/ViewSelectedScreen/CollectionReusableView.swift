@@ -20,10 +20,6 @@ class CollectionReusableView: UICollectionReusableView {
     }()
     private var headerSeparator = UIView()
     
-    func setup(_ title: String) {
-        cellTitleLable.text = title
-    }
-    
     override init(frame: CGRect) {
         super .init(frame: frame)
         backgroundColor = .white
@@ -32,6 +28,10 @@ class CollectionReusableView: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup(_ title: String) {
+        cellTitleLable.text = title
     }
     
     private func setViews() {
