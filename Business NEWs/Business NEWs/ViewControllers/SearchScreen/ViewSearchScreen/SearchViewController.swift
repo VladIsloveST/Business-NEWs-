@@ -91,10 +91,11 @@ class SearchViewController: UIViewController {
     
     @objc
     private func flowUp() {
+        heightAnchorDown?.constant = historyCollectionView.contentSize.height
         searchResultCollectioView.isScrollEnabled = true
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
-        UIView.animate(withDuration: 0.75) {
+        UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
     }
