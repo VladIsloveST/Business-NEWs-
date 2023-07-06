@@ -66,7 +66,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         searchLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -25),
+            deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20),
             deleteButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             deleteButton.widthAnchor.constraint(equalToConstant: 25),
             

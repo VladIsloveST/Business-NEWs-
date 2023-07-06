@@ -20,8 +20,7 @@ class SearchViewController: UIViewController {
         flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 76)
         return collectinView
     }()
-    
-    
+        
     var historyCollectionView = HistoryCollectionView()
     
     var heightAnchorDown: NSLayoutConstraint?
@@ -29,35 +28,29 @@ class SearchViewController: UIViewController {
     
     lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.searchBarStyle = UISearchBar.Style.default
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
-        searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        searchResultCollectioView.backgroundColor = .orange
-        
+    
         searchBar.delegate = self
-        
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
         
-        navigationController?.navigationBar.barTintColor = .white
         navigationItem.title = "Search"
-
- //       setUpHistoryView()
+                
         searchResultCollectioView.register(PortraitCell.self,
                                 forCellWithReuseIdentifier: PortraitCell.identifier)
         searchResultCollectioView.register(SearchCollectionReusableView.self,
                                     forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
                                     withReuseIdentifier: SearchCollectionReusableView.identifier)
-        
         setupSearchCollectioView()
+        setUpHistoryView()
         setupNavBarButtons()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
@@ -76,18 +69,19 @@ class SearchViewController: UIViewController {
         ])
     }
     
-//    private func setUpHistoryView() {
-//        view.addSubview(historyCollectionView)
-//        heightAnchorDown = historyCollectionView.heightAnchor.constraint(equalToConstant: 120)
-//        heightAnchorUp = historyCollectionView.heightAnchor.constraint(equalToConstant: 0)
-//        NSLayoutConstraint.activate([
-//            historyCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 30),
-//            historyCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            historyCollectionView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 40)
-//        ])
-//    }
+    private func setUpHistoryView() {
+        view.addSubview(historyCollectionView)
+        heightAnchorDown = historyCollectionView.heightAnchor.constraint(equalToConstant: 120)
+        heightAnchorUp = historyCollectionView.heightAnchor.constraint(equalToConstant: 0)
+        NSLayoutConstraint.activate([
+            historyCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 20),
+            historyCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            historyCollectionView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 55)
+        ])
+    }
     
     private func flowDown() {
+        searchResultCollectioView.isScrollEnabled = false
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
         UIView.animate(withDuration: 0.75) {
@@ -97,6 +91,7 @@ class SearchViewController: UIViewController {
     
     @objc
     private func flowUp() {
+        searchResultCollectioView.isScrollEnabled = true
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
         UIView.animate(withDuration: 0.75) {
@@ -117,15 +112,14 @@ class SearchViewController: UIViewController {
 }
 
 // MARK: - Search Bar Delegate
-
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text, !text.isEmpty else { flowUp()
+        guard let text = searchBar.text, !text.isEmpty else { flowDown()
             return }
         
-        flowDown()
+        flowUp()
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { (_) in
             print("My Search Bar \(text)")
         })
     }
@@ -135,9 +129,10 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - Collection View Data Source
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
+        6
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -154,8 +149,6 @@ extension SearchViewController: UICollectionViewDataSource {
                 as? SearchCollectionReusableView else { return UICollectionReusableView() }
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            header.backgroundColor = .brown
-            
             header.addSubview(searchBar)
             return header
         default:
@@ -165,7 +158,9 @@ extension SearchViewController: UICollectionViewDataSource {
 }
 
 extension SearchViewController: UICollectionViewDelegate {
-    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.searchBar.endEditing(true)
+    }
 }
 
 // MARK: - Collection View Delegate Flow Layout

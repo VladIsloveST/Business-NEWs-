@@ -16,7 +16,7 @@ class HistoryCollectionView: UICollectionView {
     weak var mainCellDelegate: PopOverCollectionViewProtocol?
     
     private var flowLayout = UICollectionViewFlowLayout()
-    let cellConfigureArray = [["like", "subscribe", "contact"], ["", "", ""]]
+    let cellConfigureArray = ["like", "subscribe", "contact"]
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super .init(frame: .zero, collectionViewLayout: flowLayout)
@@ -44,15 +44,13 @@ class HistoryCollectionView: UICollectionView {
 // MARK: - Collection View Data Source
 extension HistoryCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellConfigureArray[0].count
+        return cellConfigureArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: HistoryCollectionViewCell.identifier, for: indexPath) as? HistoryCollectionViewCell else { return UICollectionViewCell() }
-        let text = cellConfigureArray[0][indexPath.row]
-        //let iconName = cellConfigureArray[1][indexPath.row]
-        cell.searchLabel.text = text
+        cell.searchLabel.text = cellConfigureArray[indexPath.row]
         return cell
     }
 }
