@@ -38,6 +38,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        historyCollectionView.mainCellDelegate = self
+        
         searchBar.delegate = self
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
@@ -55,7 +57,7 @@ class SearchViewController: UIViewController {
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
         gestureRecognizer.numberOfTapsRequired = 1
-        view.addGestureRecognizer(gestureRecognizer)
+        searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
     }
     
     private func setupSearchCollectioView() {
@@ -182,5 +184,15 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
         self.historyCollectionView.reloadData()
+    }
+}
+
+extension SearchViewController: PopOverCollectionViewProtocol {
+    func selectItem(indexPath: IndexPath) {
+        print("indexPath - \(indexPath.row)")
+        
+        if searchResultCollectioView.backgroundColor == .orange {
+            searchResultCollectioView.backgroundColor = .yellow
+        } else {searchResultCollectioView.backgroundColor = .orange }
     }
 }
