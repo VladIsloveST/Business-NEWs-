@@ -17,32 +17,34 @@ class HistoryCollectionView: UICollectionView {
     
     private var flowLayout = UICollectionViewFlowLayout()
     var cellConfigureArray = ["like", "subscribe", "contact"]
-    
+
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super .init(frame: .zero, collectionViewLayout: flowLayout)
         configure()
-        
         flowLayout.minimumLineSpacing = 0
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 12
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 1
+        layer.cornerRadius = 9
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
-        print(contentSize.height)
-    }
+//    override var intrinsicContentSize: CGSize {
+//        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
+//    }
     
     private func configure() {
         delegate = self
         dataSource = self
         
         register(HistoryCollectionViewCell.self, forCellWithReuseIdentifier: HistoryCollectionViewCell.identifier)
+    }
+    
+    func autoAdjustToTableView(){
+        frame = CGRect(x: frame.origin.x,
+                       y: frame.origin.y,
+                       width: frame.size.width,
+                       height: contentSize.height)
     }
 }
 
@@ -56,8 +58,11 @@ extension HistoryCollectionView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: HistoryCollectionViewCell.identifier, for: indexPath) as? HistoryCollectionViewCell else { return UICollectionViewCell() }
         cell.searchLabel.text = cellConfigureArray[indexPath.row]
-        cell.didDelete = { self.cellConfigureArray.remove(at: indexPath.row)
+        cell.didDelete = {
+            self.cellConfigureArray.remove(at: indexPath.row)
+            //self.delete(cell)
             self.reloadData()
+            //self.autoAdjustToTableView()
         }
         return cell
     }
