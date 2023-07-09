@@ -17,11 +17,12 @@ class SearchViewController: UIViewController {
     let searchResultCollectioView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectinView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 76)
+        flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 75)
         return collectinView
     }()
         
     var historyCollectionView = HistoryCollectionView()
+    let containerView = UIView()
     
     var heightAnchorDown: NSLayoutConstraint?
     var heightAnchorUp: NSLayoutConstraint?
@@ -37,12 +38,12 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        historyCollectionView.mainCellDelegate = self
-        
+                
         searchBar.delegate = self
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
+        historyCollectionView.mainCellDelegate = self
+
         
         navigationItem.title = "Search"
                 
@@ -52,7 +53,8 @@ class SearchViewController: UIViewController {
                                     forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
                                     withReuseIdentifier: SearchCollectionReusableView.identifier)
         setupSearchCollectioView()
-        setUpHistoryView()
+        setupHistoryView()
+        setUpContainerView()
         setupNavBarButtons()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
@@ -71,22 +73,30 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    private func setUpHistoryView() {
-        view.addSubview(historyCollectionView)
-        heightAnchorDown = historyCollectionView.heightAnchor.constraint(equalToConstant: 120)
-        heightAnchorUp = historyCollectionView.heightAnchor.constraint(equalToConstant: 0)
+    private func setupHistoryView() {
+        containerView.addSubview(historyCollectionView)
+        historyCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        historyCollectionView.constraint(equalToAnchors: containerView)
+    }
+    
+    private func setUpContainerView() {
+        view.addSubview(containerView)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        heightAnchorDown = containerView.heightAnchor.constraint(equalToConstant: 120)
+        heightAnchorUp = containerView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
-            historyCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width - 20),
-            historyCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            historyCollectionView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 55)
+            containerView.widthAnchor.constraint(equalToConstant: view.frame.width - 24),
+            containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            containerView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 53)
         ])
+        containerView.layer.addShadow()
     }
     
     private func flowDown() {
         searchResultCollectioView.isScrollEnabled = false
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
-        UIView.animate(withDuration: 0.75) {
+        UIView.animate(withDuration: 0.7) {
             self.view.layoutIfNeeded()
         }
     }
@@ -168,11 +178,8 @@ extension SearchViewController: UICollectionViewDelegate {
 
 // MARK: - Collection View Delegate Flow Layout
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.frame.width - 30, height: view.frame.height / 3)
     }
     
@@ -189,10 +196,6 @@ extension SearchViewController: SearchViewInPut {
 
 extension SearchViewController: PopOverCollectionViewProtocol {
     func selectItem(indexPath: IndexPath) {
-        print("indexPath - \(indexPath.row)")
-        
-        if searchResultCollectioView.backgroundColor == .orange {
-            searchResultCollectioView.backgroundColor = .yellow
-        } else {searchResultCollectioView.backgroundColor = .orange }
+        searchBar.text = historyCollectionView.cellConfigureArray[indexPath.row]
     }
 }
