@@ -20,8 +20,8 @@ class SearchViewController: UIViewController {
         flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 75)
         return collectinView
     }()
-        
-    var historyCollectionView = HistoryCollectionView()
+    
+    var historyTableView = HistoryTableView()
     let containerView = UIView()
     
     var heightAnchorDown: NSLayoutConstraint?
@@ -35,23 +35,23 @@ class SearchViewController: UIViewController {
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         searchBar.delegate = self
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
-        historyCollectionView.mainCellDelegate = self
-
+        historyTableView.mainCellDelegate = self
+        
         
         navigationItem.title = "Search"
-                
+        
         searchResultCollectioView.register(PortraitCell.self,
-                                forCellWithReuseIdentifier: PortraitCell.identifier)
+                                           forCellWithReuseIdentifier: PortraitCell.identifier)
         searchResultCollectioView.register(SearchCollectionReusableView.self,
-                                    forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
-                                    withReuseIdentifier: SearchCollectionReusableView.identifier)
+                                           forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
+                                           withReuseIdentifier: SearchCollectionReusableView.identifier)
         setupSearchCollectioView()
         setupHistoryView()
         setUpContainerView()
@@ -74,15 +74,15 @@ class SearchViewController: UIViewController {
     }
     
     private func setupHistoryView() {
-        containerView.addSubview(historyCollectionView)
-        historyCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        historyCollectionView.constraint(equalToAnchors: containerView)
+        containerView.addSubview(historyTableView)
+        historyTableView.translatesAutoresizingMaskIntoConstraints = false
+        historyTableView.constraint(equalToAnchors: containerView)
     }
     
     private func setUpContainerView() {
         view.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        heightAnchorDown = containerView.heightAnchor.constraint(equalToConstant: 120)
+        heightAnchorDown = containerView.heightAnchor.constraint(equalToConstant: 0)
         heightAnchorUp = containerView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             containerView.widthAnchor.constraint(equalToConstant: view.frame.width - 24),
@@ -93,9 +93,10 @@ class SearchViewController: UIViewController {
     }
     
     private func flowDown() {
-        searchResultCollectioView.isScrollEnabled = false
+        heightAnchorDown?.constant = historyTableView.contentSize.height
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
+        searchResultCollectioView.isScrollEnabled = false
         UIView.animate(withDuration: 0.7) {
             self.view.layoutIfNeeded()
         }
@@ -103,10 +104,9 @@ class SearchViewController: UIViewController {
     
     @objc
     private func flowUp() {
-        heightAnchorDown?.constant = historyCollectionView.contentSize.height
-        searchResultCollectioView.isScrollEnabled = true
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
+        searchResultCollectioView.isScrollEnabled = true
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
@@ -190,12 +190,14 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
 
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
-        self.historyCollectionView.reloadData()
+        self.historyTableView.reloadData()
     }
 }
 
-extension SearchViewController: PopOverCollectionViewProtocol {
+extension SearchViewController: PopOverTableViewProtocol {
     func selectItem(indexPath: IndexPath) {
-        searchBar.text = historyCollectionView.cellConfigureArray[indexPath.row]
+    
+        self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
+        //searchBar.text = historyTableView.cellConfigureArray[indexPath.row]
     }
 }

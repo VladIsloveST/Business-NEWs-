@@ -77,18 +77,11 @@ extension ContainerViewController: HomeViewControllerDelegate {
 }
 
 extension ContainerViewController: MenuViewControllerDelegate {
-    func didSelect(menuItem: MenuViewController.MenuOptions) {
+                   //       MenuViewController.MenuOptions
+    func didSelect(menuItem: String) {
         toggleMenu { [weak self] in
             switch menuItem {
-            case .home:
-                break
-            case .info:
-                break
-            case .appRating:
-                break
-            case .shareApp:
-                break
-            case .settings:
+            default:
                 break
             }
         }
