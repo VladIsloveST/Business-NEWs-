@@ -126,11 +126,6 @@ class HomeViewController: UIViewController {
 
 // MARK: - Table View Data Source
 extension HomeViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        //presenter.typesOfArticles.count
-        1
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //presenter.typesOfArticles[section].numberOfArticles
         8
@@ -179,24 +174,23 @@ extension HomeViewController: UICollectionViewDataSource {
 // MARK: - Collection View Delegate
 extension HomeViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        menuCollectionView.leftAnchorConstraint.constant = scrollView.contentOffset.x / 4
+        menuCollectionView.leftAnchorConstraint.constant = scrollView.contentOffset.x / 4.5
     }
-    
+   
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+        menuCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        menuCollectionView.widthAnchorConstraint.constant = menuCollectionView.calculateCategoryWidth(item: Int(index))
     }
 }
 
 // MARK: - Collection View Delegate Flow Layout
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
 }

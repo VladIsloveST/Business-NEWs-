@@ -31,8 +31,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         articlCollectionView.delegate = self
         articlCollectionView.dataSource = self
         
-        articlCollectionView.register(PortraitCell.self,
-                                forCellWithReuseIdentifier: PortraitCell.identifier)
+        articlCollectionView.register(LargePortraitCell.self,
+                                forCellWithReuseIdentifier: LargePortraitCell.identifier)
         addSubview(articlCollectionView)
         articlCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -63,11 +63,14 @@ class ArticleCollectionViewCell: UICollectionViewCell {
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return UICollectionViewCell() }
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor.black.cgColor
+        cell.mainLabel.backgroundColor = .systemPink
         return cell
     }
 }
@@ -87,7 +90,7 @@ extension ArticleCollectionViewCell: UICollectionViewDelegateFlowLayout {
 //        let estimatedFrame = NSString(string: wikipedia[indexPath.row]).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
 //        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 25)
         
-        CGSize(width: frame.width - 30, height: frame.height / 2)
+        CGSize(width: frame.width - 30, height: frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

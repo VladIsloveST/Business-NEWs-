@@ -14,9 +14,15 @@ class MenuCollectionView: UICollectionView {
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
-    private var horizontalBarView = UIView()
+    var underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0
+        return view
+    }()
     
     var leftAnchorConstraint = NSLayoutConstraint()
+    var widthAnchorConstraint = NSLayoutConstraint()
     
     var homeController: HomeViewController?
     
@@ -28,7 +34,7 @@ class MenuCollectionView: UICollectionView {
 
     override func layoutSubviews() {
         super .layoutSubviews()
-        horizontalBarView.roundCorners(corners: [.topLeft, .topRight], radius: 3)
+        underlineView.roundCorners(corners: [.topLeft, .topRight], radius: 3)
     }
     
     required init?(coder: NSCoder) {
@@ -36,16 +42,19 @@ class MenuCollectionView: UICollectionView {
     }
     
     private func setupHorizontalBar() {
-        addSubview(horizontalBarView)
-        horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
-        leftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        addSubview(underlineView)
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        leftAnchorConstraint = underlineView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        widthAnchorConstraint = underlineView.widthAnchor.constraint(equalToConstant: 84)
         NSLayoutConstraint.activate([
             leftAnchorConstraint,
-            horizontalBarView.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
-            horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier:  1/4),
-            horizontalBarView.heightAnchor.constraint(equalToConstant: 6)
+            widthAnchorConstraint,
+            underlineView.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
+            underlineView.heightAnchor.constraint(equalToConstant: 6)
         ])
-        horizontalBarView.backgroundColor = .black
+        UIView.animate(withDuration: 0.4) {
+            self.underlineView.alpha = 1
+        }
     }
     
     private func configure() {
@@ -62,14 +71,21 @@ class MenuCollectionView: UICollectionView {
         register(MenuCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         selectItem(at: [0,0], animated: true, scrollPosition: [])
     }
+    
+    func calculateCategoryWidth(item: Int) -> CGFloat {
+        let categoryFont = UIFont(name: "Arial Bold", size: 18)
+        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
+        let categoryWidth = nameCategoryArray[item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+        return categoryWidth
+    }
 }
 
 // MARK: - Collection View Delegate
 
 extension MenuCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        widthAnchorConstraint.constant = calculateCategoryWidth(item: indexPath.item)
         homeController?.scrollToMenu(index: indexPath.item)
     }
 }
@@ -94,9 +110,7 @@ extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let categoryFont = UIFont(name: "Arial Bold", size: 18)
-        let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
-        let categoryWidth = nameCategoryArray[indexPath.item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
+        let categoryWidth = calculateCategoryWidth(item: indexPath.item)
         return CGSize(width: categoryWidth, height: frame.height)
     }
 }
