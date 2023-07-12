@@ -24,7 +24,6 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
         let layoutAttributes = super.layoutAttributesForElements(in: rect) ?? []
         var decorationAttributes: [UICollectionViewLayoutAttributes] = []
         
-        // skip first cell
         for layoutAttribute in layoutAttributes where layoutAttribute.indexPath.item > 0 {
             let cellFrame = layoutAttribute.frame
             let whiteSeparatorAttribute = UICollectionViewLayoutAttributes(
@@ -51,7 +50,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
 private final class WhiteSeparatorView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
+        self.backgroundColor = .black
     }
     
     required init?(coder aDecoder: NSCoder) {

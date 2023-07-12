@@ -10,7 +10,7 @@ import UIKit
 
 class MenuCollectionView: UICollectionView {
     
-    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple",  "Business", "Wall St.", "TechCrunch", "Apple",  "Business"]
+    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple", "Business", "Wall St.", "TechCrunch", "Apple", "Business"]
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
@@ -24,14 +24,14 @@ class MenuCollectionView: UICollectionView {
     var leftAnchorConstraint = NSLayoutConstraint()
     var widthAnchorConstraint = NSLayoutConstraint()
     
-    var homeController: HomeViewController?
+    weak var homeController: HomeViewController?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
         configure()
         setupHorizontalBar()
     }
-
+    
     override func layoutSubviews() {
         super .layoutSubviews()
         underlineView.roundCorners(corners: [.topLeft, .topRight], radius: 3)
@@ -52,7 +52,7 @@ class MenuCollectionView: UICollectionView {
             underlineView.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30),
             underlineView.heightAnchor.constraint(equalToConstant: 6)
         ])
-        UIView.animate(withDuration: 0.4) {
+        UIView.animate(withDuration: 0.5) {
             self.underlineView.alpha = 1
         }
     }
@@ -67,7 +67,7 @@ class MenuCollectionView: UICollectionView {
         translatesAutoresizingMaskIntoConstraints = false
         bounces = false
         showsHorizontalScrollIndicator = false
-       
+        
         register(MenuCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         selectItem(at: [0,0], animated: true, scrollPosition: [])
     }
@@ -78,39 +78,58 @@ class MenuCollectionView: UICollectionView {
         let categoryWidth = nameCategoryArray[item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         return categoryWidth
     }
-}
-
-// MARK: - Collection View Delegate
-
-extension MenuCollectionView: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        widthAnchorConstraint.constant = calculateCategoryWidth(item: indexPath.item)
-        homeController?.scrollToMenu(index: indexPath.item)
-    }
-}
-
-// MARK: - Collection View Data Source
-
-extension MenuCollectionView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        nameCategoryArray.count
+    
+    func calculationLeftIndent(bySelectedCell item: Int) -> CGFloat {
+        var originX: CGFloat = 0
+        guard item > 0 else { return originX }
+        for index in 0...item - 1 {
+            originX += calculateCategoryWidth(item: index)
+        }
+        return originX
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? MenuCollectionViewCell else { return UICollectionViewCell() }
-        cell.nameCategoryLabel.text = nameCategoryArray[indexPath.item]
-        return cell
+    func animateMovementUnderlineView(leftIndent: CGFloat, width: CGFloat) {
+        self.leftAnchorConstraint.constant = leftIndent
+        self.widthAnchorConstraint.constant = width
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
     }
 }
 
-// MARK: - Collection View Delegate Flow Layout
-
-extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let categoryWidth = calculateCategoryWidth(item: indexPath.item)
-        return CGSize(width: categoryWidth, height: frame.height)
+    // MARK: - Collection View Delegate
+    
+    extension MenuCollectionView: UICollectionViewDelegate {
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            homeController?.scrollToMenu(index: indexPath.item)
+            let leftIndent = calculationLeftIndent(bySelectedCell: indexPath.item)
+            let width = calculateCategoryWidth(item: indexPath.item)
+            animateMovementUnderlineView(leftIndent: leftIndent, width: width)
+        }
     }
-}
+    
+    // MARK: - Collection View Data Source
+    
+    extension MenuCollectionView: UICollectionViewDataSource {
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            nameCategoryArray.count
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? MenuCollectionViewCell else { return UICollectionViewCell() }
+            cell.nameCategoryLabel.text = nameCategoryArray[indexPath.item]
+            return cell
+        }
+    }
+    
+    // MARK: - Collection View Delegate Flow Layout
+    
+    extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
+        func collectionView(_ collectionView: UICollectionView,
+                            layout collectionViewLayout: UICollectionViewLayout,
+                            sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let categoryWidth = calculateCategoryWidth(item: indexPath.item)
+            return CGSize(width: categoryWidth, height: frame.height)
+        }
+    }

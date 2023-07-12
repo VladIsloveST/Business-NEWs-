@@ -26,6 +26,10 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         setuopRefreshControl()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Actions
     func setupCollectionView() {
         articlCollectionView.delegate = self
@@ -40,6 +44,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
         articlCollectionView.refreshControl = refreshControl
+        articlCollectionView.collectionViewLayout = createLayout()
     }
     
     func setuopRefreshControl() {
@@ -49,27 +54,45 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching more articles...", attributes: [NSAttributedString.Key.strokeColor : UIColor.black])
     }
     
+    private func createLayout() -> CustomFlowLayout {
+        let topItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalHeight(0.65)))
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalHeight(0.1)))
+        let localVerticalGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalHeight(0.35)),
+            subitem: item, count: 3)
+        let generalGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalHeight(1.0)),
+            subitems: [topItem, localVerticalGroup])
+        generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        let section = NSCollectionLayoutSection(group: generalGroup)
+        section.interGroupSpacing = 80
+        let layout = CustomFlowLayout(section: section)
+        return layout
+    }
+    
     @objc
     private func refresh(sender: UIRefreshControl) {
         print("refresh")
         sender.endRefreshing()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return UICollectionViewCell() }
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = UIColor.black.cgColor
+        //cell.layer.borderWidth = 1
+        //cell.layer.borderColor = UIColor.black.cgColor
         cell.mainLabel.backgroundColor = .systemPink
         return cell
     }

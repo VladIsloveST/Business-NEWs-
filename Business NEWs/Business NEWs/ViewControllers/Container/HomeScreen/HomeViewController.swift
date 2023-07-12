@@ -174,7 +174,10 @@ extension HomeViewController: UICollectionViewDataSource {
 // MARK: - Collection View Delegate
 extension HomeViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        menuCollectionView.leftAnchorConstraint.constant = scrollView.contentOffset.x / 4.5
+//        let pageIndex = scrollView.contentOffset.x/view.frame.width
+//        let leftIndent = menuCollectionView.calculationLeftIndent(bySelectedCell: pageIndex)
+//        let width = menuCollectionView.calculateCategoryWidth(item: pageIndex)
+//        menuCollectionView.animateMovementUnderlineView(leftIndent: leftIndent, width: width)
     }
    
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
