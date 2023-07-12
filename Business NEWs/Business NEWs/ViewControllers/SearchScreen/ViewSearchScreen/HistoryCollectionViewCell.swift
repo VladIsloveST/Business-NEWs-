@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 
-class HistoryCollectionViewCell: UICollectionViewCell {
+class HistoryCollectionViewCell: UITableViewCell {
     static let identifier = HistoryCollectionViewCell.description()
     
     var didDelete: () -> () = {}
@@ -31,13 +31,11 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        searchLabel.font = UIFont(name: "Helvetica Neue Medium", size: 18)
         deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         revertButton.addTarget(self, action: #selector(didTapRevert), for: .touchUpInside)
-        
         setupConstraints()
     }
     

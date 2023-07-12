@@ -45,7 +45,8 @@ class PortraitCell: BasicCollectionViewCell {
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -7),
-            mainLabel.heightAnchor.constraint(lessThanOrEqualToConstant: self.frame.height/3),            mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 20),
+            mainLabel.heightAnchor.constraint(lessThanOrEqualToConstant: self.frame.height/3),
+            mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 20),
             mainLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
         
