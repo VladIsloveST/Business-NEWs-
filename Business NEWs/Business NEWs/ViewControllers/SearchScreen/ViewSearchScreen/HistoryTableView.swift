@@ -12,11 +12,10 @@ protocol PopOverTableViewProtocol: AnyObject {
 }
 
 class HistoryTableView: UITableView {
-
     weak var mainCellDelegate: PopOverTableViewProtocol?
     
     private var flowLayout = UICollectionViewFlowLayout()
-    var cellConfigureArray = ["like", "subscribe", "contact", "like", "subscribe", "subscribe", "contact"]
+    private var cellConfigureArray = ["like", "subscribe", "contact", "like", "subscribe", "subscribe", "contact"]
 
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)

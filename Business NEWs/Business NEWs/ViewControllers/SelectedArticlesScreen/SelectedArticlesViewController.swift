@@ -10,7 +10,7 @@ import UIKit
 class SelectedArticlesViewController: UIViewController {
     
     // MARK: - Properties
-    var leftConstraint: NSLayoutConstraint!
+    private var leftConstraint: NSLayoutConstraint!
     
     private var types = MockData.shared.articleData
     
@@ -87,7 +87,7 @@ class SelectedArticlesViewController: UIViewController {
               alignment: .top)
     }
     
-    func setupSearchBar() {
+    private func setupSearchBar() {
         expandableView.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         leftConstraint = searchBar.leftAnchor.constraint(equalTo: expandableView.leftAnchor)

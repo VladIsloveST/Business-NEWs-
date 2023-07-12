@@ -14,20 +14,20 @@ class SearchViewController: UIViewController {
     
     private var timer: Timer?
     
-    let searchResultCollectioView: UICollectionView = {
+    private let searchResultCollectioView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectinView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 75)
         return collectinView
     }()
     
-    var historyTableView = HistoryTableView()
-    let containerView = UIView()
+    private let historyTableView = HistoryTableView()
+    private var containerView: UIView!
     
-    var heightAnchorDown: NSLayoutConstraint?
-    var heightAnchorUp: NSLayoutConstraint?
+    private var heightAnchorDown: NSLayoutConstraint?
+    private var heightAnchorUp: NSLayoutConstraint?
     
-    lazy var searchBar:UISearchBar = {
+    private lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
@@ -53,8 +53,8 @@ class SearchViewController: UIViewController {
                                            forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
                                            withReuseIdentifier: SearchCollectionReusableView.identifier)
         setupSearchCollectioView()
-        setupHistoryView()
         setUpContainerView()
+        setupHistoryView()
         setupNavBarButtons()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
@@ -80,6 +80,7 @@ class SearchViewController: UIViewController {
     }
     
     private func setUpContainerView() {
+        containerView = UIView()
         view.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         heightAnchorDown = containerView.heightAnchor.constraint(equalToConstant: 0)

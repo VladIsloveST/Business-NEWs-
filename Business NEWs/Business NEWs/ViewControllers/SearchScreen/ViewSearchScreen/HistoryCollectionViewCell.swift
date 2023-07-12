@@ -15,7 +15,7 @@ class HistoryCollectionViewCell: UITableViewCell {
     var didDelete: () -> () = {}
     var didRevert: () -> () = {}
     
-    var searchLabel = UILabel()
+    var searchLabel: UILabel!
     
     private let deleteButton: UIButton = {
         let button = UIButton()
@@ -33,6 +33,7 @@ class HistoryCollectionViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        searchLabel = UILabel()
         searchLabel.font = UIFont(name: "Helvetica Neue Medium", size: 18)
         deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         revertButton.addTarget(self, action: #selector(didTapRevert), for: .touchUpInside)

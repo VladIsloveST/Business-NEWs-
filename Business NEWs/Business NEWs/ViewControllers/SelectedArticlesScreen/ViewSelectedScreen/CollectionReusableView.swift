@@ -8,7 +8,6 @@
 import UIKit
 
 class CollectionReusableView: UICollectionReusableView {
-    
     static var identifier = "CollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
     

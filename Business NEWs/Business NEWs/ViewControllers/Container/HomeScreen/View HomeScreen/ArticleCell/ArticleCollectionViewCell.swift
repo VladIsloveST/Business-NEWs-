@@ -49,7 +49,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupRefreshControl() {
-       
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black

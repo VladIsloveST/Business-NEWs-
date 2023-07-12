@@ -26,21 +26,21 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
         
         for layoutAttribute in layoutAttributes where layoutAttribute.indexPath.item > 0 {
             let cellFrame = layoutAttribute.frame
-            let whiteSeparatorAttribute = UICollectionViewLayoutAttributes(
+            let lightSeparatorAttribute = UICollectionViewLayoutAttributes(
                 forDecorationViewOfKind: "whiteSeparator", with: layoutAttribute.indexPath)
-            let blackSeparatorAttribute = UICollectionViewLayoutAttributes(
+            let darkSeparatorAttribute = UICollectionViewLayoutAttributes(
                 forDecorationViewOfKind: "darkSeparator", with: layoutAttribute.indexPath)
             
             if layoutAttribute.indexPath.item % 4 == 0 {
-                whiteSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x, y: cellFrame.origin.y - 41,
+                lightSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x, y: cellFrame.origin.y - 41,
                                                   width: cellFrame.size.width, height: 2)
-                decorationAttributes.append(whiteSeparatorAttribute)
-                whiteSeparatorAttribute.zIndex = Int.max
+                decorationAttributes.append(lightSeparatorAttribute)
+                lightSeparatorAttribute.zIndex = Int.max
             } else {
-                blackSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x + 20, y: cellFrame.origin.y - 0.5,
+                darkSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x + 20, y: cellFrame.origin.y - 0.5,
                                                   width: cellFrame.size.width - 40, height: 1)
-                decorationAttributes.append(blackSeparatorAttribute)
-                blackSeparatorAttribute.zIndex = Int.max
+                decorationAttributes.append(darkSeparatorAttribute)
+                darkSeparatorAttribute.zIndex = Int.max
             }
         }
         return layoutAttributes + decorationAttributes

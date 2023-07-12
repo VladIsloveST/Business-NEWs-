@@ -15,16 +15,16 @@ class MenuCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont(name: "Helvetica Neue Medium", size: 18)
+        label.alpha = 0.95
         return label
     }()
-    
-    private var separatorLine = UIView()
     
     override var isSelected: Bool {
         didSet {
             nameCategoryLabel.font = self.isSelected ?
             UIFont(name: "Helvetica Neue Bold", size: 18) :
             UIFont(name: "Helvetica Neue Medium", size: 18)
+            nameCategoryLabel.alpha = self.isSelected ? 1 : 0.95
         }
     }
     

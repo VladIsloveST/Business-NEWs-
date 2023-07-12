@@ -30,10 +30,9 @@ class HomeViewController: UIViewController {
         return colView
     }()
     
-    var separatorLine = UIView()
-    
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
+    private var separatorLine: UIView!
     private var topMenu: UIMenu!
     
     override func viewDidLoad() {
@@ -69,6 +68,7 @@ class HomeViewController: UIViewController {
     }
     
     private func addSeparatorLineView(){
+        separatorLine = UIView()
         view.addSubview(separatorLine)
         separatorLine.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

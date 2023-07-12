@@ -16,7 +16,7 @@ class MenuCollectionView: UICollectionView {
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
-    var underlineView: UIView = {
+    private let underlineView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.alpha = 0

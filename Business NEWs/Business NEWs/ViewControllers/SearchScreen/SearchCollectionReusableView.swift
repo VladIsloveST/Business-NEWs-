@@ -11,14 +11,15 @@ class SearchCollectionReusableView: UICollectionReusableView {
     static var identifier = "SearchCollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
     
-    let bottomSeparator = UIView()
+    private var bottomSeparator: UIView!
     
     override init(frame: CGRect) {
         super .init(frame: frame)
         setupSeparator()
     }
     
-    func setupSeparator() {
+    private func setupSeparator() {
+        bottomSeparator = UIView()
         addSubview(bottomSeparator)
         bottomSeparator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
