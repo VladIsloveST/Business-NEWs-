@@ -32,6 +32,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Actions
     func setupCollectionView() {
+        articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        
         articlCollectionView.delegate = self
         articlCollectionView.dataSource = self
         
@@ -90,10 +92,13 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return UICollectionViewCell() }
-        //cell.layer.borderWidth = 1
-        //cell.layer.borderColor = UIColor.black.cgColor
-        cell.mainLabel.backgroundColor = .systemPink
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        
+        if indexPath.row % 4 == 0 {
+            cell.backgroundColor = .systemPink
+        } else {
+            cell.backgroundColor = .orange
+        }
         return cell
     }
 }
