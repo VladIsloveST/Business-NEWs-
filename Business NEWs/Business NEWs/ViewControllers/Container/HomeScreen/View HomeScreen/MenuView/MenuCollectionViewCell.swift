@@ -31,7 +31,6 @@ class MenuCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super .init(frame: frame)
         addCategoryLabel()
-        addSeparatorLineView()
     }
     
     required init?(coder: NSCoder) {
@@ -48,16 +47,5 @@ class MenuCollectionViewCell: UICollectionViewCell {
             nameCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         backgroundColor = .white
-    }
-    
-    private func addSeparatorLineView(){
-        addSubview(separatorLine)
-        separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            separatorLine.heightAnchor.constraint(equalToConstant: 1),
-            separatorLine.widthAnchor.constraint(equalTo: widthAnchor),
-            separatorLine.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 30)
-        ])
-        separatorLine.backgroundColor = .darkGray
     }
 }

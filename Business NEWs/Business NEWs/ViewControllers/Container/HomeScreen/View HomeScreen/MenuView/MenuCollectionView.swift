@@ -10,7 +10,9 @@ import UIKit
 
 class MenuCollectionView: UICollectionView {
     
-    private let nameCategoryArray = ["Wall St.", "TechCrunch", "Apple", "Business", "Wall St.", "TechCrunch", "Apple", "Business"]
+    weak var homeControllerDelegate: ArticlesMovementDelegate?
+    
+    private let nameCategoryArray = ["Wall St.", "Apple", "TechCrunch", "Business", "Wall St.", "TechCrunch", "Business", "Apple"]
     
     private let categoryFlowLayout = UICollectionViewFlowLayout()
     
@@ -21,11 +23,9 @@ class MenuCollectionView: UICollectionView {
         return view
     }()
     
-    var leftAnchorConstraint = NSLayoutConstraint()
-    var widthAnchorConstraint = NSLayoutConstraint()
-    
-    weak var homeController: HomeViewController?
-    
+    private var leftAnchorConstraint = NSLayoutConstraint()
+    private var widthAnchorConstraint = NSLayoutConstraint()
+        
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: categoryFlowLayout)
         configure()
@@ -60,8 +60,8 @@ class MenuCollectionView: UICollectionView {
     private func configure() {
         delegate = self
         dataSource = self
-        
-        categoryFlowLayout.minimumInteritemSpacing = 0
+
+        categoryFlowLayout.minimumInteritemSpacing = 4
         categoryFlowLayout.scrollDirection = .horizontal
         
         translatesAutoresizingMaskIntoConstraints = false
@@ -72,25 +72,28 @@ class MenuCollectionView: UICollectionView {
         selectItem(at: [0,0], animated: true, scrollPosition: [])
     }
     
-    func calculateCategoryWidth(item: Int) -> CGFloat {
+    private func calculateCategoryWidth(item: Int) -> CGFloat {
         let categoryFont = UIFont(name: "Arial Bold", size: 18)
         let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
         let categoryWidth = nameCategoryArray[item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
         return categoryWidth
     }
     
-    func calculationLeftIndent(bySelectedCell item: Int) -> CGFloat {
+    private func calculationLeftIndent(bySelectedCell item: Int) -> CGFloat {
         var originX: CGFloat = 0
         guard item > 0 else { return originX }
         for index in 0...item - 1 {
-            originX += calculateCategoryWidth(item: index)
+            let currentWidth = calculateCategoryWidth(item: index) + 4
+            originX += currentWidth
         }
         return originX
     }
     
-    func animateMovementUnderlineView(leftIndent: CGFloat, width: CGFloat) {
-        self.leftAnchorConstraint.constant = leftIndent
-        self.widthAnchorConstraint.constant = width
+    func animateMovementUnderlineView(item: Int) {
+        let indexPath = IndexPath(item: item, section: 0)
+        let cell = cellForItem(at: indexPath)
+        widthAnchorConstraint.constant = cell?.frame.width ?? 0
+        leftAnchorConstraint.constant = calculationLeftIndent(bySelectedCell: item)
         UIView.animate(withDuration: 0.5) {
             self.layoutIfNeeded()
         }
@@ -98,19 +101,15 @@ class MenuCollectionView: UICollectionView {
 }
 
     // MARK: - Collection View Delegate
-    
     extension MenuCollectionView: UICollectionViewDelegate {
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            homeController?.scrollToMenu(index: indexPath.item)
-            let leftIndent = calculationLeftIndent(bySelectedCell: indexPath.item)
-            let width = calculateCategoryWidth(item: indexPath.item)
-            animateMovementUnderlineView(leftIndent: leftIndent, width: width)
+            homeControllerDelegate?.scrollToMenu(index: indexPath.item)
+            animateMovementUnderlineView(item: indexPath.item)
         }
     }
     
     // MARK: - Collection View Data Source
-    
     extension MenuCollectionView: UICollectionViewDataSource {
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             nameCategoryArray.count
@@ -124,7 +123,6 @@ class MenuCollectionView: UICollectionView {
     }
     
     // MARK: - Collection View Delegate Flow Layout
-    
     extension MenuCollectionView: UICollectionViewDelegateFlowLayout {
         func collectionView(_ collectionView: UICollectionView,
                             layout collectionViewLayout: UICollectionViewLayout,

@@ -14,16 +14,16 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.contentInset.top = 20
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .lightGray
         return collectionView
     }()
     
-    private let refreshControl = UIRefreshControl()
+    private var refreshControl = UIRefreshControl()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCollectionView()
-        setuopRefreshControl()
+        setupRefreshControl()
     }
     
     required init?(coder: NSCoder) {
@@ -44,12 +44,12 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articlCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
             articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
-        articlCollectionView.backgroundColor = .lightGray
         articlCollectionView.refreshControl = refreshControl
         articlCollectionView.collectionViewLayout = createLayout()
     }
     
-    private func setuopRefreshControl() {
+    private func setupRefreshControl() {
+       
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black

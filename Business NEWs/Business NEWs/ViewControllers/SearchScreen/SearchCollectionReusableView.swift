@@ -26,7 +26,7 @@ class SearchCollectionReusableView: UICollectionReusableView {
             bottomSeparator.widthAnchor.constraint(equalToConstant: self.frame.width),
             bottomSeparator.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15)
         ])
-        bottomSeparator.backgroundColor = .darkGray
+        bottomSeparator.backgroundColor = .black
     }
     
     required init?(coder: NSCoder) {

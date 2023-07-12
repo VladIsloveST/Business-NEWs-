@@ -11,6 +11,10 @@ protocol HomeViewControllerDelegate: AnyObject {
     func didTapMenuButton()
 }
 
+protocol ArticlesMovementDelegate: AnyObject {
+    func scrollToMenu(index: Int)
+}
+
 class HomeViewController: UIViewController {
     
     // MARK: - Properties
@@ -26,27 +30,27 @@ class HomeViewController: UIViewController {
         return colView
     }()
     
-    private let menuCollectionView = MenuCollectionView()
-    private let loadingIndicator = ProgressView()
-    private var topMenu = UIMenu()
+    var separatorLine = UIView()
+    
+    private var menuCollectionView: MenuCollectionView!
+    private var loadingIndicator: ProgressView!
+    private var topMenu: UIMenu!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        loadingIndicator.isAnimating = true
-        
         setupTopMenu()
-        
         setupMenu()
         setupNavBarButtons()
         setupIndicatot()
         setupCollectionView()
+        addSeparatorLineView()
         
+        loadingIndicator.isAnimating = true
         navigationItem.title = "Home"
         navigationController?.navigationBar.backgroundColor = .white
     }
     
-    private func  setupCollectionView() {
+    private func setupCollectionView() {
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
         
@@ -64,7 +68,19 @@ class HomeViewController: UIViewController {
         articlesCollectionView.bounces = false
     }
     
+    private func addSeparatorLineView(){
+        view.addSubview(separatorLine)
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            separatorLine.widthAnchor.constraint(equalTo: view.widthAnchor),
+            separatorLine.bottomAnchor.constraint(equalTo: articlesCollectionView.topAnchor, constant: 1)
+        ])
+        separatorLine.backgroundColor = .black
+    }
+    
     private func setupMenu() {
+        menuCollectionView = MenuCollectionView()
         view.addSubview(menuCollectionView)
         menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -72,10 +88,12 @@ class HomeViewController: UIViewController {
             menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
             menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
         ])
-        menuCollectionView.homeController = self
+        menuCollectionView.homeControllerDelegate = self
+        menuCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
     }
     
     private func setupIndicatot() {
+        loadingIndicator = ProgressView()
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -109,6 +127,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setupTopMenu() {
+        topMenu = UIMenu()
         let copy =  UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc"),
                              handler: { _ in print("copy") })
         let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"),
@@ -116,11 +135,6 @@ class HomeViewController: UIViewController {
         let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"),attributes: .destructive ,
                               handler: { _ in print("Delete") })
         topMenu = UIMenu(title: "Options", options: .displayInline, children: [copy, share, delete])
-    }
-    
-    func scrollToMenu(index: Int) {
-        let indexPath = IndexPath(item: index, section: 0)
-        articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
 }
 
@@ -178,10 +192,7 @@ extension HomeViewController: UICollectionViewDelegate {
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         menuCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        let leftIndent = menuCollectionView.calculationLeftIndent(bySelectedCell: indexPath.item)
-        let width = menuCollectionView.calculateCategoryWidth(item: indexPath.item)
-        menuCollectionView.animateMovementUnderlineView(leftIndent: leftIndent, width: width)
-        
+        menuCollectionView.animateMovementUnderlineView(item: indexPath.item)
     }
 }
 
@@ -203,5 +214,12 @@ extension HomeViewController: ViewInPut {
     
     func failer(error: Error) {
         print(error.localizedDescription)
+    }
+}
+
+extension HomeViewController: ArticlesMovementDelegate {
+    func scrollToMenu(index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
 }

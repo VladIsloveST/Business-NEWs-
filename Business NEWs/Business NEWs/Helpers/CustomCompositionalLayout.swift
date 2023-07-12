@@ -65,7 +65,7 @@ private final class LightSeparatorView: UICollectionReusableView {
 private final class DarkSeparatorView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .gray
+        self.backgroundColor = .darkGray
     }
     
     required init?(coder aDecoder: NSCoder) {
