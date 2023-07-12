@@ -173,19 +173,15 @@ extension HomeViewController: UICollectionViewDataSource {
 
 // MARK: - Collection View Delegate
 extension HomeViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let pageIndex = scrollView.contentOffset.x/view.frame.width
-//        let leftIndent = menuCollectionView.calculationLeftIndent(bySelectedCell: pageIndex)
-//        let width = menuCollectionView.calculateCategoryWidth(item: pageIndex)
-//        menuCollectionView.animateMovementUnderlineView(leftIndent: leftIndent, width: width)
-    }
-   
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         menuCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        menuCollectionView.widthAnchorConstraint.constant = menuCollectionView.calculateCategoryWidth(item: Int(index))
+        let leftIndent = menuCollectionView.calculationLeftIndent(bySelectedCell: indexPath.item)
+        let width = menuCollectionView.calculateCategoryWidth(item: indexPath.item)
+        menuCollectionView.animateMovementUnderlineView(leftIndent: leftIndent, width: width)
+        
     }
 }
 

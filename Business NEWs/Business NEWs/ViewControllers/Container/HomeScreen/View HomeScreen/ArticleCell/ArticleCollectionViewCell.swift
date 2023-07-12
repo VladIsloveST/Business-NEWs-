@@ -13,7 +13,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     lazy var articlCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.contentInset.top = 15
+        collectionView.contentInset.top = 20
         collectionView.backgroundColor = .white
         return collectionView
     }()
@@ -31,12 +31,11 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Actions
-    func setupCollectionView() {
-        articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        
+    private func setupCollectionView() {
         articlCollectionView.delegate = self
         articlCollectionView.dataSource = self
         
+        articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         articlCollectionView.register(LargePortraitCell.self,
                                 forCellWithReuseIdentifier: LargePortraitCell.identifier)
         addSubview(articlCollectionView)
@@ -45,11 +44,12 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articlCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
             articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
+        articlCollectionView.backgroundColor = .lightGray
         articlCollectionView.refreshControl = refreshControl
         articlCollectionView.collectionViewLayout = createLayout()
     }
     
-    func setuopRefreshControl() {
+    private func setuopRefreshControl() {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black
