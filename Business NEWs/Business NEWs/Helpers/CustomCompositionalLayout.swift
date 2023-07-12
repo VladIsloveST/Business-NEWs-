@@ -12,7 +12,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     
     override init(section: NSCollectionLayoutSection) {
         super.init(section: section)
-        register(WhiteSeparatorView.self, forDecorationViewOfKind: "whiteSeparator")
+        register(LightSeparatorView.self, forDecorationViewOfKind: "whiteSeparator")
         register(DarkSeparatorView.self, forDecorationViewOfKind: "darkSeparator")
     }
     
@@ -47,10 +47,10 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     }
 }
 
-private final class WhiteSeparatorView: UICollectionReusableView {
+private final class LightSeparatorView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .black
+        self.backgroundColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
