@@ -10,15 +10,8 @@ import UIKit
 class ArticleCollectionViewCell: UICollectionViewCell {
     static let identifier = "ArticleCollectionViewCell"
     
-    lazy var articlCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.contentInset.top = 20
-        collectionView.backgroundColor = .lightGray
-        return collectionView
-    }()
-    
-    private var refreshControl = UIRefreshControl()
+    private var articlCollectionView: UICollectionView!
+    private var refreshControl: UIRefreshControl!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,9 +24,33 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Actions
+    private func createLayout() -> CustomFlowLayout {
+        let topItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(100)))
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(70)))
+        let localVerticalGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(210)),
+            subitem: item, count: 3)
+        let generalGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(310)),
+            subitems: [topItem, localVerticalGroup])
+        generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        let section = NSCollectionLayoutSection(group: generalGroup)
+        section.interGroupSpacing = 80
+        let layout = CustomFlowLayout(section: section)
+        return layout
+    }
+    
     private func setupCollectionView() {
-        articlCollectionView.delegate = self
+        articlCollectionView = UICollectionView(frame: .zero, collectionViewLayout:  createLayout())
+       
         articlCollectionView.dataSource = self
+        articlCollectionView.delegate = self
         
         articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         articlCollectionView.register(LargePortraitCell.self,
@@ -44,37 +61,17 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articlCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
             articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
-        articlCollectionView.refreshControl = refreshControl
-        articlCollectionView.collectionViewLayout = createLayout()
+        articlCollectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        articlCollectionView.backgroundColor = .lightGray
     }
     
     private func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching more articles...", attributes: [NSAttributedString.Key.strokeColor : UIColor.black])
-    }
-    
-    private func createLayout() -> CustomFlowLayout {
-        let topItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.65)))
-        let item = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.1)))
-        let localVerticalGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.35)),
-            subitem: item, count: 3)
-        let generalGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(1.0)),
-            subitems: [topItem, localVerticalGroup])
-        generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-        let section = NSCollectionLayoutSection(group: generalGroup)
-        section.interGroupSpacing = 80
-        let layout = CustomFlowLayout(section: section)
-        return layout
+        articlCollectionView.refreshControl = refreshControl
     }
     
     @objc
@@ -94,33 +91,15 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
         
         if indexPath.row % 4 == 0 {
-            cell.backgroundColor = .systemPink
+            guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
+            return portraitCell
         } else {
             cell.backgroundColor = .orange
+            return cell
         }
-        return cell
     }
 }
 
 // MARK: - Collection View Delegate
 extension ArticleCollectionViewCell: UICollectionViewDelegate {
-    
-}
-
-// MARK: - Collection View Delegate Flow Layout
-extension ArticleCollectionViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-//        let widnestCellWigth = bounds.width - collectionView.contentInset.left - collectionView.contentInset.left
-//        let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]
-//        let size = CGSize(width: widnestCellWigth, height: 2000)
-//        let estimatedFrame = NSString(string: wikipedia[indexPath.row]).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-//        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 25)
-        
-        CGSize(width: frame.width - 30, height: frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
-    }
 }

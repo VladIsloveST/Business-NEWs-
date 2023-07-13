@@ -24,7 +24,11 @@ class LargePortraitCell: BasicCollectionViewCell {
         addSubview(lableStackView)
         
         setConstraint()
-        mainLabel.font = .systemFont(ofSize: 25)
+        mainLabel.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
+        //"Baskerville"
+        
+        mainLabel.setLineSpacing(lineSpacing: 3)
+        backgroundColor = .gray
     }
     
     required init?(coder: NSCoder) {
@@ -36,41 +40,28 @@ class LargePortraitCell: BasicCollectionViewCell {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),
             imageView.widthAnchor.constraint(equalTo: widthAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -300)
+            imageView.heightAnchor.constraint(equalToConstant: 200)
         ])
-        imageView.backgroundColor = .blue
+        imageView.backgroundColor = .white
         
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 7),
-            mainLabel.bottomAnchor.constraint(equalTo: lableStackView.topAnchor, constant: -10),
-            mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 20),
+            mainLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
+            mainLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -70),
+            mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
             mainLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
-
-        buttonSaving.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            buttonSaving.widthAnchor.constraint(equalToConstant: 30),
-            buttonSaving.heightAnchor.constraint(equalToConstant: 30)
-        ])
-
-        buttonShare.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            buttonShare.widthAnchor.constraint(equalToConstant: 30),
-            buttonShare.heightAnchor.constraint(equalToConstant: 30)
         ])
 
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
-            buttonStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8)
+            buttonStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
+            buttonStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20)
         ])
 
         lableStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
-            lableStackView.heightAnchor.constraint(equalTo: buttonStackView.heightAnchor),
-            lableStackView.bottomAnchor.constraint(equalTo: buttonStackView.bottomAnchor)
+            lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor)
         ])
     }
 }

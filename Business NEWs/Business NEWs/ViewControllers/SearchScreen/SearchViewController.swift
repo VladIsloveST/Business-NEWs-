@@ -44,7 +44,6 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.dataSource = self
         historyTableView.mainCellDelegate = self
         
-        
         navigationItem.title = "Search"
         
         searchResultCollectioView.register(PortraitCell.self,
@@ -181,7 +180,14 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: view.frame.width - 30, height: view.frame.height / 3)
+        let cell = collectionView.cellForItem(at: indexPath) as? PortraitCell
+        let widnestCellWigth = view.bounds.width - 24
+        let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]
+        let size = CGSize(width: widnestCellWigth, height: 2000)
+        guard let text = cell?.mainLabel.text else {
+            return CGSize(width: view.frame.width - 30, height: view.frame.height / 3) }
+        let estimatedFrame = NSString(string: text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 260)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

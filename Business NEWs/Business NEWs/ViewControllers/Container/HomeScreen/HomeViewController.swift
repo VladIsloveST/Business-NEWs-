@@ -26,8 +26,8 @@ class HomeViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
-        let colView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return colView
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
     }()
     
     private var menuCollectionView: MenuCollectionView!

@@ -25,7 +25,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.horizontal
         stackView.alignment = .center
-        stackView.spacing = 25
+        stackView.spacing = 23
         return stackView
     }()
     
@@ -39,7 +39,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.textAlignment = .left
         label.backgroundColor = .darkGray
-        
         return label
     }()
     
@@ -47,23 +46,22 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.vertical
         stackView.alignment = .leading
-        stackView.spacing = 0
-        stackView.backgroundColor = .yellow
+        stackView.spacing = -3
         return stackView
     }()
     
     var timeOfPublicationLable: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica Neue", size: 17)
-        label.textColor = .lightGray
+        label.font = UIFont(name: "Arial", size: 16)
+        label.textColor = .white
         label.text = "1h ago"
         return label
     }()
     
     var infoLable: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica Neue", size: 17)
-        label.textColor = .lightGray
+        label.font = UIFont(name: "Arial", size: 16)
+        label.textColor = .white
         label.text = "Artiane de Vogue"
         return label
     }()

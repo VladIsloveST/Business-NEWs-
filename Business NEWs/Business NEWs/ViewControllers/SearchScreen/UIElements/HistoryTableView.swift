@@ -15,7 +15,8 @@ class HistoryTableView: UITableView {
     weak var mainCellDelegate: PopOverTableViewProtocol?
     
     private var flowLayout = UICollectionViewFlowLayout()
-    private var cellConfigureArray = ["like", "subscribe", "contact", "like", "subscribe", "subscribe", "contact"]
+        
+    private var cellConfigureArray = ["Built environments", "are where", "humans have", "fundamentally", "transformed landscapes", "such as urban", "settings"]
 
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -30,7 +31,8 @@ class HistoryTableView: UITableView {
         delegate = self
         dataSource = self
         flowLayout.minimumLineSpacing = 0
-        register(HistoryCollectionViewCell.self, forCellReuseIdentifier: HistoryCollectionViewCell.identifier)
+        register(HistoryCollectionViewCell.self,
+                 forCellReuseIdentifier: HistoryCollectionViewCell.identifier)
         separatorInset.right = 17
         layer.cornerRadius = 9
     }

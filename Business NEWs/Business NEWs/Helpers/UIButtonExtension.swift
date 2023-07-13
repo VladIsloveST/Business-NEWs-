@@ -10,16 +10,17 @@ import UIKit
 
 extension UIButton {
     convenience init(normalStateImage: String, selectedStateImage: String) {
+       
         self.init()
-        let normalStateImage = UIImage(systemName: normalStateImage)?
-            .withTintColor(.darkGray, renderingMode: .alwaysOriginal)
-        let selectedStateImage = UIImage(systemName: selectedStateImage)?
-            .withTintColor(.darkGray, renderingMode: .alwaysOriginal)
+        let configuration = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular, scale: .large)
+        let normalStateImage = UIImage(systemName: normalStateImage, withConfiguration: configuration)?
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
+        let selectedStateImage = UIImage(systemName: selectedStateImage, withConfiguration: configuration)?
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
         self.setImage(normalStateImage, for: .normal)
         self.setImage(selectedStateImage, for: .selected)
-        
+        self.contentHorizontalAlignment = .right
+        self.contentVerticalAlignment = .bottom
         self.isSelected = false
-        self.contentVerticalAlignment = .fill
-        self.contentHorizontalAlignment = .fill
     }
 }
