@@ -17,7 +17,7 @@ class SearchViewController: UIViewController {
     private let searchResultCollectioView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectinView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 75)
+        flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 76)
         return collectinView
     }()
     

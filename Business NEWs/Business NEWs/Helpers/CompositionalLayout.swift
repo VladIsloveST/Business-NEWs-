@@ -14,13 +14,12 @@ enum CompositionalGroupAligment {
 }
 
 struct CompositionalLayout {
-    
     static func createItem(width: NSCollectionLayoutDimension,
                            height: NSCollectionLayoutDimension) -> NSCollectionLayoutItem {
         return NSCollectionLayoutItem(layoutSize: .init(widthDimension: width,
                                                         heightDimension: height))
     }
-    
+
     static func createGroup(aligment: CompositionalGroupAligment,
                             width: NSCollectionLayoutDimension,
                             height: NSCollectionLayoutDimension,

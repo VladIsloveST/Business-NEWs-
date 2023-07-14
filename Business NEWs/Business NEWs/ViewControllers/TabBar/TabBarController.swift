@@ -11,7 +11,6 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureTabBar()
         setupViewControllers()
         
@@ -29,7 +28,6 @@ class TabBarController: UITabBarController {
     }
     
     fileprivate func setupViewControllers() {
-        
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
                                 title: "Saved",
@@ -65,7 +63,7 @@ class TabBarController: UITabBarController {
 
 // MARK: - UITabBarController Delegate
 extension TabBarController: UITabBarControllerDelegate {
-
+    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
             return true
@@ -74,7 +72,6 @@ extension TabBarController: UITabBarControllerDelegate {
         if selectedIndex == 2 {
             return false
         }
-        
         return true
     }
 }

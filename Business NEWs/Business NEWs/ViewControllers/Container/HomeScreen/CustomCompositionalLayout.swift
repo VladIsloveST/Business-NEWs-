@@ -13,7 +13,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     override init(section: NSCollectionLayoutSection) {
         super.init(section: section)
         register(LightSeparatorView.self, forDecorationViewOfKind: "whiteSeparator")
-        register(DarkSeparatorView.self, forDecorationViewOfKind: "darkSeparator")
+        register(SeparatorView.self, forDecorationViewOfKind: "darkSeparator")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -47,6 +47,21 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     }
 }
 
+private final class SeparatorView: UICollectionReusableView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = .lightGray
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        self.frame = layoutAttributes.frame
+    }
+}
+
 private final class LightSeparatorView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,17 +77,3 @@ private final class LightSeparatorView: UICollectionReusableView {
     }
 }
 
-private final class DarkSeparatorView: UICollectionReusableView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = .darkGray
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        self.frame = layoutAttributes.frame
-    }
-}

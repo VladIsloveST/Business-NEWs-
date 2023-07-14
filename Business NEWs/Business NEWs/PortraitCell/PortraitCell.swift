@@ -9,11 +9,11 @@ import UIKit
 
 class PortraitCell: BasicCollectionViewCell {
     static let identifier = "PortraitCollectionViewCell"
+    var imageView = UIImageView()
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        
-        imageView.backgroundColor = .lightGray
+        imageView.backgroundColor = .white
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.black.cgColor
 

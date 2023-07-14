@@ -27,17 +27,17 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     private func createLayout() -> CustomFlowLayout {
         let topItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(100)))
+                                               heightDimension: .estimated(1)))
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(70)))
+                                               heightDimension: .estimated(1)))
         let localVerticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(210)),
+                                               heightDimension: .estimated(400)),
             subitem: item, count: 3)
         let generalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(310)),
+                                               heightDimension: .estimated(600)),
             subitems: [topItem, localVerticalGroup])
         generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let section = NSCollectionLayoutSection(group: generalGroup)
@@ -52,9 +52,10 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         articlCollectionView.dataSource = self
         articlCollectionView.delegate = self
         
-        articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        //articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         articlCollectionView.register(LargePortraitCell.self,
                                 forCellWithReuseIdentifier: LargePortraitCell.identifier)
+        articlCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
         addSubview(articlCollectionView)
         articlCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -62,7 +63,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
         articlCollectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        articlCollectionView.backgroundColor = .lightGray
+        articlCollectionView.backgroundColor = .systemGray3
     }
     
     private func setupRefreshControl() {
@@ -88,14 +89,13 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        
+        let cell = UICollectionViewCell()
         if indexPath.row % 4 == 0 {
             guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
             return portraitCell
         } else {
-            cell.backgroundColor = .orange
-            return cell
+            guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+            return smallCell
         }
     }
 }
@@ -103,3 +103,4 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Delegate
 extension ArticleCollectionViewCell: UICollectionViewDelegate {
 }
+

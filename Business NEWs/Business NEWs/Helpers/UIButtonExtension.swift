@@ -19,8 +19,6 @@ extension UIButton {
             .withTintColor(.white, renderingMode: .alwaysOriginal)
         self.setImage(normalStateImage, for: .normal)
         self.setImage(selectedStateImage, for: .selected)
-        self.contentHorizontalAlignment = .right
-        self.contentVerticalAlignment = .bottom
         self.isSelected = false
     }
 }

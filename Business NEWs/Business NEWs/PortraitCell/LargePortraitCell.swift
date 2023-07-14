@@ -11,24 +11,13 @@ import UIKit
 class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
+    var imageView = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        buttonStackView.addArrangedSubview(buttonShare)
-        buttonStackView.addArrangedSubview(buttonSaving)
-        lableStackView.addArrangedSubview(infoLable)
-        lableStackView.addArrangedSubview(timeOfPublicationLable)
-        
         addSubview(imageView)
-        addSubview(mainLabel)
-        addSubview(buttonStackView)
-        addSubview(lableStackView)
-        
         setConstraint()
-        mainLabel.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
-        //"Baskerville"
-        
-        mainLabel.setLineSpacing(lineSpacing: 3)
-        backgroundColor = .gray
+        imageView.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {
@@ -42,7 +31,6 @@ class LargePortraitCell: BasicCollectionViewCell {
             imageView.widthAnchor.constraint(equalTo: widthAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 200)
         ])
-        imageView.backgroundColor = .white
         
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -61,7 +49,8 @@ class LargePortraitCell: BasicCollectionViewCell {
         lableStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor)
+            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5)
         ])
     }
 }
+

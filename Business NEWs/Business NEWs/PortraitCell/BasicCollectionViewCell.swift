@@ -21,33 +21,34 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    let buttonStackView: UIStackView = {
+    lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.horizontal
         stackView.alignment = .center
         stackView.spacing = 23
+        stackView.addArrangedSubview(buttonShare)
+        stackView.addArrangedSubview(buttonSaving)
         return stackView
     }()
-    
-    var imageView = UIImageView()
     
     var mainLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica Neue", size: 21)
+        label.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
         label.textColor = .white
-        label.text = "Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium."
+        label.text = "Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium."
         label.numberOfLines = 0
+        label.setLineSpacing(lineSpacing: 3)
         label.textAlignment = .left
-        label.backgroundColor = .darkGray
+        //label.backgroundColor = .l
         return label
     }()
     
-    let lableStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.vertical
-        stackView.alignment = .leading
-        stackView.spacing = -3
-        return stackView
+    var infoLable: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Arial", size: 16)
+        label.textColor = .white
+        label.text = "Artiane de Vogue"
+        return label
     }()
     
     var timeOfPublicationLable: UILabel = {
@@ -58,12 +59,14 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var infoLable: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Arial", size: 16)
-        label.textColor = .white
-        label.text = "Artiane de Vogue"
-        return label
+    lazy var lableStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.alignment = .leading
+        stackView.spacing = -3
+        stackView.addArrangedSubview(infoLable)
+        stackView.addArrangedSubview(timeOfPublicationLable)
+        return stackView
     }()
     
     @objc
@@ -76,5 +79,17 @@ class BasicCollectionViewCell: UICollectionViewCell {
             print("Selected")
             return buttonSaving.isSelected = true
         }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(mainLabel)
+        addSubview(buttonStackView)
+        addSubview(lableStackView)
+        backgroundColor = .darkGray
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
