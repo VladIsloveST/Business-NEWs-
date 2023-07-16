@@ -9,22 +9,34 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabBar()
         setupViewControllers()
-        
-        guard let tabBar = self.tabBar as? CustomTabBar else { return }
-        tabBar.didTapButton = { [unowned self] in
-            self.routeToSettings()
-        }
     }
     
+    // MARK: - Actions
     fileprivate func configureTabBar() {
         setValue(CustomTabBar(frame: tabBar.frame), forKey: "tabBar")
         delegate = self
         tabBar.tintColor = .label
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
+        
+        guard let tabBar = self.tabBar as? CustomTabBar else { return }
+        tabBar.didTapButton = { [unowned self] in
+            view.alpha = 0.9
+            view.isUserInteractionEnabled = false
+            self.routeToSettings()
+        }
+    }
+    
+    fileprivate func routeToSettings() {
+        if #available(iOS 15.0, *) {
+            let settingsVC = SettingsViewController()
+            settingsVC.delegate = self
+            present(settingsVC, animated: true)
+        }
     }
     
     fileprivate func setupViewControllers() {
@@ -39,13 +51,6 @@ class TabBarController: UITabBarController {
                              selectedImageName: "house.fill"),
             UIViewController()
         ]
-    }
-    
-    fileprivate func routeToSettings() {
-        if #available(iOS 15.0, *) {
-            let settingsVC = SettingsViewController()
-            present(settingsVC, animated: true)
-        }
     }
     
     fileprivate func createNavController(_ viewController: UIViewController, title: String,
@@ -63,7 +68,6 @@ class TabBarController: UITabBarController {
 
 // MARK: - UITabBarController Delegate
 extension TabBarController: UITabBarControllerDelegate {
-    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
             return true
@@ -75,3 +79,14 @@ extension TabBarController: UITabBarControllerDelegate {
         return true
     }
 }
+
+extension TabBarController: TabBarControllerDelegate {
+    func removeFromInactiveState() {
+        view.alpha = 1.0
+        view.isUserInteractionEnabled = true
+    }
+}
+
+
+
+

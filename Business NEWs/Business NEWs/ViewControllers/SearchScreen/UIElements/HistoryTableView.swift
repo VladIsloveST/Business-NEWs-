@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol PopOverTableViewProtocol: AnyObject {
+protocol PopOverTableViewDelegate: AnyObject {
     func selectItem(indexPath: IndexPath)
 }
 
 class HistoryTableView: UITableView {
-    weak var mainCellDelegate: PopOverTableViewProtocol?
+    weak var mainCellDelegate: PopOverTableViewDelegate?
     
     private var flowLayout = UICollectionViewFlowLayout()
         
