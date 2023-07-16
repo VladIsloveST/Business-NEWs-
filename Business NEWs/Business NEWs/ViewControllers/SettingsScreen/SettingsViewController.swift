@@ -18,6 +18,8 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         adjustBottomSheet()
+        setupTableView()
+        setupNavBar()
     }
     
     private func adjustBottomSheet() {
