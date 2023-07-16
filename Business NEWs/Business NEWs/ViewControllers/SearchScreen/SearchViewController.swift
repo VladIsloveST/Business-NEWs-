@@ -201,7 +201,7 @@ extension SearchViewController: SearchViewInPut {
     }
 }
 
-extension SearchViewController: PopOverTableViewProtocol {
+extension SearchViewController: PopOverTableViewDelegate {
     func selectItem(indexPath: IndexPath) {
         self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
         //searchBar.text = historyTableView.cellConfigureArray[indexPath.row]

@@ -7,13 +7,19 @@
 
 import UIKit
 
+protocol TabBarControllerDelegate: AnyObject {
+    func removeFromInactiveState()
+}
+
 class SettingsViewController: UIViewController {
+    
+    weak var delegate: TabBarControllerDelegate?
     
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
         [("Reviews", "exclamationmark.bubble"), ("About the App", "info.circle")]
     ]
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -24,9 +30,10 @@ class SettingsViewController: UIViewController {
     
     private func adjustBottomSheet() {
         let sheet = self.sheetPresentationController
+        sheet?.delegate = self
         sheet?.detents = [.medium()]
-        sheet?.prefersScrollingExpandsWhenScrolledToEdge = false
         sheet?.prefersGrabberVisible = true
+        sheet?.prefersScrollingExpandsWhenScrolledToEdge = false
         sheet?.largestUndimmedDetentIdentifier = .medium
         sheet?.preferredCornerRadius = 20
     }
@@ -86,6 +93,13 @@ extension SettingsViewController: UITableViewDataSource {
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+// MARK: - Sheet Presentation Controller Delegate
+extension SettingsViewController: UISheetPresentationControllerDelegate {
+    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        delegate?.removeFromInactiveState()
     }
 }
 
