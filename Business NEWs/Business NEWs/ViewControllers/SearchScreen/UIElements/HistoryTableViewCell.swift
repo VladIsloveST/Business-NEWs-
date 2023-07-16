@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 
-class HistoryCollectionViewCell: UITableViewCell {
-    static let identifier = HistoryCollectionViewCell.description()
+class HistoryTableViewCell: UITableViewCell {
+    static let identifier = HistoryTableViewCell.description()
     
     var didDelete: () -> () = {}
     var didRevert: () -> () = {}
@@ -65,16 +65,16 @@ class HistoryCollectionViewCell: UITableViewCell {
         searchLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20),
-            deleteButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            deleteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
+            deleteButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             deleteButton.widthAnchor.constraint(equalToConstant: 25),
             
-            revertButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20),
-            revertButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            revertButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+            revertButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             searchLabel.leftAnchor.constraint(equalTo: revertButton.rightAnchor, constant: 10),
             searchLabel.rightAnchor.constraint(lessThanOrEqualTo: deleteButton.leftAnchor),
-            searchLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            searchLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

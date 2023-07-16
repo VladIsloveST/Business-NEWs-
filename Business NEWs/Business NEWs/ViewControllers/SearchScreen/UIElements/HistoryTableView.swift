@@ -31,8 +31,8 @@ class HistoryTableView: UITableView {
         delegate = self
         dataSource = self
         flowLayout.minimumLineSpacing = 0
-        register(HistoryCollectionViewCell.self,
-                 forCellReuseIdentifier: HistoryCollectionViewCell.identifier)
+        register(HistoryTableViewCell.self,
+                 forCellReuseIdentifier: HistoryTableViewCell.identifier)
         separatorInset.right = 17
         layer.cornerRadius = 9
     }
@@ -45,7 +45,7 @@ extension HistoryTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryCollectionViewCell.identifier, for: indexPath) as? HistoryCollectionViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.identifier, for: indexPath) as? HistoryTableViewCell else { return UITableViewCell() }
         cell.searchLabel.text = cellConfigureArray[indexPath.row]
         cell.didDelete = {
             self.cellConfigureArray.remove(at: indexPath.row)
