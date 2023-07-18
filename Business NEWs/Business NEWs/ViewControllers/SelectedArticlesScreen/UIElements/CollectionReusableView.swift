@@ -21,7 +21,7 @@ class CollectionReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .systemGray3
         setViews()
     }
     
@@ -45,7 +45,7 @@ class CollectionReusableView: UICollectionReusableView {
         headerSeparator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             headerSeparator.heightAnchor.constraint(equalToConstant: 1),
-            headerSeparator.widthAnchor.constraint(equalToConstant: self.frame.width - 30),
+            headerSeparator.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
             headerSeparator.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
         headerSeparator.backgroundColor = .black

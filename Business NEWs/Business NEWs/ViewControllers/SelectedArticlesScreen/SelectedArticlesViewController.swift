@@ -14,21 +14,21 @@ class SelectedArticlesViewController: UIViewController {
     
     private var types = MockData.shared.articleData
     
-    private let newsCollectionView = UICollectionView(frame: .zero,
-                                                      collectionViewLayout: UICollectionViewFlowLayout())
+    private var newsCollectionView: UICollectionView!
     private let searchBar = UISearchBar()
     private let expandableView = ExpandableView()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        newsCollectionView.collectionViewLayout = createLayout()
         setupCollectionView()
         setupSearchBar()
     }
     
     // MARK: - Private Methods
     private func  setupCollectionView() {
+        newsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+
         newsCollectionView.delegate = self
         newsCollectionView.dataSource = self
         
@@ -47,7 +47,7 @@ class SelectedArticlesViewController: UIViewController {
             newsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             newsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
+        newsCollectionView.backgroundColor = .systemGray3
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -64,23 +64,23 @@ class SelectedArticlesViewController: UIViewController {
                                                             subitems: item)
                 let section = CompositionalLayout.createSection(group: group,
                                                                 scrollingBehavior: .continuous)
-                section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
+                section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
                 return section
             case .recent:
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
                                                           height: .fractionalHeight(1))
                 let group = CompositionalLayout.createGroup(aligment: .vertical,
                                                             width: .fractionalWidth(1),
-                                                            height: .fractionalHeight(0.4),
+                                                            height: .fractionalHeight(0.5),
                                                             subitems: item)
                 let section = CompositionalLayout.createSection(group: group)
-                section.boundarySupplementaryItems = [self.supplementaryHeaderItem()]
+                section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
                 return section
             }
         }
     }
     
-    private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func createSupplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementaryItem {
         .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
                                 heightDimension: .estimated(50)),
               elementKind: UICollectionView.elementKindSectionHeader,

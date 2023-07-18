@@ -10,14 +10,13 @@ import UIKit
 
 final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     
-    override init(section: NSCollectionLayoutSection) {
-        super.init(section: section)
-        register(LightSeparatorView.self, forDecorationViewOfKind: "whiteSeparator")
-        register(SeparatorView.self, forDecorationViewOfKind: "darkSeparator")
-    }
+    private var numberOfItemsInSection = 0
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    convenience init(section: NSCollectionLayoutSection, numberOfItemsInSection: Int) {
+        self.init(section: section)
+        self.numberOfItemsInSection = numberOfItemsInSection
+        register(LightSeparator.self, forDecorationViewOfKind: "whiteSeparator")
+        register(DarkSeparator.self, forDecorationViewOfKind: "darkSeparator")
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
@@ -31,7 +30,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
             let darkSeparatorAttribute = UICollectionViewLayoutAttributes(
                 forDecorationViewOfKind: "darkSeparator", with: layoutAttribute.indexPath)
             
-            if layoutAttribute.indexPath.item % 4 == 0 {
+            if layoutAttribute.indexPath.item % numberOfItemsInSection == 0 {
                 lightSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x, y: cellFrame.origin.y - 41,
                                                   width: cellFrame.size.width, height: 2)
                 decorationAttributes.append(lightSeparatorAttribute)
@@ -47,7 +46,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     }
 }
 
-private final class SeparatorView: UICollectionReusableView {
+private final class DarkSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .lightGray
@@ -62,7 +61,7 @@ private final class SeparatorView: UICollectionReusableView {
     }
 }
 
-private final class LightSeparatorView: UICollectionReusableView {
+private final class LightSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white

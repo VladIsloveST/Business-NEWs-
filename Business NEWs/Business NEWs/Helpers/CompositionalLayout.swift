@@ -43,7 +43,7 @@ struct CompositionalLayout {
         section.orthogonalScrollingBehavior = scrollingBehavior
         section.interGroupSpacing = interGroupSpacing
         section.supplementariesFollowContentInsets = false
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
+        section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing: 20)
         return section
     }
 }

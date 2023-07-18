@@ -9,12 +9,28 @@ import UIKit
 class SettingTableViewCell: UITableViewCell {
     static let idettifire = "SettingTableViewCell"
     
-    private var infoLabel: UILabel!
-    private var infoImageView: UIImageView!
-
+    private var infoLabel = UILabel()
+    private var infoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .center
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        imageView.layer.cornerRadius = 7
+        imageView.tintColor = .white
+        return imageView
+    }()
+    
+    private let forwardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .lightGray
+        let configuration = UIImage.SymbolConfiguration(weight: .bold)
+        let image = UIImage(systemName: "chevron.right", withConfiguration: configuration)
+        imageView.image = image
+        return imageView
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUIElement()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -26,46 +42,31 @@ class SettingTableViewCell: UITableViewCell {
         let configuration = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: imageName, withConfiguration: configuration)
         infoImageView.image = image
-        infoImageView.tintColor = .white
         infoImageView.backgroundColor = imageColor
     }
     
-    private func setupUIElement() {
-        infoLabel = UILabel()
+    private func setupConstraints() {
         contentView.addSubview(infoLabel)
+        contentView.addSubview(infoImageView)
+        contentView.addSubview(forwardImageView)
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoImageView.translatesAutoresizingMaskIntoConstraints = false
+        forwardImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             infoLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 59),
             infoLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             infoLabel.heightAnchor.constraint(equalToConstant: 20),
-            infoLabel.widthAnchor.constraint(equalToConstant: frame.width - 20)
-        ])
-        
-        infoImageView = UIImageView()
-        contentView.addSubview(infoImageView)
-        infoImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+            infoLabel.widthAnchor.constraint(equalToConstant: frame.width - 20),
+            
             infoImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
             infoImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             infoImageView.heightAnchor.constraint(equalToConstant: 30),
-            infoImageView.widthAnchor.constraint(equalToConstant: 30)
-        ])
-        infoImageView.contentMode = .center
-        infoImageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
-        infoImageView.layer.cornerRadius = 7
-        
-        let forwardImageView = UIImageView()
-        contentView.addSubview(forwardImageView)
-        forwardImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+            infoImageView.widthAnchor.constraint(equalToConstant: 30),
+            
             forwardImageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -25),
             forwardImageView.widthAnchor.constraint(equalToConstant: 10),
             forwardImageView.heightAnchor.constraint(equalToConstant: 18),
             forwardImageView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
-        forwardImageView.tintColor = .lightGray
-        let forwardImage = UIImage(systemName: "chevron.right", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
-        forwardImageView.image = forwardImage
-        addSubview(forwardImageView)
     }
 }

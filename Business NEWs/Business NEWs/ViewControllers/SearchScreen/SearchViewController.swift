@@ -14,14 +14,8 @@ class SearchViewController: UIViewController {
     
     private var timer: Timer?
     
-    private let searchResultCollectioView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let collectinView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.headerReferenceSize = CGSize(width: collectinView.frame.size.width, height: 76)
-        return collectinView
-    }()
-    
-    private let historyTableView = HistoryTableView()
+    private var searchResultCollectioView: UICollectionView!
+    private var historyTableView: HistoryTableView!
     private var containerView: UIView!
     
     private var heightAnchorDown: NSLayoutConstraint?
@@ -29,7 +23,6 @@ class SearchViewController: UIViewController {
     
     private lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
         searchBar.backgroundImage = UIImage()
@@ -39,18 +32,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.delegate = self
-        searchResultCollectioView.delegate = self
-        searchResultCollectioView.dataSource = self
-        historyTableView.mainCellDelegate = self
-        
         navigationItem.title = "Search"
         
-        searchResultCollectioView.register(PortraitCell.self,
-                                           forCellWithReuseIdentifier: PortraitCell.identifier)
-        searchResultCollectioView.register(SearchCollectionReusableView.self,
-                                           forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
-                                           withReuseIdentifier: SearchCollectionReusableView.identifier)
         setupSearchCollectioView()
         setUpContainerView()
         setupHistoryView()
@@ -61,7 +44,35 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
     }
     
+    private func createLayout() -> CustomFlowLayout {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalHeight(0.2)))
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(700)),
+            subitem: item, count: 5)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 80
+        section.boundarySupplementaryItems = [createSupplementaryHeaderItem()]
+        let layout = CustomFlowLayout(section: section, numberOfItemsInSection: 5)
+        return layout
+    }
+    
+    private func createSupplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                heightDimension: .absolute(81))
+        return NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+    }
+    
     private func setupSearchCollectioView() {
+        searchResultCollectioView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        searchBar.delegate = self
+        searchResultCollectioView.delegate = self
+        searchResultCollectioView.dataSource = self
+        
         view.addSubview(searchResultCollectioView)
         searchResultCollectioView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -70,12 +81,20 @@ class SearchViewController: UIViewController {
             searchResultCollectioView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchResultCollectioView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+        searchResultCollectioView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
+        searchResultCollectioView.register(SearchCollectionReusableView.self,
+                                           forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
+                                           withReuseIdentifier: SearchCollectionReusableView.identifier)
+        searchResultCollectioView.backgroundColor = .systemGray3
+        searchResultCollectioView.contentInset.bottom = 20
     }
     
     private func setupHistoryView() {
+        historyTableView = HistoryTableView()
         containerView.addSubview(historyTableView)
         historyTableView.translatesAutoresizingMaskIntoConstraints = false
         historyTableView.constraint(equalToAnchors: containerView)
+        historyTableView.mainCellDelegate = self
     }
     
     private func setUpContainerView() {
@@ -145,13 +164,13 @@ extension SearchViewController: UISearchBarDelegate {
 // MARK: - Collection View Data Source
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        6
+        15
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
         guard let searchCell = searchResultCollectioView.dequeueReusableCell(
-            withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
+            withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
         return searchCell
     }
     
@@ -173,25 +192,6 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchBar.endEditing(true)
-    }
-}
-
-// MARK: - Collection View Delegate Flow Layout
-extension SearchViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = collectionView.cellForItem(at: indexPath) as? PortraitCell
-        let widnestCellWigth = view.bounds.width - 24
-        let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15)]
-        let size = CGSize(width: widnestCellWigth, height: 2000)
-        guard let text = cell?.mainLabel.text else {
-            return CGSize(width: view.frame.width - 30, height: view.frame.height / 3) }
-        let estimatedFrame = NSString(string: text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-        return CGSize(width: widnestCellWigth, height: estimatedFrame.height + 260)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
     }
 }
 

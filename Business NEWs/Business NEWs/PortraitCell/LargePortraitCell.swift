@@ -16,7 +16,7 @@ class LargePortraitCell: BasicCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(imageView)
-        setConstraint()
+        setConstraints()
         imageView.backgroundColor = .white
     }
     
@@ -24,7 +24,7 @@ class LargePortraitCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setConstraint() {
+    private func setConstraints() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),

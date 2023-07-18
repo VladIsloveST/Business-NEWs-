@@ -8,6 +8,7 @@
 import UIKit
 
 class ArticleCollectionViewCell: UICollectionViewCell {
+    
     static let identifier = "ArticleCollectionViewCell"
     
     private var articlCollectionView: UICollectionView!
@@ -42,7 +43,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let section = NSCollectionLayoutSection(group: generalGroup)
         section.interGroupSpacing = 80
-        let layout = CustomFlowLayout(section: section)
+        let layout = CustomFlowLayout(section: section, numberOfItemsInSection: 4)
         return layout
     }
     
@@ -51,8 +52,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
        
         articlCollectionView.dataSource = self
         articlCollectionView.delegate = self
+        articlCollectionView.prefetchDataSource = self
         
-        //articlCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         articlCollectionView.register(LargePortraitCell.self,
                                 forCellWithReuseIdentifier: LargePortraitCell.identifier)
         articlCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
@@ -102,5 +103,10 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 
 // MARK: - Collection View Delegate
 extension ArticleCollectionViewCell: UICollectionViewDelegate {
+}
+
+extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    }
 }
 

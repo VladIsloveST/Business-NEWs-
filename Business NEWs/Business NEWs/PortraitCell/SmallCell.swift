@@ -13,9 +13,8 @@ class SmallCell: BasicCollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        mainLabel.font = UIFont(name: "Hiragino Mincho ProN W3", size: 20)
         setConstraint()
-        
+        mainLabel.font = UIFont(name: "Hiragino Mincho ProN W3", size: 20)
         mainLabel.text = "Hiragino Mincho ProN W3 HiraginoHiragino Mincho ProN W3Hiragino Mincho Pro"
     }
     
@@ -42,8 +41,6 @@ class SmallCell: BasicCollectionViewCell {
         NSLayoutConstraint.activate([
             lableStackView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 5),
             lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            //lableStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -5)
-            //lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5)
         ])
     }
 }
