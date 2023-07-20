@@ -7,90 +7,47 @@
 
 import UIKit
 
-struct TestData {
-    let name: String
-    let data: Int
-    
-    init(name: String, data: Int) {
-        self.name = name
-        self.data = data
-    }
-}
-
-enum MenuOptions: String, CaseIterable {
+enum MenuOptions: String {
     case home = "Home"
     case info = "Information"
     case appRating = "App Rating"
     case shareApp = "ShareApp"
     case settings = "Settings"
-    
-    var image: String {
-        switch self {
-        case .home:
-            return "house"
-        case .info:
-            return "airplane"
-        case .appRating:
-            return "star"
-        case .shareApp:
-            return "message"
-        case .settings:
-            return "gear"
-        }
-    }
+    case homeTest = "HomeTest"
+    case infoTest = "InformationTest"
+    case appRatingTest = "App RatingTest"
+    case shareAppTest = "ShareAppTest"
 }
 
 struct Section {
     let title: String
-    let options: [String]
+    let options: [MenuOptions]
     var isOpened = false
     
     init(title: String,
-         options: [String],
+         sectionOptions: [MenuOptions],
          isOpened: Bool = false) {
         self.title = title
-        self.options = options
+        self.options = sectionOptions
         self.isOpened = isOpened
     }
 }
 
 protocol MenuViewControllerDelegate: AnyObject {
-                            // MenuViewController.MenuOptions
-    func didSelect(menuItem: String)
+    func didSelect(menuItem: MenuOptions)
 }
 
 class MenuViewController: UIViewController {
     
     weak var delegate: MenuViewControllerDelegate?
+    private var menuSections: [Section] = []
+    private var tableView: UITableView!
+    private var myLabel: UILabel!
     
-    private var sections = [Section]()
-    
-    private let tableView: UITableView = {
-        let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        return table
-    }()
-    
-    private let myLabel = UILabel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        sections = [
-            Section(title: "Home", options: [1, 2].compactMap({ return "Cell \($0)" })),
-            Section(title: "Information", options: [1, 2, 3, 4].compactMap({ return "Cell \($0)" })),
-            Section(title: "App Rating", options: [1].compactMap({ return "Cell \($0)" })),
-            Section(title: "ShareApp", options: [1, 2].compactMap({ return "Cell \($0)" })),
-            Section(title: "Settings", options: [1, 2, 3].compactMap({ return "Cell \($0)" }))
-        ]
-
-        view.addSubview(tableView)
-        tableView.backgroundColor = .none
-        tableView.separatorStyle = .none
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        
+        setupTableView()
+        setupTestName()
         setupLable()
     }
     
@@ -101,7 +58,27 @@ class MenuViewController: UIViewController {
                                  height: view.bounds.size.height)
     }
     
+    private func setupTableView() {
+        tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.separatorStyle = .none
+        view.addSubview(tableView)
+    }
+    
+    private func setupTestName() {
+        menuSections = [
+            Section(title: "Home", sectionOptions: [MenuOptions.appRating, MenuOptions.home]),
+            Section(title: "Information", sectionOptions: [MenuOptions.info]),
+            Section(title: "App Rating", sectionOptions: [MenuOptions.homeTest]),
+            Section(title: "ShareApp", sectionOptions: [MenuOptions.infoTest, MenuOptions.shareAppTest, MenuOptions.appRatingTest]),
+            Section(title: "Settings", sectionOptions: [MenuOptions.shareApp, MenuOptions.settings])
+        ]
+    }
+    
     private func setupLable() {
+        myLabel = UILabel()
         myLabel.frame = CGRect(x: 20, y: 60, width: 50, height: 20)
         myLabel.font = UIFont.boldSystemFont(ofSize: 18)
         myLabel.text = "Menu"
@@ -112,24 +89,20 @@ class MenuViewController: UIViewController {
 // MARK: - Table View Data Source
 extension MenuViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
+        menuSections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let currentSection = sections[section]
+        let currentSection = menuSections[section]
         return currentSection.isOpened ? (currentSection.options.count + 1) : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //        cell.imageView?.image = UIImage(systemName: MenuOptions.allCases[indexPath.row].image)
-        //        cell.imageView?.tintColor = .green
-        //        cell.textLabel?.text = MenuOptions.allCases[indexPath.row].rawValue
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         if indexPath.row == 0 {
-            cell.textLabel?.text = sections[indexPath.section].title
+            cell.textLabel?.text = menuSections[indexPath.section].title
         } else {
-            cell.textLabel?.text = sections[indexPath.section].options[indexPath.row - 1]
+            cell.textLabel?.text = menuSections[indexPath.section].options[indexPath.row - 1].rawValue
             cell.layoutMargins.left = 30
         }
         return cell
@@ -140,11 +113,10 @@ extension MenuViewController: UITableViewDataSource {
 extension MenuViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            sections[indexPath.section].isOpened = !sections[indexPath.section].isOpened
+            menuSections[indexPath.section].isOpened = !menuSections[indexPath.section].isOpened
             tableView.reloadSections([indexPath.section], with: .fade)
         } else {
-//          let item = MenuOptions.allCases[indexPath.row]
-            let item = sections[indexPath.section].options[indexPath.row - 1]
+            let item = menuSections[indexPath.section].options[indexPath.row - 1]
             delegate?.didSelect(menuItem: item)
             tableView.deselectRow(at: indexPath, animated: true)
         }
