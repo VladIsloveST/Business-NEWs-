@@ -72,7 +72,7 @@ class SelectedArticlesViewController: UIViewController {
                                                             width: .fractionalWidth(1),
                                                             height: .estimated(1),
                                                             subitems: item)
-                let section = CompositionalLayout.createSection(group: group)
+                let section = CompositionalLayout.createSection(group: group, interGroupSpacing: 0)
                 section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
                 return section
             }
