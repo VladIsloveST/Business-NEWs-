@@ -25,7 +25,7 @@ class SmallCell: BasicCollectionViewCell {
     private func setConstraint() {
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainLabel.topAnchor.constraint(equalTo: topAnchor, constant: 1),
+            mainLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             mainLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
             mainLabel.centerXAnchor.constraint(equalTo: centerXAnchor)

@@ -14,7 +14,7 @@ class SelectedArticlesViewController: UIViewController {
     
     private var types = MockData.shared.articleData
     
-    private var newsCollectionView: UICollectionView!
+    private var savedCollectionView: UICollectionView!
     private let searchBar = UISearchBar()
     private let expandableView = ExpandableView()
     
@@ -27,27 +27,26 @@ class SelectedArticlesViewController: UIViewController {
     
     // MARK: - Private Methods
     private func  setupCollectionView() {
-        newsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        savedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
 
-        newsCollectionView.delegate = self
-        newsCollectionView.dataSource = self
+        savedCollectionView.delegate = self
+        savedCollectionView.dataSource = self
         
-        newsCollectionView.register(StoryCell.self,
-                                    forCellWithReuseIdentifier: StoryCell.identifier)
-        newsCollectionView.register(PortraitCell.self,
-                                    forCellWithReuseIdentifier: PortraitCell.identifier)
-        newsCollectionView.register(CollectionReusableView.self,
+        savedCollectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
+        savedCollectionView.register(PortraitCell.self, forCellWithReuseIdentifier: PortraitCell.identifier)
+        savedCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
+        savedCollectionView.register(CollectionReusableView.self,
                                     forSupplementaryViewOfKind: CollectionReusableView.kind,
                                     withReuseIdentifier: CollectionReusableView.identifier)
-        view.addSubview(newsCollectionView)
-        newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(savedCollectionView)
+        savedCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            newsCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
-            newsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            newsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            newsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            savedCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
+            savedCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            savedCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            savedCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        newsCollectionView.backgroundColor = .systemGray3
+        savedCollectionView.backgroundColor = .systemGray3
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -68,10 +67,10 @@ class SelectedArticlesViewController: UIViewController {
                 return section
             case .recent:
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
-                                                          height: .fractionalHeight(1))
+                                                          height: .estimated(1))
                 let group = CompositionalLayout.createGroup(aligment: .vertical,
                                                             width: .fractionalWidth(1),
-                                                            height: .fractionalHeight(0.5),
+                                                            height: .estimated(1),
                                                             subitems: item)
                 let section = CompositionalLayout.createSection(group: group)
                 section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
@@ -130,14 +129,15 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
             withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
         guard let portraitCell = collectionView.dequeueReusableCell(
             withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
-        
+        guard let smallCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
         switch types[indexPath.section] {
         case .recent(_):
             switch indexPath.item {
             case 0:
-                return storyCell
-            default:
                 return portraitCell
+            default:
+                return smallCell
             }
         case .outdated(_):
             return storyCell

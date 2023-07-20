@@ -31,7 +31,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        searchBar.delegate = self
         navigationItem.title = "Search"
         
         setupSearchCollectioView()
@@ -69,9 +69,9 @@ class SearchViewController: UIViewController {
     
     private func setupSearchCollectioView() {
         searchResultCollectioView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        searchBar.delegate = self
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
+        searchResultCollectioView.prefetchDataSource = self
         
         view.addSubview(searchResultCollectioView)
         searchResultCollectioView.translatesAutoresizingMaskIntoConstraints = false
@@ -189,9 +189,16 @@ extension SearchViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - Collection View Delegate
 extension SearchViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchBar.endEditing(true)
+    }
+}
+
+// MARK: - Collection View Data Source Prefetching
+extension SearchViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
     }
 }
 

@@ -105,6 +105,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 extension ArticleCollectionViewCell: UICollectionViewDelegate {
 }
 
+// MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
     }
