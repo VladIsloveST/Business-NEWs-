@@ -66,13 +66,20 @@ class SelectedArticlesViewController: UIViewController {
                 section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
                 return section
             case .recent:
+                let topItem = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                       heightDimension: .estimated(5)))
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
                                                           height: .estimated(1))
-                let group = CompositionalLayout.createGroup(aligment: .vertical,
+                let localVerticalGroup = CompositionalLayout.createGroup(aligment: .vertical,
                                                             width: .fractionalWidth(1),
                                                             height: .estimated(1),
                                                             subitems: item)
-                let section = CompositionalLayout.createSection(group: group, interGroupSpacing: 0)
+                let generalGroup = NSCollectionLayoutGroup.vertical(
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                       heightDimension: .estimated(1)),
+                    subitems: [topItem, localVerticalGroup])
+                let section = CompositionalLayout.createSection(group: generalGroup, interGroupSpacing: 0)
                 section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
                 return section
             }
