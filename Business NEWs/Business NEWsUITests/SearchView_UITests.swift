@@ -1,5 +1,5 @@
 //
-//  UITestingSearchView_UITests.swift
+//  SearchView_UITests.swift
 //  Business NEWsUITests
 //
 //  Created by Mac on 30.07.2023.
@@ -7,25 +7,7 @@
 
 import XCTest
 
-class UITestingSearchView_UITests: XCTestCase {
-
-    let app = XCUIApplication()
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
-    }
-
-    override func tearDownWithError() throws {
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                app.launch()
-            }
-        }
-    }
+class SearchView_UITests: Business_NEWsUITests {
     
     func test_UITestingSearchView_searchField_showAndHideSearchHistory() {
         let searchBarButtonItem = app.navigationBars["Home"].buttons["Search"]

@@ -1,5 +1,5 @@
 //
-//  UITestingSavedView_UITests.swift
+//  SavedView_UITests.swift
 //  Business NEWsUITests
 //
 //  Created by Mac on 30.07.2023.
@@ -7,25 +7,7 @@
 
 import XCTest
 
-class UITestingSavedView_UITests: XCTestCase {
-
-    let app = XCUIApplication()
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
-    }
-
-    override func tearDownWithError() throws {
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                app.launch()
-            }
-        }
-    }
+class SavedView_UITests: Business_NEWsUITests {
 
     func test_UITestingSavedView_searchButton_showSearchBar() {
         app.tabBars["Tab Bar"].buttons["Saved"].tap()
