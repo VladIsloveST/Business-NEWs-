@@ -39,7 +39,7 @@ class SettingsViewController: UIViewController {
     }
     
     private func setupTableView() {
-        let tableView = UITableView(frame: CGRect(x: 0, y: 70, width: view.bounds.width, height: view.bounds.height / 2), style: .insetGrouped)
+        let tableView = UITableView(frame: CGRect(x: 0, y: 75, width: view.bounds.width, height: view.bounds.height / 2), style: .insetGrouped)
         tableView.contentInset.top = -5
         tableView.delegate = self
         tableView.dataSource = self

@@ -42,7 +42,7 @@ class MenuViewController: UIViewController {
     weak var delegate: MenuViewControllerDelegate?
     private var menuSections: [Section] = []
     private var tableView: UITableView!
-    private var myLabel: UILabel!
+    private var menuLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,7 @@ class MenuViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = CGRect(x: 0, y: myLabel.frame.origin.y + 30,
+        tableView.frame = CGRect(x: 0, y: menuLabel.frame.origin.y + 30,
                                  width: view.bounds.size.width / 2.5,
                                  height: view.bounds.size.height)
     }
@@ -64,6 +64,7 @@ class MenuViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.separatorStyle = .none
+        tableView.accessibilityIdentifier = "tableView"
         view.addSubview(tableView)
     }
     
@@ -78,11 +79,11 @@ class MenuViewController: UIViewController {
     }
     
     private func setupLable() {
-        myLabel = UILabel()
-        myLabel.frame = CGRect(x: 20, y: 60, width: 50, height: 20)
-        myLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        myLabel.text = "Menu"
-        view.addSubview(myLabel)
+        menuLabel = UILabel()
+        menuLabel.frame = CGRect(x: 20, y: 60, width: 50, height: 20)
+        menuLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        menuLabel.text = "Menu"
+        view.addSubview(menuLabel)
     }
 }
 
@@ -101,8 +102,10 @@ extension MenuViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         if indexPath.row == 0 {
             cell.textLabel?.text = menuSections[indexPath.section].title
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         } else {
             cell.textLabel?.text = menuSections[indexPath.section].options[indexPath.row - 1].rawValue
+            cell.textLabel?.font = UIFont(name: "Avenir Light Oblique", size: 17)
             cell.layoutMargins.left = 30
         }
         return cell

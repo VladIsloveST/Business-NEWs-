@@ -13,11 +13,11 @@ class CustomTabBar: UITabBar {
     // MARK: - Variables
     var didTapButton: (() -> ())?
     
-    lazy var middleButton: UIButton = {
+    lazy var settingsButton: UIButton = {
         
-        let middleButton = CustomButtonBehavior()
-        middleButton.frame.size = CGSize(width: 65, height: 50)
-        middleButton.isSelected = false
+        let button = CustomButtonBehavior()
+        button.frame.size = CGSize(width: 65, height: 50)
+        button.isSelected = false
         
         var filled = UIButton.Configuration.filled()
         filled.baseForegroundColor = .systemGray
@@ -27,33 +27,33 @@ class CustomTabBar: UITabBar {
         filled.imagePlacement = .top
         filled.imagePadding = 5
     
-        middleButton.configuration = filled
-        middleButton.configurationUpdateHandler = { button in
+        button.configuration = filled
+        button.configurationUpdateHandler = { button in
             button.isHighlighted = false
         }
         
-        middleButton.addTarget(self, action: #selector(self.middleButtonAction), for: .touchUpInside)
-        middleButton.addTarget(self, action: #selector(self.buttonAction), for: .touchDown)
-        self.addSubview(middleButton)
-        return middleButton
+        button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
+        self.addSubview(button)
+        return button
     }()
     
     // MARK: - View Lifecycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        middleButton.center = CGPoint(x: thirdItemPosition , y: 27)
+        settingsButton.center = CGPoint(x: thirdItemPosition , y: 27)
     }
     
     // MARK: - Actions
     @objc
-    private func middleButtonAction(sender: UIButton) {
-        middleButton.isSelected = false
+    private func touchUpInsideAction(sender: UIButton) {
+        settingsButton.isSelected = false
         didTapButton?()
     }
     
     @objc
-    private func buttonAction(sender: UIButton) {
-        middleButton.isSelected = true
+    private func touchDownAction(sender: UIButton) {
+        settingsButton.isSelected = true
     }
 }
 

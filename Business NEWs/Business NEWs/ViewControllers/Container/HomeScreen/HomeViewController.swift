@@ -27,6 +27,7 @@ class HomeViewController: UIViewController {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.accessibilityIdentifier = "articlesCollectionView"
         return collectionView
     }()
     

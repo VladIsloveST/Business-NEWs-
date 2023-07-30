@@ -91,6 +91,7 @@ class SearchViewController: UIViewController {
     
     private func setupHistoryView() {
         historyTableView = HistoryTableView()
+        historyTableView.accessibilityIdentifier = "historyTableView"
         containerView.addSubview(historyTableView)
         historyTableView.translatesAutoresizingMaskIntoConstraints = false
         historyTableView.constraint(equalToAnchors: containerView)
@@ -154,6 +155,7 @@ extension SearchViewController: UISearchBarDelegate {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { (_) in
             print("My Search Bar \(text)")
         })
+        print("textDidChange")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

@@ -29,7 +29,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
                 forDecorationViewOfKind: "whiteSeparator", with: layoutAttribute.indexPath)
             let darkSeparatorAttribute = UICollectionViewLayoutAttributes(
                 forDecorationViewOfKind: "darkSeparator", with: layoutAttribute.indexPath)
-            
+        
             if layoutAttribute.indexPath.item % numberOfItemsInSection == 0 {
                 lightSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x, y: cellFrame.origin.y - 41,
                                                   width: cellFrame.size.width, height: 2)
