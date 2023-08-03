@@ -12,22 +12,23 @@ struct MockData {
     static let shared = MockData()
     
     private var recent: SectionType = {
-        .recent([ .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: ""),
-                    .init(title: "")
+        .recent([ 
+//                    .init(title: ""),
+//                    .init(title: ""),
+//                    .init(title: ""),
+//                    .init(title: ""),
+//                    .init(title: "")
         ])
     }()
     
     private let outdated: SectionType = {
-        .outdated([ .init(title: ""),
-                 .init(title: ""),
-                 .init(title: ""),
-                 .init(title: ""),
-                 .init(title: ""),
-                 .init(title: "")
+        .outdated([
+            //.init(title: ""),
+//                 .init(title: ""),
+//                 .init(title: ""),
+//                 .init(title: ""),
+//                 .init(title: ""),
+//                 .init(title: "")
         ])
     }()
     

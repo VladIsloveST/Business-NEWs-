@@ -39,7 +39,7 @@ class LocalNotification: NSObject {
         let isDaily = true
         let content = UNMutableNotificationContent(title: title, body: body, sound: .default)
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current,
-                                            hour: 21, minute:  0)
+                                            hour: 22, minute:  41)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: isDaily)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])

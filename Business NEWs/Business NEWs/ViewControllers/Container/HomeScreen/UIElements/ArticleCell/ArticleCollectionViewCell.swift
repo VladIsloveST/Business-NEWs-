@@ -8,11 +8,18 @@
 import UIKit
 
 class ArticleCollectionViewCell: UICollectionViewCell {
-    
     static let identifier = "ArticleCollectionViewCell"
     
-    private var articlCollectionView: UICollectionView!
+    var articleCollectionView: UICollectionView!
     private var refreshControl: UIRefreshControl!
+    
+    var didFetchData: (Int) -> () = {_ in } 
+    
+    var articles: [ArticleData] = [] {
+        didSet {
+            articleCollectionView.reloadData()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,23 +55,23 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupCollectionView() {
-        articlCollectionView = UICollectionView(frame: .zero, collectionViewLayout:  createLayout())
+        articleCollectionView = UICollectionView(frame: .zero, collectionViewLayout:  createLayout())
        
-        articlCollectionView.dataSource = self
-        articlCollectionView.delegate = self
-        articlCollectionView.prefetchDataSource = self
+        articleCollectionView.dataSource = self
+        articleCollectionView.delegate = self
+        articleCollectionView.prefetchDataSource = self
         
-        articlCollectionView.register(LargePortraitCell.self,
+        articleCollectionView.register(LargePortraitCell.self,
                                 forCellWithReuseIdentifier: LargePortraitCell.identifier)
-        articlCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
-        addSubview(articlCollectionView)
-        articlCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        articleCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
+        addSubview(articleCollectionView)
+        articleCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            articlCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
-            articlCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
+            articleCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
+            articleCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
-        articlCollectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        articlCollectionView.backgroundColor = .systemGray3
+        articleCollectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        articleCollectionView.backgroundColor = .systemGray3
     }
     
     private func setupRefreshControl() {
@@ -73,12 +80,12 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         refreshControl.backgroundColor = .clear
         refreshControl.tintColor = .black
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching more articles...", attributes: [NSAttributedString.Key.strokeColor : UIColor.black])
-        articlCollectionView.refreshControl = refreshControl
+        articleCollectionView.refreshControl = refreshControl
     }
     
     @objc
     private func refresh(sender: UIRefreshControl) {
-        print("refresh")
+        didFetchData(16)
         sender.endRefreshing()
     }
 }
@@ -86,28 +93,34 @@ class ArticleCollectionViewCell: UICollectionViewCell {
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return articles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
         if indexPath.row % 4 == 0 {
             guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
+            portraitCell.mainLabel.text = articles[indexPath.row].title
             return portraitCell
         } else {
-            guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+            guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as?
+                SmallCell else { return cell }
+            smallCell.mainLabel.text = articles[indexPath.row].title
+            smallCell.authorLable.text = articles[indexPath.row].author
+            smallCell.publishedAtLable.text = articles[indexPath.row].publishedAt
             return smallCell
         }
     }
 }
 
-// MARK: - Collection View Delegate
-extension ArticleCollectionViewCell: UICollectionViewDelegate {
-}
-
 // MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+       // didFetchData(
     }
+}
+
+// MARK: - Collection View Delegate
+extension ArticleCollectionViewCell: UICollectionViewDelegate {
 }
 

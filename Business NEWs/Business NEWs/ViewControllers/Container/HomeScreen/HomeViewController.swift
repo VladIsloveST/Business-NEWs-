@@ -28,6 +28,7 @@ class HomeViewController: UIViewController {
         flowLayout.minimumLineSpacing = 0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.accessibilityIdentifier = "articlesCollectionView"
+        collectionView.isPrefetchingEnabled = false
         return collectionView
     }()
     
@@ -142,53 +143,28 @@ class HomeViewController: UIViewController {
 // MARK: - Table View Data Source
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //presenter.typesOfArticles[section].numberOfArticles
         8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        //        let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.section].articlesOfTheSamePublisher
-        //        let article = articlesOfTheSamePublisher[indexPath.row]
-        //        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        //        cell.articlesLabel.text = article.title
-        //        return cell
-        
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        if !presenter.typesOfArticles.isEmpty {
+            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row].articlesOfTheSamePublisher
+            
+            cell.articles = articlesOfTheSamePublisher
+            cell.didFetchData = { [weak self] count in
+      //          print("didFetchData")
+                self?.presenter.getArticles(count: count)
+            }
+        }
         return cell
-        
-        //        let typesOfArticles = presenter.typesOfArticles[indexPath.section]
-        //        switch typesOfArticles {
-        //        case .apple(let appleType):
-        //            let apple = appleType.articles[indexPath.row]
-        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        //            cell.articlesLabel.text = apple.title
-        //            return cell
-        //
-        //        case .business(let businessType):
-        //            let business = businessType.articles[indexPath.row]
-        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        //            cell.articlesLabel.text = business.title
-        //            return cell
-        //
-        //        case .techCrunch(let techCrunchType):
-        //            let techCrunch = techCrunchType.articles[indexPath.row]
-        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        //            cell.articlesLabel.text = techCrunch.title
-        //            return cell
-        //
-        //        case .wallStreet(let wallStreetType):
-        //            let wallStreet = wallStreetType.articles[indexPath.row]
-        //            guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-        //            cell.articlesLabel.text = wallStreet.title
-        //            return cell
-        //        }
     }
 }
 
 // MARK: - Collection View Delegate
 extension HomeViewController: UICollectionViewDelegate {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint,
+                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
         menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
@@ -208,6 +184,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: ViewInPut {
     func success() {
+        print("success")
         loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
         articlesCollectionView.reloadData()
@@ -215,6 +192,7 @@ extension HomeViewController: ViewInPut {
     
     func failer(error: Error) {
         print(error.localizedDescription)
+        // show popUp
     }
 }
 

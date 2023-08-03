@@ -43,7 +43,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var infoLable: UILabel = {
+    var authorLable: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Arial", size: 16)
         label.textColor = .white
@@ -51,7 +51,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var timeOfPublicationLable: UILabel = {
+    var publishedAtLable: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Arial", size: 16)
         label.textColor = .white
@@ -63,9 +63,9 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.vertical
         stackView.alignment = .leading
-        stackView.spacing = -3
-        stackView.addArrangedSubview(infoLable)
-        stackView.addArrangedSubview(timeOfPublicationLable)
+        stackView.spacing = 0
+        stackView.addArrangedSubview(authorLable)
+        stackView.addArrangedSubview(publishedAtLable)
         return stackView
     }()
     

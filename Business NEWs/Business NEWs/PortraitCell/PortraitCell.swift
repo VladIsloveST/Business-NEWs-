@@ -17,8 +17,8 @@ class PortraitCell: BasicCollectionViewCell {
 
         buttonStackView.addArrangedSubview(buttonShare)
         buttonStackView.addArrangedSubview(buttonSaving)
-        lableStackView.addArrangedSubview(infoLable)
-        lableStackView.addArrangedSubview(timeOfPublicationLable)
+        lableStackView.addArrangedSubview(authorLable)
+        lableStackView.addArrangedSubview(publishedAtLable)
        
         addSubview(imageView)
         addSubview(mainLabel)
