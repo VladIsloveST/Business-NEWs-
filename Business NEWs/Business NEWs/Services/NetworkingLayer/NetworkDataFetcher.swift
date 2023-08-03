@@ -15,7 +15,7 @@ enum CategoriesOfArticles: String {
 }
 
 protocol NetworkDataFetcherProtocol {
-    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>)-> Void)
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, count: Int, complition: @escaping (Result<Articles, Error>)-> Void)
 }
 
 class NetworkDataFetcher: NetworkDataFetcherProtocol {
@@ -35,14 +35,14 @@ class NetworkDataFetcher: NetworkDataFetcherProtocol {
                     print("\(jsonError). Unable to decode")
                 }
             case .failure(let error):
-                print(error)
+                print("\(error) - .failure")
                 response(.failure(error))
             }
         }
     }
     
-    func getArticlesFromCategory(_ name: CategoriesOfArticles, complition: @escaping (Result<Articles, Error>) -> Void) {
-        let url = "https://newsapi.org/v2/" + name.rawValue
+    func getArticlesFromCategory(_ name: CategoriesOfArticles, count: Int, complition: @escaping (Result<Articles, Error>) -> Void) {
+        let url = "https://newsapi.org/v2/" + name.rawValue + "pageSize=\(count)&"
         fetchTracks(url: url, response: complition)
     }
 }

@@ -16,12 +16,10 @@ protocol ViewOutPut: AnyObject {
     var typesOfArticles: [TypeOfArticles] { get set }
     init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol)
     func tapOnTheSearch()
-    func getArticles()
-    
+    func getArticles(count: Int)
 }
 
 class Presenter: ViewOutPut {
-    
     weak var view: ViewInPut?
     private let group = DispatchGroup()
     private let networkDataFetcher: NetworkDataFetcherProtocol
@@ -32,52 +30,30 @@ class Presenter: ViewOutPut {
         self.view = view
         self.networkDataFetcher = networkDataFetcher
         self.router = router
-        getArticles()
+        getArticles(count: 8)  // default count
     }
     
     func tapOnTheSearch() {
         router?.showSearch()
     }
     
-    func getArticles() {
+    func getArticles(count: Int) {
+        typesOfArticles = []
         group.enter()
-        networkDataFetcher.getArticlesFromCategory(.apple) { result in
-            switch result {
-            case .success(let items):
-                self.typesOfArticles.append(.apple(items))
-            case .failure(let error):
-                self.view?.failer(error: error)
-            }
-            self.group.leave()
-        }
-        
-        group.enter()
-        networkDataFetcher.getArticlesFromCategory(.apple) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let items):
-                self.typesOfArticles.append(.apple(items))
-            case .failure(let error):
-                self.view?.failer(error: error)
-            }
-            self.group.leave()
-        }
-        
-        group.enter()
-        networkDataFetcher.getArticlesFromCategory(.business) { [weak self] result in
+        networkDataFetcher.getArticlesFromCategory(.business, count: count) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let items):
                 self.typesOfArticles.append(.business(items))
+                print("getArticles success")
             case .failure(let error):
                 self.view?.failer(error: error)
             }
             self.group.leave()
         }
         
-        group.enter()
+   /*     group.enter()
         networkDataFetcher.getArticlesFromCategory(.techCrunch) { [weak self] result in
             guard let self = self else { return }
             
@@ -93,7 +69,6 @@ class Presenter: ViewOutPut {
         group.enter()
         networkDataFetcher.getArticlesFromCategory(.wallStreet) { [weak self] result in
             guard let self = self else { return }
-            
             switch result {
             case .success(let items):
                 self.typesOfArticles.append(.wallStreet(items))
@@ -102,8 +77,22 @@ class Presenter: ViewOutPut {
             }
             self.group.leave()
         }
+    */
+    
+//        group.enter()
+//        networkDataFetcher.getArticlesFromCategory(.apple) { [weak self] result in  // error
+//            guard let self = self else { return }
+//            
+//            switch result {
+//            case .success(let items):
+//                self.typesOfArticles.append(.apple(items))
+//            case .failure(let error):
+//                self.view?.failer(error: error)
+//            }
+//            self.group.leave()
+//        }
         
-        group.notify(queue: DispatchQueue.main){
+        group.notify(queue: DispatchQueue.main) {
             self.view?.success()
         }
     }

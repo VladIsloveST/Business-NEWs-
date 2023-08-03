@@ -33,3 +33,5 @@ class SearchView_UITests: Business_NEWsUITests {
         XCTAssertFalse(search.exists)
     }
 }
+
+
