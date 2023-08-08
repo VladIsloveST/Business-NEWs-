@@ -184,7 +184,6 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: ViewInPut {
     func success() {
-        print("success")
         loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
         articlesCollectionView.reloadData()
