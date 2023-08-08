@@ -13,7 +13,14 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     var articleCollectionView: UICollectionView!
     private var refreshControl: UIRefreshControl!
     
-    var didFetchData: (Int) -> () = {_ in } 
+    var didFetchData: (Int) -> () = {_ in }
+    
+//    private var totalNumbers = 8 {
+//        didSet {
+//            print("totalNumbers increase")
+//            articleCollectionView.reloadData()
+//        }
+//    }
     
     var articles: [ArticleData] = [] {
         didSet {
@@ -88,35 +95,66 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         didFetchData(16)
         sender.endRefreshing()
     }
+    
+    func convertDateFormater(_ date: String) -> String {
+        var fixDate = ""
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        if let newDate = dateFormatter.date(from: date) {
+            dateFormatter.dateFormat = "EEEE, MMM d"
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            fixDate = dateFormatter.string(from: newDate)
+        }
+        return fixDate
+    }
 }
 
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return articles.count
+        articles.count
+        //totalNumbers
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
-        if indexPath.row % 4 == 0 {
-            guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
-            portraitCell.mainLabel.text = articles[indexPath.row].title
-            return portraitCell
-        } else {
-            guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as?
-                SmallCell else { return cell }
-            smallCell.mainLabel.text = articles[indexPath.row].title
-            smallCell.authorLable.text = articles[indexPath.row].author
-            smallCell.publishedAtLable.text = articles[indexPath.row].publishedAt
-            return smallCell
+        guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
+        guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+//        print("\(indexPath.row) - row")
+//        print("\(articles.count) - count")
+//        print("\(totalNumbers) - total")
+//        print("_________________")
+        
+        if !articles.isEmpty {
+            if indexPath.row % 4 == 0 {
+                //print(articles.isEmpty)
+                portraitCell.mainLabel.text = articles[indexPath.row].title
+                portraitCell.authorLable.text = articles[indexPath.row].author
+                portraitCell.publishedAtLable.text = convertDateFormater(articles[indexPath.row].publishedAt)
+                return portraitCell
+            } else {
+                smallCell.mainLabel.text = articles[indexPath.row].title
+                smallCell.authorLable.text = articles[indexPath.row].author
+                smallCell.publishedAtLable.text = convertDateFormater(articles[indexPath.row].publishedAt)
+                return smallCell
+            }
         }
+        return smallCell
     }
 }
 
 // MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-       // didFetchData(
+//        print("prefetchItemsAt")
+//        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 5})  // - 1 - 4 (1 блок)
+//        if filtered.count > 0 {
+//            totalNumbers += 8
+//        }
+//
+//        filtered.forEach({_ in
+//            self.didFetchData(totalNumbers)
+//        })
     }
 }
 
