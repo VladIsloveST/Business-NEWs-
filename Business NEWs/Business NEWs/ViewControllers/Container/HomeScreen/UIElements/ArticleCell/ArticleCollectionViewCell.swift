@@ -120,6 +120,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         let cell = UICollectionViewCell()
         guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
         guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+        let article = articles[indexPath.row]
 //        print("\(indexPath.row) - row")
 //        print("\(articles.count) - count")
 //        print("\(totalNumbers) - total")
@@ -128,14 +129,14 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         if !articles.isEmpty {
             if indexPath.row % 4 == 0 {
                 //print(articles.isEmpty)
-                portraitCell.mainLabel.text = articles[indexPath.row].title
-                portraitCell.authorLable.text = articles[indexPath.row].author
-                portraitCell.publishedAtLable.text = convertDateFormater(articles[indexPath.row].publishedAt)
+                portraitCell.mainLabel.text = article.title
+                portraitCell.authorLable.text = article.author
+                portraitCell.convertDateFormater(article.publishedAt)
                 return portraitCell
             } else {
-                smallCell.mainLabel.text = articles[indexPath.row].title
-                smallCell.authorLable.text = articles[indexPath.row].author
-                smallCell.publishedAtLable.text = convertDateFormater(articles[indexPath.row].publishedAt)
+                smallCell.mainLabel.text = article.title
+                smallCell.authorLable.text = article.author
+                smallCell.convertDateFormater(article.publishedAt)
                 return smallCell
             }
         }
