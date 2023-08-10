@@ -37,7 +37,6 @@ class HomeViewController: UIViewController {
     
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
-    private var separatorLine: UIView!
     private var topMenu: UIMenu!
     
     override func viewDidLoad() {
@@ -47,7 +46,6 @@ class HomeViewController: UIViewController {
         setupNavBarButtons()
         setupIndicatot()
         setupCollectionView()
-        addSeparatorLineView()
         
         loadingIndicator.isAnimating = true
         navigationItem.title = "Home"
@@ -70,18 +68,6 @@ class HomeViewController: UIViewController {
         articlesCollectionView.isPagingEnabled = true
         articlesCollectionView.showsHorizontalScrollIndicator = false
         articlesCollectionView.bounces = false
-    }
-    
-    private func addSeparatorLineView(){
-        separatorLine = UIView()
-        view.addSubview(separatorLine)
-        separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            separatorLine.heightAnchor.constraint(equalToConstant: 1),
-            separatorLine.widthAnchor.constraint(equalTo: view.widthAnchor),
-            separatorLine.bottomAnchor.constraint(equalTo: articlesCollectionView.topAnchor, constant: 1)
-        ])
-        separatorLine.backgroundColor = .black
     }
     
     private func setupMenu() {

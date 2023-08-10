@@ -12,6 +12,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     var articleCollectionView: UICollectionView!
     private var refreshControl: UIRefreshControl!
+    private var separatorLine: UIView!
     var delegat: HomeViewControllerShareDelegate?
 
     var didFetchData: (Int) -> () = {_ in }
@@ -33,6 +34,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupCollectionView()
         setupRefreshControl()
+        addSeparatorLineView()
     }
     
     required init?(coder: NSCoder) {
@@ -95,6 +97,18 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     private func refresh(sender: UIRefreshControl) {
         didFetchData(16)
         sender.endRefreshing()
+    }
+    
+    private func addSeparatorLineView(){   
+        separatorLine = UIView()
+        addSubview(separatorLine)
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            separatorLine.widthAnchor.constraint(equalToConstant: frame.width),
+            separatorLine.topAnchor.constraint(equalTo: articleCollectionView.topAnchor)
+        ])
+        separatorLine.backgroundColor = .black
     }
     
     func convertDateFormater(_ date: String) -> String {
