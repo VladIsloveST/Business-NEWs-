@@ -11,12 +11,15 @@ protocol HomeViewControllerDelegate: AnyObject {
     func didTapMenuButton()
 }
 
+protocol HomeViewControllerShareDelegate: AnyObject {
+    func presentShareSheet(url: URL)
+}
+
 protocol ArticlesMovementDelegate: AnyObject {
     func scrollToMenu(index: Int)
 }
 
 class HomeViewController: UIViewController {
-    
     // MARK: - Properties
     weak var delegate: HomeViewControllerDelegate?
     
@@ -150,10 +153,9 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         if !presenter.typesOfArticles.isEmpty {
             let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row].articlesOfTheSamePublisher
-            
+            cell.delegat = self
             cell.articles = articlesOfTheSamePublisher
             cell.didFetchData = { [weak self] count in
-      //          print("didFetchData")
                 self?.presenter.getArticles(count: count)
             }
         }
@@ -199,5 +201,12 @@ extension HomeViewController: ArticlesMovementDelegate {
     func scrollToMenu(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
+    }
+}
+
+extension HomeViewController: HomeViewControllerShareDelegate {
+    func presentShareSheet(url: URL) {
+        let shareSheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.present(shareSheet, animated: true)
     }
 }
