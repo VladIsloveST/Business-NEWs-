@@ -12,7 +12,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     var articleCollectionView: UICollectionView!
     private var refreshControl: UIRefreshControl!
-    
+    var delegat: HomeViewControllerShareDelegate?
+
     var didFetchData: (Int) -> () = {_ in }
     
 //    private var totalNumbers = 8 {
@@ -113,7 +114,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         articles.count
-        //totalNumbers
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -121,26 +121,26 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         guard let portraitCell = collectionView.dequeueReusableCell(withReuseIdentifier: LargePortraitCell.identifier, for: indexPath) as? LargePortraitCell else { return cell }
         guard let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
         let article = articles[indexPath.row]
-//        print("\(indexPath.row) - row")
-//        print("\(articles.count) - count")
-//        print("\(totalNumbers) - total")
-//        print("_________________")
         
-        if !articles.isEmpty {
-            if indexPath.row % 4 == 0 {
-                //print(articles.isEmpty)
-                portraitCell.mainLabel.text = article.title
-                portraitCell.authorLable.text = article.author
-                portraitCell.convertDateFormater(article.publishedAt)
-                return portraitCell
-            } else {
-                smallCell.mainLabel.text = article.title
-                smallCell.authorLable.text = article.author
-                smallCell.convertDateFormater(article.publishedAt)
-                return smallCell
+        if indexPath.row % 4 == 0 {
+            portraitCell.didShare = { [weak self] in
+                guard let url = URL(string: article.url) else { return }
+                self?.delegat?.presentShareSheet(url: url)
             }
+            portraitCell.mainLabel.text = article.title
+            portraitCell.authorLable.text = article.author
+            portraitCell.convertDateFormater(article.publishedAt)
+            return portraitCell
+        } else {
+            smallCell.didShare = { [weak self] in
+                guard let url = URL(string: article.url) else { return }
+                self?.delegat?.presentShareSheet(url: url)
+            }
+            smallCell.mainLabel.text = article.title
+            smallCell.authorLable.text = article.author
+            smallCell.convertDateFormater(article.publishedAt)
+            return smallCell
         }
-        return smallCell
     }
 }
 

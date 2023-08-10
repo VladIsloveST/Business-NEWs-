@@ -15,12 +15,12 @@ class ContainerView_UITests: Business_NEWsUITests {
 
         menuCollectionView.staticTexts["Apple"].tap()
         menuCollectionView.staticTexts["TechCrunch"].tap()
-  //      print(menuCollectionView.cells.accessibilityPath?.bound)
-
-        articlesCollectionView.element.swipeRight()
-        articlesCollectionView.element.swipeRight()
+        //let thirdCollectionView = articlesCollectionView.cells.collectionViews.containing(.other, identifier:"Horizontal scroll bar, 3 page").element
+                        
+  //      XCTAssertTrue(thirdCollectionView.isHittable)
+//        articlesCollectionView.element.swipeRight()
+//        articlesCollectionView.element.swipeRight()
     }
-    
     
     func test_UITestingContainerView_menuButton_showAndDismissMenu() {
         let navigationBar = app.navigationBars["Home"]

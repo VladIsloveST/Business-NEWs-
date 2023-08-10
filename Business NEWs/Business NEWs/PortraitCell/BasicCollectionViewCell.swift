@@ -8,9 +8,10 @@
 import UIKit
 
 class BasicCollectionViewCell: UICollectionViewCell {
-    
+        
     var timer: Timer?
     let calendar = Calendar.current
+    var didShare: () -> () = {}
     
     let buttonSaving: UIButton = {
         let button = UIButton(normalStateImage: "bookmark",
@@ -21,9 +22,15 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     let buttonShare: UIButton = {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
-                              selectedStateImage: "bookmark.fill")
+                              selectedStateImage: "square.and.arrow.up")
+        button.addTarget(self, action: #selector(presentShareSheet), for: .touchDown)
         return button
     }()
+    
+    @objc
+    private func presentShareSheet() {
+        didShare()
+    }
     
     lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -43,7 +50,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.setLineSpacing(lineSpacing: 3)
         label.textAlignment = .left
-        //label.backgroundColor = .l
         return label
     }()
     
@@ -119,7 +125,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     private func setup(fixedDate: String, publicationHour: Int, publicationMinute: Int) {
         let currentDate = getCurrentDate()
-        let hourAgo = currentDate.hour - publicationHour
+        let hourAgo = (currentDate.hour >= publicationHour) ? (currentDate.hour - publicationHour) : (currentDate.hour + 24 - publicationHour)
         var minAgo = (hourAgo * 60 + currentDate.minute) - publicationMinute
         // дубляж
         var note = (minAgo <= 59) ? "\(minAgo) min" : "\(hourAgo) hour"
@@ -136,7 +142,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
             var note = (minAgo <= 59) ? "\(minAgo) min" : "\(minAgo/60) hour"
             if minAgo/60 > 1 { note += "s" }
             self?.publishedAtLable.text = fixedDate + " • \(note) ago"
-     }
+        }
     }
     
     private func getCurrentDate() -> (hour: Int, minute: Int) {
