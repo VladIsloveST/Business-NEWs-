@@ -20,6 +20,18 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    @objc
+    private func tappedSelect() {
+        switch buttonSaving.isSelected {
+        case true:
+            print("Not Selected")
+            return buttonSaving.isSelected = false
+        case false:
+            print("Selected")
+            return buttonSaving.isSelected = true
+        }
+    }
+    
     let buttonShare: UIButton = {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up")
@@ -31,16 +43,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
     private func presentShareSheet() {
         didShare()
     }
-    
-    lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.alignment = .center
-        stackView.spacing = 23
-        stackView.addArrangedSubview(buttonShare)
-        stackView.addArrangedSubview(buttonSaving)
-        return stackView
-    }()
     
     var mainLabel: UILabel = {
         let label = UILabel()
@@ -79,17 +81,15 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    @objc
-    private func tappedSelect() {
-        switch buttonSaving.isSelected {
-        case true:
-            print("Not Selected")
-            return buttonSaving.isSelected = false
-        case false:
-            print("Selected")
-            return buttonSaving.isSelected = true
-        }
-    }
+    lazy var buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.horizontal
+        stackView.alignment = .center
+        stackView.spacing = 23
+        stackView.addArrangedSubview(buttonShare)
+        stackView.addArrangedSubview(buttonSaving)
+        return stackView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

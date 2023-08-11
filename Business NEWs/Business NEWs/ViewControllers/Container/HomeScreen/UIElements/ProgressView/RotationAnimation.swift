@@ -8,7 +8,6 @@
 import UIKit
 
 class RotationAnimation: CABasicAnimation {
-    
     // MARK: - Initialization
     override init() {
         super.init()

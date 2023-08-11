@@ -22,7 +22,6 @@ protocol ArticlesMovementDelegate: AnyObject {
 class HomeViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: HomeViewControllerDelegate?
-    
     var presenter: ViewOutPut!
     
     private let articlesCollectionView: UICollectionView = {
@@ -44,7 +43,7 @@ class HomeViewController: UIViewController {
         setupTopMenu()
         setupMenu()
         setupNavBarButtons()
-        setupIndicatot()
+        setupIndicator()
         setupCollectionView()
         
         loadingIndicator.isAnimating = true
@@ -83,7 +82,7 @@ class HomeViewController: UIViewController {
         menuCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
     }
     
-    private func setupIndicatot() {
+    private func setupIndicator() {
         loadingIndicator = ProgressView()
         view.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +90,7 @@ class HomeViewController: UIViewController {
             loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             loadingIndicator.widthAnchor.constraint(equalToConstant: 50),
-            loadingIndicator.heightAnchor.constraint(equalTo: self.loadingIndicator.widthAnchor)
+            loadingIndicator.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -172,14 +171,15 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: ViewInPut {
     func success() {
-        loadingIndicator.isAnimating = false
+        //loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
         articlesCollectionView.reloadData()
     }
     
     func failer(error: Error) {
-        print(error.localizedDescription)
-        // show popUp
+        DispatchQueue.main.async {
+            self.showAlert("Error", message: error.localizedDescription)
+        }
     }
 }
 

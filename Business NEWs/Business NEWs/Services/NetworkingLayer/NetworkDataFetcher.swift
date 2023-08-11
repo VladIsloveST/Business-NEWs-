@@ -8,7 +8,7 @@
 import Foundation
 
 enum CategoriesOfArticles: String {
-    case apple = "everything?q=apple&from=2023-06-07&to=2023-06-07&sortBy=popularity&"
+    case apple = "everything?q=apple&sortBy=popularity&"
     case business = "top-headlines?country=us&category=business&"
     case techCrunch = "top-headlines?sources=techcrunch&"
     case wallStreet = "everything?domains=wsj.com&"

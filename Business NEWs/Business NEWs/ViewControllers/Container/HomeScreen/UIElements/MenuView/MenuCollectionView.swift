@@ -14,8 +14,6 @@ class MenuCollectionView: UICollectionView {
     
     private let nameCategoryArray = ["Wall St.", "Apple", "TechCrunch", "Business", "Wall St.", "TechCrunch", "Business", "Apple"]
     
-    private let categoryFlowLayout = UICollectionViewFlowLayout()
-    
     private let underlineView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -23,6 +21,7 @@ class MenuCollectionView: UICollectionView {
         return view
     }()
     
+    private let categoryFlowLayout = UICollectionViewFlowLayout()
     private var leftAnchorConstraint = NSLayoutConstraint()
     private var widthAnchorConstraint = NSLayoutConstraint()
         
