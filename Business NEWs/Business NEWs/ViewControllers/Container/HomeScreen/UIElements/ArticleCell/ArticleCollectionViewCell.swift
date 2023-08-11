@@ -80,7 +80,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articleCollectionView.widthAnchor.constraint(equalTo: widthAnchor),
             articleCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
-        articleCollectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        articleCollectionView.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 20, right: 0)
         articleCollectionView.backgroundColor = .systemGray3
     }
     
@@ -111,7 +111,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         separatorLine.backgroundColor = .black
     }
     
-    func convertDateFormater(_ date: String) -> String {
+    private func convertDateFormater(_ date: String) -> String {
         var fixDate = ""
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"

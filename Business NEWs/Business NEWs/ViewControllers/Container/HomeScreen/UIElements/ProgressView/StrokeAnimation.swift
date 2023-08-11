@@ -8,7 +8,6 @@
 import UIKit
 
 class StrokeAnimation: CABasicAnimation {
-    
     enum StrokeType {
         case start
         case end

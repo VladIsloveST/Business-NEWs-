@@ -49,6 +49,7 @@ class Presenter: ViewOutPut {
                 print("getArticles success")
             case .failure(let error):
                 self.view?.failer(error: error)
+                
             }
             self.group.leave()
         }

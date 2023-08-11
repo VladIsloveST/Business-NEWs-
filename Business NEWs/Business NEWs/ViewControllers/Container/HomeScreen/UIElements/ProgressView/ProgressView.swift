@@ -50,7 +50,6 @@ class ProgressView: UIView {
     
     // MARK: - Animations
     private func animateStroke() {
-        
         let startAnimation = StrokeAnimation(
             type: .start,
             beginTime: 0.25,
@@ -84,7 +83,6 @@ class ProgressView: UIView {
             duration: 2,
             repeatCount: .greatestFiniteMagnitude
         )
-        
         self.layer.add(rotationAnimation, forKey: nil)
     }
 }
