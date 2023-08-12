@@ -144,6 +144,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             portraitCell.mainLabel.text = article.title
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt)
+            portraitCell.imageView.setImage(article.urlToImage)
             return portraitCell
         } else {
             smallCell.didShare = { [weak self] in
