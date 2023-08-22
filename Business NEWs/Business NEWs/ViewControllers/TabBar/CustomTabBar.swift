@@ -18,6 +18,7 @@ class CustomTabBar: UITabBar {
         let button = CustomButtonBehavior()
         button.frame.size = CGSize(width: 65, height: 50)
         button.isSelected = false
+        button.tintAdjustmentMode = .normal
         
         var filled = UIButton.Configuration.filled()
         filled.baseForegroundColor = .systemGray

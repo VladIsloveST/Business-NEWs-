@@ -54,8 +54,8 @@ class Presenter: ViewOutPut {
             self.group.leave()
         }
         
-   /*     group.enter()
-        networkDataFetcher.getArticlesFromCategory(.techCrunch) { [weak self] result in
+        group.enter()
+        networkDataFetcher.getArticlesFromCategory(.techCrunch, count: count) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -67,7 +67,7 @@ class Presenter: ViewOutPut {
             self.group.leave()
         }
         
-        group.enter()
+   /*     group.enter()
         networkDataFetcher.getArticlesFromCategory(.wallStreet) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -78,21 +78,20 @@ class Presenter: ViewOutPut {
             }
             self.group.leave()
         }
-    */
     
-//        group.enter()
-//        networkDataFetcher.getArticlesFromCategory(.apple) { [weak self] result in  // error
-//            guard let self = self else { return }
-//            
-//            switch result {
-//            case .success(let items):
-//                self.typesOfArticles.append(.apple(items))
-//            case .failure(let error):
-//                self.view?.failer(error: error)
-//            }
-//            self.group.leave()
-//        }
-        
+        group.enter()
+        networkDataFetcher.getArticlesFromCategory(.apple) { [weak self] result in  // error
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let items):
+                self.typesOfArticles.append(.apple(items))
+            case .failure(let error):
+                self.view?.failer(error: error)
+            }
+            self.group.leave()
+        }
+    */
         group.notify(queue: DispatchQueue.main) {
             self.view?.success()
         }

@@ -49,7 +49,8 @@ class LargePortraitCell: BasicCollectionViewCell {
         lableStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5)
+            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5),
+            lableStackView.rightAnchor.constraint(equalTo: buttonStackView.leftAnchor, constant: 0)
         ])
     }
 }

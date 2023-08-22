@@ -110,18 +110,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         ])
         separatorLine.backgroundColor = .black
     }
-    
-    private func convertDateFormater(_ date: String) -> String {
-        var fixDate = ""
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        if let newDate = dateFormatter.date(from: date) {
-            dateFormatter.dateFormat = "EEEE, MMM d"
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            fixDate = dateFormatter.string(from: newDate)
-        }
-        return fixDate
-    }
 }
 
 // MARK: - Collection View Data Source
