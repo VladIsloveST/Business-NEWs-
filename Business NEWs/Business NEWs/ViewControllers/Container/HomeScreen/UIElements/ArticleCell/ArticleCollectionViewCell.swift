@@ -95,7 +95,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func refresh(sender: UIRefreshControl) {
-        didFetchData(16)
+        didFetchData(2)
         sender.endRefreshing()
     }
     

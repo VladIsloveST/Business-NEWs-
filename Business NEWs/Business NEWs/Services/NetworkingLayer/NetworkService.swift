@@ -24,9 +24,10 @@ enum StatusCodeResult<Error> {
 }
 
 class NetworkService {
-    private let baseApiKey = "" //rapiKey=977e4b83946b42a1aba422dc52cefbb1"
+    private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {
+        print(response.statusCode)
         switch response.statusCode {
         case 200...299: return .success
         case 300...399: return .failure(NetworkError.redirection)
@@ -52,7 +53,6 @@ class NetworkService {
             
             let result = self.handleNetworkResponse(response)
             switch result {
-                
             case .success:
                 guard let data = data else {
                     complition(.failure(NetworkError.emptyData))

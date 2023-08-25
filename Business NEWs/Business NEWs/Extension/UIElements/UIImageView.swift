@@ -11,13 +11,15 @@ import UIKit
 extension UIImageView {
     func setImage(_ imgURLString: String?) {
         guard let imageURLString = imgURLString else {
-            self.image = UIImage(named: "default.png")
+            let image = UIImage(named: "Image")
+            self.image = image
+            
             return
         }
         DispatchQueue.global().async { [weak self] in
             let data = try? Data(contentsOf: URL(string: imageURLString)!)
             DispatchQueue.main.async {
-                self?.image = (data != nil) ? UIImage(data: data!) : UIImage(named: "default.png")
+                self?.image = (data != nil) ? UIImage(data: data!) : UIImage(named: "Image")
             }
         }
     }

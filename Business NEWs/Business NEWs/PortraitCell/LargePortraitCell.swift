@@ -11,7 +11,11 @@ import UIKit
 class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
-    var imageView = UIImageView()
+    var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
