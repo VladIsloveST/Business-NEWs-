@@ -37,6 +37,8 @@ class HomeViewController: UIViewController {
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
+    private var activityView = UIActivityViewController(activityItems: [], applicationActivities: nil)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,17 +133,17 @@ class HomeViewController: UIViewController {
 // MARK: - Table View Data Source
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        8
+         8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         if !presenter.typesOfArticles.isEmpty {
-            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row].articlesOfTheSamePublisher
+            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegat = self
             cell.articles = articlesOfTheSamePublisher
-            cell.didFetchData = { [weak self] count in
-                self?.presenter.getArticles(count: count)
+            cell.didFetchData = { [weak self] page in
+                self?.presenter.getArticles(index: indexPath.row, page: page, isRefrash: true)
             }
         }
         return cell
@@ -192,7 +194,7 @@ extension HomeViewController: ArticlesMovementDelegate {
 
 extension HomeViewController: HomeViewControllerShareDelegate {
     func presentShareSheet(url: URL) {
-        let shareSheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        self.present(shareSheet, animated: true)
+        activityView = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.present(activityView, animated: true)
     }
 }

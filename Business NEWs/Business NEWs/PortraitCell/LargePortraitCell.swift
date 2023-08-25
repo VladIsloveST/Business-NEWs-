@@ -11,7 +11,11 @@ import UIKit
 class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
-    var imageView = UIImageView()
+    var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,7 +53,8 @@ class LargePortraitCell: BasicCollectionViewCell {
         lableStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5)
+            lableStackView.centerYAnchor.constraint(equalTo: buttonStackView.centerYAnchor, constant: -5),
+            lableStackView.rightAnchor.constraint(equalTo: buttonStackView.leftAnchor, constant: 0)
         ])
     }
 }

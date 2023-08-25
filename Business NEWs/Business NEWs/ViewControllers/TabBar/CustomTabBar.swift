@@ -18,6 +18,7 @@ class CustomTabBar: UITabBar {
         let button = CustomButtonBehavior()
         button.frame.size = CGSize(width: 65, height: 50)
         button.isSelected = false
+        button.tintAdjustmentMode = .normal
         
         var filled = UIButton.Configuration.filled()
         filled.baseForegroundColor = .systemGray
@@ -62,11 +63,17 @@ class CustomButtonBehavior: UIButton {
         didSet {
             if isSelected {
                 configuration?.baseForegroundColor = .label
-                guard let image = UIImage(systemName: "gearshape.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19, weight: .semibold, scale: .large)) else { return }
+                let selectedConfiguration = UIImage.SymbolConfiguration(pointSize: 19,
+                                                                        weight: .semibold, scale: .large)
+                guard let image = UIImage(systemName: "gearshape.fill",
+                                          withConfiguration: selectedConfiguration) else { return }
                 setImage(image, for: .normal)
             } else {
                 configuration?.baseForegroundColor = .systemGray
-                guard let image = UIImage(systemName: "gearshape", withConfiguration: UIImage.SymbolConfiguration(pointSize: 19, weight: .medium, scale: .large)) else { return }
+                let configuration = UIImage.SymbolConfiguration(pointSize: 19,
+                                                                weight: .medium, scale: .large)
+                guard let image = UIImage(systemName: "gearshape",
+                                          withConfiguration: configuration) else { return }
                 setImage(image, for: .normal)
             }
         }
