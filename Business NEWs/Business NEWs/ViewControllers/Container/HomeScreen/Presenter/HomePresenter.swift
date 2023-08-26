@@ -43,26 +43,6 @@ class Presenter: ViewOutPut {
     
     func getArticles(index: Int, page: Int = 1, isRefrash: Bool = false) {
         if isRefrash { typesOfArticles[0] = [] }
-        
-//        let workItem = DispatchWorkItem { [weak self] in
-//        self?.networkDataFetcher.getArticlesFromCategory(fromIndex, page: page) { [weak self] result in
-//            guard let self = self else { return }
-//            switch result {
-//            case .success(let items):
-//                print(self.typesOfArticles.count)
-//                self.typesOfArticles[fromIndex] = items.articles
-//
-//            case .failure(let error):
-//                self.view?.failer(error: error)
-//            }
-//        }
-//    }
-//
-//    workItem.perform()
-//    workItem.notify(queue: DispatchQueue.main) {
-//        self.view?.success()
-//    }
-        
         group.enter()
         networkDataFetcher.getArticlesCategoryFrom(index, page: page) { [weak self] result in
             guard let self = self else { return }
@@ -79,5 +59,26 @@ class Presenter: ViewOutPut {
         group.notify(queue: DispatchQueue.main) {
             self.view?.success()
         }
+        
+//        let workItem = DispatchWorkItem { [weak self] in
+//            self?.networkDataFetcher.getArticlesCategoryFrom(index, page: page) { [weak self] result in
+//                guard let self = self else { return }
+//                switch result {
+//                case .success(let items):
+//                    print(self.typesOfArticles.count)
+//                    self.typesOfArticles[index] = items.articles
+//
+//                case .failure(let error):
+//                    self.view?.failer(error: error)
+//                }
+//            }
+//        }
+//
+//        workItem.perform()
+//        defer {
+//            workItem.notify(queue: DispatchQueue.main) {
+//                self.view?.success()
+//            }
+//        }
     }
 }

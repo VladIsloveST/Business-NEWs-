@@ -24,6 +24,7 @@ class HomeViewController: UIViewController {
     weak var delegate: HomeViewControllerDelegate?
     var presenter: ViewOutPut!
     
+    private var moveToTop: () -> () = {}
     private let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -51,6 +52,15 @@ class HomeViewController: UIViewController {
         loadingIndicator.isAnimating = true
         navigationItem.title = "Home"
         navigationController?.navigationBar.backgroundColor = .white
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollToTop))
+        gestureRecognizer.numberOfTapsRequired = 1
+        navigationController?.navigationBar.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    @objc
+    func scrollToTop() {
+        moveToTop()
     }
     
     private func setupCollectionView() {
@@ -138,6 +148,7 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        moveToTop = { cell.scrollToTop() }
         if !presenter.typesOfArticles.isEmpty {
             let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegat = self
