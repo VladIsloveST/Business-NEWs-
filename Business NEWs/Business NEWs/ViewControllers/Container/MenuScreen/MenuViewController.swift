@@ -43,6 +43,7 @@ class MenuViewController: UIViewController {
     private var menuSections: [Section] = []
     private var tableView: UITableView!
     private var menuLabel: UILabel!
+    var size: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,10 +103,10 @@ extension MenuViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         if indexPath.row == 0 {
             cell.textLabel?.text = menuSections[indexPath.section].title
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+            cell.textLabel?.font = UIFont.systemFont(ofSize: size)
         } else {
             cell.textLabel?.text = menuSections[indexPath.section].options[indexPath.row - 1].rawValue
-            cell.textLabel?.font = UIFont(name: "Avenir Light Oblique", size: 17)
+            cell.textLabel?.font = UIFont(name: "Avenir Light Oblique", size: size)
             cell.layoutMargins.left = 30
         }
         return cell

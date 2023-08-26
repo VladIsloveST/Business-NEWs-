@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
         setupNavBarButtons()
         setupIndicator()
         setupCollectionView()
-        
+
         loadingIndicator.isAnimating = true
         navigationItem.title = "Home"
         navigationController?.navigationBar.backgroundColor = .white
