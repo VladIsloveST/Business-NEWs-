@@ -16,7 +16,7 @@ class ContainerViewController: UIViewController {
     
     private var menuState: MenuState = .closed
     private let menuVC = MenuViewController()
-    private var navgationController = UINavigationController()
+    var navgationController = UINavigationController()
      
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +50,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
         switch menuState {
         case .closed:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
-                self.navgationController.view.frame.origin.x = (self.navgationController.view.frame.size.width)/2.5
+                self.navgationController.view.frame.origin.x = 150 // (self.navgationController.view.frame.size.width)/2.5
                 homeViewController?.view.alpha = 0.95
                 homeViewController?.view.isUserInteractionEnabled = false
             } completion: { [weak self] done in

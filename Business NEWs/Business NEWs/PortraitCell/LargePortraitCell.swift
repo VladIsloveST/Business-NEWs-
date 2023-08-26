@@ -11,17 +11,14 @@ import UIKit
 class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
-    var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    var imageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(imageView)
         setConstraints()
         imageView.backgroundColor = .white
+        //imageView.contentMode = .scaleAspectFill
     }
     
     required init?(coder: NSCoder) {

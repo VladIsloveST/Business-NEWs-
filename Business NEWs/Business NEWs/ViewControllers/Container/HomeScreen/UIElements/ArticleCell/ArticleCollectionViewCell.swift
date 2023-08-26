@@ -110,6 +110,10 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         ])
         separatorLine.backgroundColor = .black
     }
+
+    func scrollToTop() {
+        self.articleCollectionView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
+   }
 }
 
 // MARK: - Collection View Data Source
