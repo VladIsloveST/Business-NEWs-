@@ -28,6 +28,7 @@ class ContainerViewController: UIViewController {
         addChild(menuVC)
         view.addSubview(menuVC.view)
         menuVC.didMove(toParent: self)
+        menuVC.size = navgationController.view.bounds.width / 22
         
         let assembly = ModuleBuilder()
         navgationController.navigationBar.prefersLargeTitles = true
@@ -37,6 +38,7 @@ class ContainerViewController: UIViewController {
         addChild(navgationController)
         view.addSubview(navgationController.view)
         navgationController.didMove(toParent: self)
+        
     }
 }
 
@@ -50,7 +52,7 @@ extension ContainerViewController: HomeViewControllerDelegate {
         switch menuState {
         case .closed:
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
-                self.navgationController.view.frame.origin.x = 150 // (self.navgationController.view.frame.size.width)/2.5
+                self.navgationController.view.frame.origin.x = (self.navgationController.view.frame.size.width)/2.5
                 homeViewController?.view.alpha = 0.95
                 homeViewController?.view.isUserInteractionEnabled = false
             } completion: { [weak self] done in

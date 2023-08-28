@@ -17,14 +17,16 @@ class ArticleCollectionViewCell: UICollectionViewCell {
 
     var didFetchData: (Int) -> () = {_ in }
     
-//    private var totalNumbers = 8 {
+//    private var page = 1
+//    private var totalNumbers = 12 {
 //        didSet {
 //            print("totalNumbers increase")
 //            articleCollectionView.reloadData()
 //        }
 //    }
     
-    var articles: [ArticleData] = [] {
+    var articles: [ArticleData] = []
+    {
         didSet {
             articleCollectionView.reloadData()
         }
@@ -70,7 +72,8 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         articleCollectionView.dataSource = self
         articleCollectionView.delegate = self
         articleCollectionView.prefetchDataSource = self
-        
+        articleCollectionView.isPrefetchingEnabled = true
+
         articleCollectionView.register(LargePortraitCell.self,
                                 forCellWithReuseIdentifier: LargePortraitCell.identifier)
         articleCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
@@ -119,7 +122,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        articles.count
+         articles.count //totalNumbers
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -133,6 +136,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
+            //portraitCell.url = URL(string: article.url)
             portraitCell.mainLabel.text = article.title
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt)
@@ -143,6 +147,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
+            //smallCell.url = URL(string: article.url)
             smallCell.mainLabel.text = article.title
             smallCell.authorLable.text = article.author
             smallCell.convertDateFormater(article.publishedAt)
@@ -154,14 +159,13 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-//        print("prefetchItemsAt")
-//        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 5})  // - 1 - 4 (1 блок)
+//        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 8})
 //        if filtered.count > 0 {
-//            totalNumbers += 8
+//            totalNumbers += 12
+//            page += 1
+//            self.didFetchData(page)
 //        }
-//
 //        filtered.forEach({_ in
-//            self.didFetchData(totalNumbers)
 //        })
     }
 }
