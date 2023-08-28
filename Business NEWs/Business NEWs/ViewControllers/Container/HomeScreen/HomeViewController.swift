@@ -38,24 +38,18 @@ class HomeViewController: UIViewController {
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
-    private var activityView = UIActivityViewController(activityItems: [], applicationActivities: nil)
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTopMenu()
         setupMenu()
-        setupNavBarButtons()
+        setupNavBar()
         setupIndicator()
         setupCollectionView()
 
         loadingIndicator.isAnimating = true
         navigationItem.title = "Home"
         navigationController?.navigationBar.backgroundColor = .white
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollToTop))
-        gestureRecognizer.numberOfTapsRequired = 1
-        navigationController?.navigationBar.addGestureRecognizer(gestureRecognizer)
     }
     
     @objc
@@ -92,21 +86,25 @@ class HomeViewController: UIViewController {
         ])
         menuCollectionView.homeControllerDelegate = self
         menuCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
+        //menuCollectionView.size = view.bounds.width / 22
     }
     
     private func setupIndicator() {
         loadingIndicator = ProgressView()
-        view.addSubview(loadingIndicator)
+        articlesCollectionView.addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: articlesCollectionView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: articlesCollectionView.centerYAnchor),
             loadingIndicator.widthAnchor.constraint(equalToConstant: 50),
             loadingIndicator.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
-    private func setupNavBarButtons() {
+    private func setupNavBar() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollToTop))
+        gestureRecognizer.numberOfTapsRequired = 1
+        navigationController?.navigationBar.addGestureRecognizer(gestureRecognizer)
         let menuButtonItem = UIBarButtonItem(
             imageSystemName: "line.horizontal.3", target: self, action: #selector(didTapMenuButton))
         let searchBarButtonItem = UIBarButtonItem(
@@ -148,6 +146,13 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+
+//        cell.articleCollectionView.visibleCells.forEach { [weak self] cell in
+//            let basicCell = cell as? BasicCollectionViewCell
+//            if let url = basicCell?.url {
+//                basicCell?.didShare = { self?.presentShareSheet(url: url) }
+//            }
+//        }
         moveToTop = { cell.scrollToTop() }
         if !presenter.typesOfArticles.isEmpty {
             let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
@@ -184,7 +189,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: ViewInPut {
     func success() {
-        //loadingIndicator.isAnimating = false
+        loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
         articlesCollectionView.reloadData()
     }
@@ -205,7 +210,8 @@ extension HomeViewController: ArticlesMovementDelegate {
 
 extension HomeViewController: HomeViewControllerShareDelegate {
     func presentShareSheet(url: URL) {
-        activityView = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        self.present(activityView, animated: true)
+        let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.present(activityViewPopover, animated: true)
+        print("presentShareSheet")
     }
 }

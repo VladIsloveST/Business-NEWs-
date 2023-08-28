@@ -12,10 +12,11 @@ class BasicCollectionViewCell: UICollectionViewCell {
     var timer: Timer?
     let calendar = Calendar.current
     var didShare: () -> () = {}
+//    var url: URL?
     
     let buttonSaving: UIButton = {
         let button = UIButton(normalStateImage: "bookmark",
-                           selectedStateImage: "bookmark.fill")
+                              selectedStateImage: "bookmark.fill")
         button.addTarget(self, action: #selector(tappedSelect), for: .touchUpInside)
         return button
     }()

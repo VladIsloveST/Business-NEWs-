@@ -75,7 +75,7 @@ class MenuCollectionView: UICollectionView {
         let categoryFont = UIFont(name: "Arial Bold", size: 18)
         let categoryAttributes = [NSAttributedString.Key.font : categoryFont]
         let categoryWidth = nameCategoryArray[item].size(withAttributes: categoryAttributes as [NSAttributedString.Key : Any]).width + 20
-        return categoryWidth 
+        return categoryWidth
     }
     
     private func calculationLeftIndent(bySelectedCell item: Int) -> CGFloat {
@@ -117,6 +117,7 @@ class MenuCollectionView: UICollectionView {
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? MenuCollectionViewCell else { return UICollectionViewCell() }
             cell.nameCategoryLabel.text = nameCategoryArray[indexPath.item]
+            //cell.nameCategoryLabel.font =
             return cell
         }
     }

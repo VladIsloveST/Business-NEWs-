@@ -24,7 +24,7 @@ enum StatusCodeResult<Error> {
 }
 
 class NetworkService {
-    private let baseApiKey = "" //apiKey=e70eac065c3b4e8b9520a03dc1643d26"
+    private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26"
     
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {
         print(response.statusCode)
@@ -43,14 +43,9 @@ class NetworkService {
             return complition(.failure(NetworkError.missingURL)) }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                complition(.failure(error))
-                return
-            }
-            
+            if let error = error { return complition(.failure(error)) }
             guard let response = (response as? HTTPURLResponse) else {
                 return complition(.failure(NetworkError.responseAbsent)) }
-            
             let result = self.handleNetworkResponse(response)
             switch result {
             case .success:
@@ -61,7 +56,6 @@ class NetworkService {
                 complition(.success(data))
             case .failure(let networkError):
                 complition(.failure(networkError))
-                
             }
         }.resume()
     }
