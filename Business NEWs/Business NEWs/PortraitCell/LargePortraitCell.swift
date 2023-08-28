@@ -18,7 +18,6 @@ class LargePortraitCell: BasicCollectionViewCell {
         addSubview(imageView)
         setConstraints()
         imageView.backgroundColor = .white
-        //imageView.contentMode = .scaleAspectFill
     }
     
     required init?(coder: NSCoder) {

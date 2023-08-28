@@ -26,5 +26,4 @@ enum SectionType {
             return items.count
         }
     }
-
 }

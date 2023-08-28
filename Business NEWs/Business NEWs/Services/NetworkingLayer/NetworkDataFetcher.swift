@@ -8,10 +8,10 @@
 import Foundation
 
 enum CategoriesOfArticles: String, CaseIterable {
-    case business = "top-headlines?country=us&category=business&"
-    case techCrunch = "top-headlines?sources=techcrunch&"
     case wallStreet = "everything?domains=wsj.com&"
     case apple = "everything?q=apple&sortBy=popularity&"
+    case techCrunch = "top-headlines?sources=techcrunch&"
+    case business = "top-headlines?country=us&category=business&"
 }
 
 protocol NetworkDataFetcherProtocol {

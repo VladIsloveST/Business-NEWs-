@@ -15,18 +15,17 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     private var separatorLine: UIView!
     var delegat: HomeViewControllerShareDelegate?
 
-    var didFetchData: (Int) -> () = {_ in }
+    var didFetchData: (Int, Bool) -> () = { _,_ in }
     
-//    private var page = 1
-//    private var totalNumbers = 12 {
-//        didSet {
-//            print("totalNumbers increase")
-//            articleCollectionView.reloadData()
-//        }
-//    }
+    private var page = 1
+    private var totalNumbers = 12 {
+        didSet {
+            print("totalNumbers increase")
+            articleCollectionView.reloadData()
+        }
+    }
     
-    var articles: [ArticleData] = []
-    {
+    var articles: [ArticleData] = [] {
         didSet {
             articleCollectionView.reloadData()
         }
@@ -98,7 +97,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func refresh(sender: UIRefreshControl) {
-        didFetchData(2)
+        if articles.count == 12 { didFetchData(2, true) }
         sender.endRefreshing()
     }
     
@@ -136,7 +135,6 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
-            //portraitCell.url = URL(string: article.url)
             portraitCell.mainLabel.text = article.title
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt)
@@ -147,7 +145,6 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
-            //smallCell.url = URL(string: article.url)
             smallCell.mainLabel.text = article.title
             smallCell.authorLable.text = article.author
             smallCell.convertDateFormater(article.publishedAt)
@@ -159,14 +156,14 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-//        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 8})
-//        if filtered.count > 0 {
-//            totalNumbers += 12
-//            page += 1
-//            self.didFetchData(page)
-//        }
-//        filtered.forEach({_ in
-//        })
+        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 1})
+        if filtered.count > 0 {
+            totalNumbers += 12
+            page += 1
+            self.didFetchData(page, false)
+        }
+        filtered.forEach({_ in
+        })
     }
 }
 
