@@ -16,7 +16,7 @@ protocol ViewOutPut: AnyObject {
     var typesOfArticles: [[ArticleData]] { get set }
     init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol)
     func tapOnTheSearch()
-    func getArticles(index: Int, page: Int, isRefrash: Bool)
+    func getArticlesFromCategory(index: Int, page: Int, isRefreshed: Bool)
 }
 
 class Presenter: ViewOutPut {
@@ -31,54 +31,32 @@ class Presenter: ViewOutPut {
         self.networkDataFetcher = networkDataFetcher
         self.router = router
         
-        getArticles(index: 0)
-        getArticles(index: 1)
-        getArticles(index: 2)
-        getArticles(index: 3)
+        Array(0...3).forEach { index in
+            getArticlesFromCategory(index: index)
+        }
     }
     
     func tapOnTheSearch() {
         router?.showSearch()
     }
     
-    func getArticles(index: Int, page: Int = 1, isRefrash: Bool = false) {
-        if isRefrash { typesOfArticles[0] = [] }
+    func getArticlesFromCategory(index: Int, page: Int = 1, isRefreshed: Bool = false) {
+        if isRefreshed { typesOfArticles[index] = [] }
         group.enter()
         networkDataFetcher.getArticlesCategoryFrom(index, page: page) { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case .success(let items):
-                self.typesOfArticles[index] = items.articles
+                self.typesOfArticles[index].append(contentsOf: items.articles)
             case .failure(let error):
                 self.view?.failer(error: error)
             }
             self.group.leave()
         }
-
+        
         group.notify(queue: DispatchQueue.main) {
             self.view?.success()
         }
-        
-//        let workItem = DispatchWorkItem { [weak self] in
-//            self?.networkDataFetcher.getArticlesCategoryFrom(index, page: page) { [weak self] result in
-//                guard let self = self else { return }
-//                switch result {
-//                case .success(let items):
-//                    print(self.typesOfArticles.count)
-//                    self.typesOfArticles[index] = items.articles
-//
-//                case .failure(let error):
-//                    self.view?.failer(error: error)
-//                }
-//            }
-//        }
-//
-//        workItem.perform()
-//        defer {
-//            workItem.notify(queue: DispatchQueue.main) {
-//                self.view?.success()
-//            }
-//        }
     }
 }

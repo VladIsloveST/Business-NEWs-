@@ -14,17 +14,10 @@ class PortraitCell: BasicCollectionViewCell {
     override init(frame: CGRect) {
         super .init(frame: frame)
         imageView.backgroundColor = .orange
-
-//        buttonStackView.addArrangedSubview(buttonShare)
-//        buttonStackView.addArrangedSubview(buttonSaving)
-//        lableStackView.addArrangedSubview(authorLable)
-//        lableStackView.addArrangedSubview(publishedAtLable)
-       
         addSubview(imageView)
         addSubview(mainLabel)
         addSubview(buttonStackView)
         addSubview(lableStackView)
-        
         setConstraints()
     }
     

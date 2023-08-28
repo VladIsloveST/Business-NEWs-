@@ -38,7 +38,6 @@ class ContainerViewController: UIViewController {
         addChild(navgationController)
         view.addSubview(navgationController.view)
         navgationController.didMove(toParent: self)
-        
     }
 }
 
@@ -79,7 +78,6 @@ extension ContainerViewController: HomeViewControllerDelegate {
 }
 
 extension ContainerViewController: MenuViewControllerDelegate {
-                          
     func didSelect(menuItem: MenuOptions) {
         toggleMenu { 
             switch menuItem {

@@ -12,7 +12,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
     var timer: Timer?
     let calendar = Calendar.current
     var didShare: () -> () = {}
-//    var url: URL?
     
     let buttonSaving: UIButton = {
         let button = UIButton(normalStateImage: "bookmark",

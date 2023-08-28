@@ -46,10 +46,7 @@ class HomeViewController: UIViewController {
         setupNavBar()
         setupIndicator()
         setupCollectionView()
-
         loadingIndicator.isAnimating = true
-        navigationItem.title = "Home"
-        navigationController?.navigationBar.backgroundColor = .white
     }
     
     @objc
@@ -105,6 +102,7 @@ class HomeViewController: UIViewController {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollToTop))
         gestureRecognizer.numberOfTapsRequired = 1
         navigationController?.navigationBar.addGestureRecognizer(gestureRecognizer)
+        navigationController?.navigationBar.backgroundColor = .white
         let menuButtonItem = UIBarButtonItem(
             imageSystemName: "line.horizontal.3", target: self, action: #selector(didTapMenuButton))
         let searchBarButtonItem = UIBarButtonItem(
@@ -114,6 +112,7 @@ class HomeViewController: UIViewController {
         moreButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
         navigationItem.leftBarButtonItem = menuButtonItem
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
+        navigationItem.title = "Home"
     }
     
     @objc
@@ -146,20 +145,14 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
-
-//        cell.articleCollectionView.visibleCells.forEach { [weak self] cell in
-//            let basicCell = cell as? BasicCollectionViewCell
-//            if let url = basicCell?.url {
-//                basicCell?.didShare = { self?.presentShareSheet(url: url) }
-//            }
-//        }
         moveToTop = { cell.scrollToTop() }
         if !presenter.typesOfArticles.isEmpty {
             let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegat = self
             cell.articles = articlesOfTheSamePublisher
-            cell.didFetchData = { [weak self] page in
-                self?.presenter.getArticles(index: indexPath.row, page: page, isRefrash: true)
+            cell.didFetchData = { [weak self] (page, isRefreshed) in
+                self?.presenter
+                    .getArticlesFromCategory(index: indexPath.row, page: page, isRefreshed: isRefreshed)
             }
         }
         return cell
@@ -210,8 +203,9 @@ extension HomeViewController: ArticlesMovementDelegate {
 
 extension HomeViewController: HomeViewControllerShareDelegate {
     func presentShareSheet(url: URL) {
-        let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        self.present(activityViewPopover, animated: true)
-        print("presentShareSheet")
+        DispatchQueue.main.async {
+            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.present(activityViewPopover, animated: true)
+        }
     }
 }
