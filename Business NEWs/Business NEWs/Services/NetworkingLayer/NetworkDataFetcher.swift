@@ -45,5 +45,3 @@ class NetworkDataFetcher: NetworkDataFetcherProtocol {
         fetchTracks(url: url, response: complition)
     }
 }
-
-

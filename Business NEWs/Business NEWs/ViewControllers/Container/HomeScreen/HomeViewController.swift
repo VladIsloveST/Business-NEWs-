@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTopMenu()
@@ -46,6 +46,7 @@ class HomeViewController: UIViewController {
         setupNavBar()
         setupIndicator()
         setupCollectionView()
+        notifyCells()
         loadingIndicator.isAnimating = true
     }
     
@@ -135,12 +136,23 @@ class HomeViewController: UIViewController {
                               handler: { _ in print("Delete") })
         topMenu = UIMenu(title: "Options", options: .displayInline, children: [copy, share, delete])
     }
+    
+    private func notifyCells() {
+        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+            self?.articlesCollectionView.visibleCells.forEach({ cell in
+                (cell as? ArticleCollectionViewCell)?.articleCollectionView.visibleCells.filter {
+                    ($0 as? BasicCollectionViewCell)?.note != " • lately" }.forEach { cell in
+                        (cell as? BasicCollectionViewCell)?.updatePublishedLabel()
+                    }
+            })
+        }
+    }
 }
 
 // MARK: - Table View Data Source
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-         8
+        8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

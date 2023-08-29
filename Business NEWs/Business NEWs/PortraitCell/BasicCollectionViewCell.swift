@@ -9,8 +9,6 @@ import UIKit
 
 class BasicCollectionViewCell: UICollectionViewCell {
         
-    var timer: Timer?
-    let calendar = Calendar.current
     var didShare: () -> () = {}
     
     let buttonSaving: UIButton = {
@@ -19,6 +17,10 @@ class BasicCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(tappedSelect), for: .touchUpInside)
         return button
     }()
+    
+    private var publicationDate = ""
+    private var hoursAgo = 0
+    var note = " • recently"
     
     @objc
     private func tappedSelect() {
@@ -36,6 +38,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up")
         button.addTarget(self, action: #selector(presentShareSheet), for: .touchDown)
+        button.becomeFirstResponder()
         return button
     }()
     
@@ -63,7 +66,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private var publishedAtLable: UILabel = {
+    private var publishedLable: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Arial", size: 16)
         label.textColor = .white
@@ -77,7 +80,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         stackView.alignment = .leading
         stackView.spacing = 0
         stackView.addArrangedSubview(authorLable)
-        stackView.addArrangedSubview(publishedAtLable)
+        stackView.addArrangedSubview(publishedLable)
         return stackView
     }()
     
@@ -101,54 +104,31 @@ class BasicCollectionViewCell: UICollectionViewCell {
         buttonStackView.addArrangedSubview(buttonShare)
         buttonStackView.addArrangedSubview(buttonSaving)
         lableStackView.addArrangedSubview(authorLable)
-        lableStackView.addArrangedSubview(publishedAtLable)
+        lableStackView.addArrangedSubview(publishedLable)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func convertDateFormater(_ date: String) {
+    func convertDateFormater(_ date: String, currentHour: Int) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         guard let newDate = dateFormatter.date(from: date) else { return }
-        
-        let minute = calendar.component(.minute, from: newDate)
-        let hour = calendar.component(.hour, from: newDate)
-        
+        let publicationHour = Calendar.current.component(.hour, from: newDate)
+        hoursAgo = (currentHour >= publicationHour) ?
+                            (currentHour - publicationHour) : (currentHour + 24 - publicationHour)
         dateFormatter.dateFormat = "EEEE, MMM d"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        let fixedDate = dateFormatter.string(from: newDate)
-        
-        setup(fixedDate: fixedDate, publicationHour: hour, publicationMinute: minute)
+        publicationDate = dateFormatter.string(from: newDate)
+        updatePublishedLabel()
     }
     
-    private func setup(fixedDate: String, publicationHour: Int, publicationMinute: Int) {
-        let currentDate = getCurrentDate()
-        let hourAgo = (currentDate.hour >= publicationHour) ? (currentDate.hour - publicationHour) : (currentDate.hour + 24 - publicationHour)
-        var minAgo = (hourAgo * 60 + currentDate.minute) - publicationMinute
-        // дубляж
-        var note = (minAgo <= 59) ? "\(minAgo) min" : "\(hourAgo) hour"
-        if hourAgo > 1 { note += "s" }
-        self.publishedAtLable.text = fixedDate + " • \(note) ago"
-
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            if minAgo == 779 {
-                self?.timer?.invalidate()
-                self?.publishedAtLable.text = fixedDate
-                return
-            }
-            minAgo += 1
-            var note = (minAgo <= 59) ? "\(minAgo) min" : "\(minAgo/60) hour"
-            if minAgo/60 > 1 { note += "s" }
-            self?.publishedAtLable.text = fixedDate + " • \(note) ago"
-        }
-    }
-    
-    private func getCurrentDate() -> (hour: Int, minute: Int) {
-        let date = Date()
-        let currentHour = calendar.component(.hour, from: date)
-        let currentMinute = calendar.component(.minute, from: date)
-        return (currentHour, currentMinute)
+    func updatePublishedLabel() {
+        note = hoursAgo > 1 ? " • \(hoursAgo) hours ago" : " • \(hoursAgo) hour ago"
+        if hoursAgo == 24 { note = " • lately" }
+        if hoursAgo == 0 { note = " • recently" }
+        publishedLable.text = publicationDate + note
+        if hoursAgo < 24 { hoursAgo += 1 }
     }
 }
