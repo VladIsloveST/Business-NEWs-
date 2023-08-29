@@ -14,16 +14,16 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     private var refreshControl: UIRefreshControl!
     private var separatorLine: UIView!
     var delegat: HomeViewControllerShareDelegate?
-
+    private let currentHour = Calendar.current.component(.hour, from: Date())
     var didFetchData: (Int, Bool) -> () = { _,_ in }
     
-    private var page = 1
-    private var totalNumbers = 12 {
-        didSet {
-            print("totalNumbers increase")
-            articleCollectionView.reloadData()
-        }
-    }
+    //    private var page = 1
+    //    private var totalNumbers = 12 {
+    //        didSet {
+    //            print("totalNumbers increase")
+    //            articleCollectionView.reloadData()
+    //        }
+    //    }
     
     var articles: [ArticleData] = [] {
         didSet {
@@ -67,14 +67,14 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     private func setupCollectionView() {
         articleCollectionView = UICollectionView(frame: .zero, collectionViewLayout:  createLayout())
-       
+        
         articleCollectionView.dataSource = self
         articleCollectionView.delegate = self
         articleCollectionView.prefetchDataSource = self
         articleCollectionView.isPrefetchingEnabled = true
-
+        
         articleCollectionView.register(LargePortraitCell.self,
-                                forCellWithReuseIdentifier: LargePortraitCell.identifier)
+                                       forCellWithReuseIdentifier: LargePortraitCell.identifier)
         articleCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
         addSubview(articleCollectionView)
         articleCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +101,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         sender.endRefreshing()
     }
     
-    private func addSeparatorLineView(){   
+    private func addSeparatorLineView(){
         separatorLine = UIView()
         addSubview(separatorLine)
         separatorLine.translatesAutoresizingMaskIntoConstraints = false
@@ -112,16 +112,16 @@ class ArticleCollectionViewCell: UICollectionViewCell {
         ])
         separatorLine.backgroundColor = .black
     }
-
+    
     func scrollToTop() {
         self.articleCollectionView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
-   }
+    }
 }
 
 // MARK: - Collection View Data Source
 extension ArticleCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-         articles.count //totalNumbers
+        articles.count //totalNumbers
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -131,23 +131,23 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         let article = articles[indexPath.row]
         
         if indexPath.row % 4 == 0 {
+            portraitCell.mainLabel.text = article.title
+            portraitCell.authorLable.text = article.author
+            portraitCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
+            portraitCell.imageView.setImage(article.urlToImage)
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
-            portraitCell.mainLabel.text = article.title
-            portraitCell.authorLable.text = article.author
-            portraitCell.convertDateFormater(article.publishedAt)
-            portraitCell.imageView.setImage(article.urlToImage)
             return portraitCell
         } else {
+            smallCell.mainLabel.text = article.title
+            smallCell.authorLable.text = article.author
+            smallCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
             smallCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
-            smallCell.mainLabel.text = article.title
-            smallCell.authorLable.text = article.author
-            smallCell.convertDateFormater(article.publishedAt)
             return smallCell
         }
     }
@@ -156,14 +156,14 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Data Source Prefetching
 extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 1})
-        if filtered.count > 0 {
-            totalNumbers += 12
-            page += 1
-            self.didFetchData(page, false)
-        }
-        filtered.forEach({_ in
-        })
+        //        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 1})
+        //        if filtered.count > 0 {
+        //            totalNumbers += 12
+        //            page += 1
+        //            self.didFetchData(page, false)
+        //        }
+        //        filtered.forEach({_ in
+        //        })
     }
 }
 
