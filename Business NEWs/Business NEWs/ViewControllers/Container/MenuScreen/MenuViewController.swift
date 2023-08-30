@@ -14,8 +14,8 @@ enum MenuOptions: String {
     case shareApp = "ShareApp"
     case settings = "Settings"
     case homeTest = "HomeTest"
-    case infoTest = "InformationTest"
-    case appRatingTest = "App RatingTest"
+    case infoTest = "information"
+    case appRatingTest = "AppRating"
     case shareAppTest = "ShareAppTest"
 }
 

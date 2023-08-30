@@ -38,6 +38,7 @@ class HomeViewController: UIViewController {
     private var menuCollectionView: MenuCollectionView!
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
+    private var timer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,8 +139,10 @@ class HomeViewController: UIViewController {
     }
     
     private func notifyCells() {
-        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
-            self?.articlesCollectionView.visibleCells.forEach({ cell in
+        let visibleCells = articlesCollectionView.visibleCells
+        timer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+            if visibleCells.isEmpty { self?.timer.invalidate() }
+            visibleCells.forEach({ cell in
                 (cell as? ArticleCollectionViewCell)?.articleCollectionView.visibleCells.filter {
                     ($0 as? BasicCollectionViewCell)?.note != " • lately" }.forEach { cell in
                         (cell as? BasicCollectionViewCell)?.updatePublishedLabel()

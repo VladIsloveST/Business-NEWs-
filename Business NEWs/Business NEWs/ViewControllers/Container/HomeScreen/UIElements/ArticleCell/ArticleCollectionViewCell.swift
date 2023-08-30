@@ -49,14 +49,14 @@ class ArticleCollectionViewCell: UICollectionViewCell {
                                                heightDimension: .estimated(1)))
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(1)))
+                                               heightDimension: .estimated(40)))
         let localVerticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
             subitem: item, count: 3)
         let generalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(600)),
+                                               heightDimension: .estimated(400)),
             subitems: [topItem, localVerticalGroup])
         generalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let section = NSCollectionLayoutSection(group: generalGroup)
@@ -135,6 +135,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
             portraitCell.imageView.setImage(article.urlToImage)
+            //portraitCell.setImageViewConstraints()
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)

@@ -47,7 +47,7 @@ class SearchViewController: UIViewController {
     private func createLayout() -> CustomFlowLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.2)))
+                                               heightDimension: .fractionalHeight(1)))
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(700)),

@@ -11,9 +11,7 @@ import UIKit
 extension UIImageView {
     func setImage(_ imgURLString: String?) {
         guard let imageURLString = imgURLString else {
-            let image = UIImage(named: "error")
-            self.image = image
-            
+            self.image = UIImage(named: "error")
             return
         }
         DispatchQueue.global().async { [weak self] in
