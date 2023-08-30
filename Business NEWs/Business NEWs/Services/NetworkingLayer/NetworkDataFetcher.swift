@@ -12,6 +12,10 @@ enum CategoriesOfArticles: String, CaseIterable {
     case apple = "everything?q=apple&sortBy=popularity&"
     case techCrunch = "top-headlines?sources=techcrunch&"
     case business = "top-headlines?country=us&category=business&"
+    case tesla = "everything?q=tesla&"
+    case bitcoin = "everything?q=bitcoin&"
+    case ua = "top-headlines?country=ua&"
+    case bbc = "top-headlines?sources=bbc-news&"
 }
 
 protocol NetworkDataFetcherProtocol {

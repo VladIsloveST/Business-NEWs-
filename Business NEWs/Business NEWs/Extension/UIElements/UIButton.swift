@@ -10,7 +10,6 @@ import UIKit
 
 extension UIButton {
     convenience init(normalStateImage: String, selectedStateImage: String) {
-       
         self.init()
         let configuration = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular, scale: .large)
         let normalStateImage = UIImage(systemName: normalStateImage, withConfiguration: configuration)?
