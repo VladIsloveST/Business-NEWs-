@@ -15,7 +15,7 @@ class SelectedArticlesViewController: UIViewController {
     private var types = MockData.shared.articleData
     
     private var savedCollectionView: UICollectionView!
-    private let searchBar = UISearchBar()
+    private var searchBar: UISearchBar!
     private let expandableView = ExpandableView()
     
     // MARK: - Lifecycle
@@ -94,6 +94,7 @@ class SelectedArticlesViewController: UIViewController {
     }
     
     private func setupSearchBar() {
+        searchBar = UISearchBar()
         expandableView.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         leftConstraint = searchBar.leftAnchor.constraint(equalTo: expandableView.leftAnchor)
