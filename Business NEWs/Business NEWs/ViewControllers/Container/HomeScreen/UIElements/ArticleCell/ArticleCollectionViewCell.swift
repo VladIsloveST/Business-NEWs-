@@ -97,7 +97,7 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func refresh(sender: UIRefreshControl) {
-        if articles.count == 12 { didFetchData(2, true) }
+        didFetchData(1, true)
         sender.endRefreshing()
     }
     
@@ -134,8 +134,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             portraitCell.mainLabel.text = article.title
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
-            portraitCell.imageView.setImage(article.urlToImage)
-            //portraitCell.setImageViewConstraints()
+            portraitCell.updateImage(from: article.urlToImage)
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)

@@ -31,7 +31,7 @@ class Presenter: ViewOutPut {
         self.networkDataFetcher = networkDataFetcher
         self.router = router
         
-        Array(0...1).forEach { index in
+        Array(0...5).forEach { index in
             getArticlesFromCategory(index: index)
         }
     }

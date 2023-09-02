@@ -11,7 +11,7 @@ import UIKit
 class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
-    var imageView = UIImageView()
+    var imageView = ResizableImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,19 +20,25 @@ class LargePortraitCell: BasicCollectionViewCell {
         imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    func updateImage(from url: String?) {
+        imageView.image = nil
+        //imageView.setImage(url)
+        imageView.image = UIImage(named: "error")
+    }
+    
     private func setConstraints() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.widthAnchor.constraint(equalTo: widthAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 200)
+            imageView.topAnchor.constraint(equalTo: topAnchor)
+          //  imageView.widthAnchor.constraint(equalTo: widthAnchor),
+          //  imageView.heightAnchor.constraint(equalToConstant: 200)
         ])
         
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -58,3 +64,19 @@ class LargePortraitCell: BasicCollectionViewCell {
     }
 }
 
+class ResizableImageView: UIImageView {
+    override var image: UIImage? {
+        didSet {
+            guard let image = image else { return }
+            if superview != nil {
+                let asp = (superview?.frame.width)! / image.size.width
+
+                let resizeConstraints = [
+                    self.widthAnchor.constraint(equalToConstant: image.size.width * asp),
+                    self.heightAnchor.constraint(equalToConstant: image.size.height * asp)
+                ]
+                addConstraints(resizeConstraints)
+            }
+        }
+    }
+}
