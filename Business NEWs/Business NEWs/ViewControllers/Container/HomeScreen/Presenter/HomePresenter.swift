@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ViewInPut: AnyObject {
     func success()
@@ -14,7 +15,8 @@ protocol ViewInPut: AnyObject {
 
 protocol ViewOutPut: AnyObject {
     var typesOfArticles: [[ArticleData]] { get set }
-    init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol)
+    init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
+         storageManager: Cashe, router: RouterProtocol)
     func tapOnTheSearch()
     func getArticlesFromCategory(index: Int, page: Int, isRefreshed: Bool)
 }
@@ -23,14 +25,22 @@ class Presenter: ViewOutPut {
     weak var view: ViewInPut?
     private let group = DispatchGroup()
     private let networkDataFetcher: NetworkDataFetcherProtocol
+    var storageManager: Cashe?
     var router: RouterProtocol?
     var typesOfArticles: [[ArticleData]] = Array(repeating: [], count: 8)
+    {
+        didSet {
+            print("update")
+        }
+    }
     
-    required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol, router: RouterProtocol) {
+    required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
+                  storageManager: Cashe, router: RouterProtocol) {
         self.view = view
         self.networkDataFetcher = networkDataFetcher
+        self.storageManager = storageManager
         self.router = router
-        
+
         Array(0...5).forEach { index in
             getArticlesFromCategory(index: index)
         }
@@ -48,6 +58,7 @@ class Presenter: ViewOutPut {
             
             switch result {
             case .success(let items):
+                self.storageManager?.save(articles: items.articles)
                 self.typesOfArticles[index].append(contentsOf: items.articles)
             case .failure(let error):
                 self.view?.failer(error: error)

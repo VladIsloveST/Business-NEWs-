@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol HomeViewControllerDelegate: AnyObject {
+protocol HomeViewControllerMenuDelegate: AnyObject {
     func didTapMenuButton()
 }
 
@@ -21,7 +21,7 @@ protocol ArticlesMovementDelegate: AnyObject {
 
 class HomeViewController: UIViewController {
     // MARK: - Properties
-    weak var delegate: HomeViewControllerDelegate?
+    weak var delegate: HomeViewControllerMenuDelegate?
     var presenter: ViewOutPut!
     
     private var moveToTop: () -> () = {}
@@ -205,6 +205,7 @@ extension HomeViewController: ViewInPut {
     func failer(error: Error) {
         DispatchQueue.main.async {
             self.showAlert("Error", message: error.localizedDescription)
+            self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         }
     }
 }

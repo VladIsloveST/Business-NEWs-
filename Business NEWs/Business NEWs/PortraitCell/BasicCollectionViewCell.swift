@@ -58,21 +58,8 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var authorLable: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Arial", size: 16)
-        label.textColor = .white
-        label.text = "Artiane de Vogue"
-        return label
-    }()
-    
-    private var publishedLable: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Arial", size: 16)
-        label.textColor = .white
-        label.text = "1h ago"
-        return label
-    }()
+    var authorLable = UILabel()
+    var publishedLable = UILabel()
     
     lazy var lableStackView: UIStackView = {
         let stackView = UIStackView()
@@ -109,6 +96,13 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupLableStackWith(size: CGFloat) {
+        authorLable.font = UIFont(name: "Arial", size: size)
+        authorLable.textColor = .white
+        publishedLable.font = UIFont(name: "Arial", size: size)
+        publishedLable.textColor = .white
     }
     
     func convertDateFormater(_ date: String, currentHour: Int) {
