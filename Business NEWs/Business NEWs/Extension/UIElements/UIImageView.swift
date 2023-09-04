@@ -9,16 +9,19 @@ import Foundation
 import UIKit
 
 extension UIImageView {
-    func setImage(_ imgURLString: String?) {
-        guard let imageURLString = imgURLString else {
-            self.image = UIImage(named: "error")
-            return
-        }
-        DispatchQueue.global().async { [weak self] in
-            let data = try? Data(contentsOf: URL(string: imageURLString)!)
-            DispatchQueue.main.async {
-                self?.image = (data != nil) ? UIImage(data: data!) : UIImage(named: "error")
-            }
-        }
-    }
+//    func loadImageFromDiskWith(fileName: String?) {
+//        let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+//        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+//        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+//        
+//        if let directoryPath = paths.first {
+//            guard let fileName = fileName else { return }
+//            DispatchQueue.main.async {
+//                let imageUrl = URL(fileURLWithPath: directoryPath).appendingPathComponent(fileName)
+//                self.image = UIImage(contentsOfFile: imageUrl.path)
+//                return
+//            }
+//        }
+//        self.image = nil
+//    }
 }

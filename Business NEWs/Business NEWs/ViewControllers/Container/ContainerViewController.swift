@@ -41,7 +41,7 @@ class ContainerViewController: UIViewController {
     }
 }
 
-extension ContainerViewController: HomeViewControllerDelegate {
+extension ContainerViewController: HomeViewControllerMenuDelegate {
     func didTapMenuButton() {
         toggleMenu(complition: nil)
     }

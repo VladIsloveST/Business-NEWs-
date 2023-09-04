@@ -131,6 +131,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
         let article = articles[indexPath.row]
         
         if indexPath.row % 4 == 0 {
+            portraitCell.setupLableStackWith(size: frame.size.width * 0.04)
             portraitCell.mainLabel.text = article.title
             portraitCell.authorLable.text = article.author
             portraitCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
@@ -141,6 +142,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             }
             return portraitCell
         } else {
+            smallCell.setupLableStackWith(size: frame.size.width * 0.04)
             smallCell.mainLabel.text = article.title
             smallCell.authorLable.text = article.author
             smallCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
