@@ -28,11 +28,6 @@ class Presenter: ViewOutPut {
     var storageManager: Cashe?
     var router: RouterProtocol?
     var typesOfArticles: [[ArticleData]] = Array(repeating: [], count: 8)
-    {
-        didSet {
-            print("update")
-        }
-    }
     
     required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
                   storageManager: Cashe, router: RouterProtocol) {
@@ -41,7 +36,7 @@ class Presenter: ViewOutPut {
         self.storageManager = storageManager
         self.router = router
 
-        Array(0...5).forEach { index in
+        Array(0...7).forEach { index in
             getArticlesFromCategory(index: index)
         }
     }

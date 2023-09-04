@@ -39,7 +39,7 @@ class SmallCell: BasicCollectionViewCell {
         
         lableStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            lableStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            lableStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
             lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
             lableStackView.rightAnchor.constraint(equalTo: buttonStackView.leftAnchor, constant: 0)
         ])

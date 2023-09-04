@@ -162,9 +162,9 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         moveToTop = { cell.scrollToTop() }
         if !presenter.typesOfArticles.isEmpty {
-            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
+            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row] //.filter
             cell.delegat = self
-            cell.articles = articlesOfTheSamePublisher
+            cell.articles = articlesOfTheSamePublisher.filter { $0.title != "[Removed]" } 
             cell.didFetchData = { [weak self] (page, isRefreshed) in
                 self?.presenter
                     .getArticlesFromCategory(index: indexPath.row, page: page, isRefreshed: isRefreshed)

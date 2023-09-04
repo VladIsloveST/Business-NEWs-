@@ -17,7 +17,7 @@ class ModuleBuilder: AssemblyBuilderProtocol {
     func createHomeBuilder(router: RouterProtocol) -> UIViewController {
         let homeView = HomeViewController()
         let networkDataFetcher = NetworkDataFetcher()
-        let storageManager = StorageManager()
+        let storageManager = StorageManager.shared
         let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
                                   storageManager: storageManager, router: router)
         homeView.presenter = presenter
