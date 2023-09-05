@@ -36,7 +36,7 @@ class Presenter: ViewOutPut {
         self.storageManager = storageManager
         self.router = router
 
-        Array(0...7).forEach { index in
+        Array(0...3).forEach { index in
             getArticlesFromCategory(index: index)
         }
     }

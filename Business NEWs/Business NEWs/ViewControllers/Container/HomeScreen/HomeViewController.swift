@@ -51,6 +51,16 @@ class HomeViewController: UIViewController {
         loadingIndicator.isAnimating = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        var isFirstAppear = true
+        if isFirstAppear {
+            Array(4...7).forEach { index in
+                presenter.getArticlesFromCategory(index: index, page: 1, isRefreshed: false)
+            }
+            isFirstAppear = false
+        }
+    }
+    
     @objc
     func scrollToTop() {
         moveToTop()
@@ -205,7 +215,7 @@ extension HomeViewController: ViewInPut {
     func failer(error: Error) {
         DispatchQueue.main.async {
             self.showAlert("Error", message: error.localizedDescription)
-            self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
+            //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         }
     }
 }

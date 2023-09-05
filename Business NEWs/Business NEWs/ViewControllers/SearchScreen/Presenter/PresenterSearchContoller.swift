@@ -12,29 +12,34 @@ protocol SearchViewInPut: AnyObject {
 }
 
 protocol SearchViewOutPut: AnyObject {
-    var mockData: [String] { get set }
-    init(view: SearchViewInPut, router: RouterProtocol)
-    func delete(_ atIndex: Int)
+    //var mockData: [String] { get set }  ???
+    init(view: SearchViewInPut, router: RouterProtocol, networkDataFetcher: NetworkDataFetcherProtocol)
+    //func delete(_ atIndex: Int)
     func turnBack()
+    func search(line: String)
 }
 
 class PresenterSearchContoller: SearchViewOutPut {
     
-    var mockData = ["First", "First", "First", "First", "First", "First", "First", "Second", "Third"]
-    var router: RouterProtocol?
-    weak var view: SearchViewInPut?
+    //var mockData = ["First", "Second", "Third"]
     
-    required init(view: SearchViewInPut, router: RouterProtocol) {
+    weak var view: SearchViewInPut?
+    var router: RouterProtocol?
+    var networkDataFetcher: NetworkDataFetcherProtocol?
+    
+    required init(view: SearchViewInPut, router: RouterProtocol, networkDataFetcher: NetworkDataFetcherProtocol) {
         self.view = view
         self.router = router
-    }
-    
-    func delete(_ atIndex: Int) {
-        mockData.remove(at: atIndex)
-        view?.showUpdateData()
+        self.networkDataFetcher = networkDataFetcher
     }
     
     func turnBack() {
         router?.popToRoot()
+    }
+    
+    func search(line: String) {
+        DispatchWorkItem { //[weak self] _ in 
+            self.networkDataFetcher?.getSearchArticles(fromSearch: line)
+        }.perform()
     }
 }
