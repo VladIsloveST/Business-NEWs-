@@ -14,9 +14,10 @@ protocol AssemblyBuilderProtocol {
 }
 
 class ModuleBuilder: AssemblyBuilderProtocol {
+    let networkDataFetcher = NetworkDataFetcher()
+    
     func createHomeBuilder(router: RouterProtocol) -> UIViewController {
         let homeView = HomeViewController()
-        let networkDataFetcher = NetworkDataFetcher()
         let storageManager = StorageManager.shared
         let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
                                   storageManager: storageManager, router: router)
@@ -26,7 +27,7 @@ class ModuleBuilder: AssemblyBuilderProtocol {
     
     func createSearchBuilder(router: RouterProtocol) -> UIViewController {
         let searchView = SearchViewController()
-        let searchPresenter = PresenterSearchContoller(view: searchView, router: router)
+        let searchPresenter = PresenterSearchContoller(view: searchView, router: router, networkDataFetcher: networkDataFetcher)
         searchView.presenter = searchPresenter
         return searchView
     }

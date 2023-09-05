@@ -39,7 +39,7 @@ class SearchViewController: UIViewController {
         setupHistoryView()
         setupNavBarButtons()
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
         gestureRecognizer.numberOfTapsRequired = 1
         searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
     }
@@ -112,7 +112,7 @@ class SearchViewController: UIViewController {
         containerView.layer.addShadow()
     }
     
-    private func flowDown() {
+    private func flowUp() {
         heightAnchorDown?.constant = historyTableView.contentSize.height
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
@@ -123,7 +123,7 @@ class SearchViewController: UIViewController {
     }
     
     @objc
-    private func flowUp() {
+    private func flowDown() {
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
         searchResultCollectioView.isScrollEnabled = true
@@ -147,19 +147,21 @@ class SearchViewController: UIViewController {
 // MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text, !text.isEmpty else { flowDown()
-            return }
+        guard let text = searchBar.text, !text.isEmpty else { return flowUp() }
         
-        flowUp()
+        flowDown()
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
             print("My Search Bar \(text)")
+            self?.presenter.search(line: text)
+            self?.historyTableView.added(item: text)
+            self?.historyTableView.reloadData()
         })
         print("textDidChange")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        flowDown()
+        flowUp()
     }
 }
 
@@ -201,6 +203,7 @@ extension SearchViewController: UICollectionViewDelegate {
 // MARK: - Collection View Data Source Prefetching
 extension SearchViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        // prefetching logic
     }
 }
 
@@ -211,8 +214,17 @@ extension SearchViewController: SearchViewInPut {
 }
 
 extension SearchViewController: PopOverTableViewDelegate {
-    func selectItem(indexPath: IndexPath) {
-        self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
-        //searchBar.text = historyTableView.cellConfigureArray[indexPath.row]
+    func selectItem(row: Int,  with action: Action) {
+        switch action {
+        case .delete:
+            self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
+        case .revert:
+            searchBar.text = historyTableView.mockData[row]
+        case .search:
+            let selectedRow = historyTableView.mockData[row]
+            searchBar.text = selectedRow
+            presenter.search(line: selectedRow)
+            flowDown()
+        }
     }
 }

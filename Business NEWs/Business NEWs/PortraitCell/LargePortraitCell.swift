@@ -28,7 +28,7 @@ class LargePortraitCell: BasicCollectionViewCell {
     
     func updateImage(from url: String?) {
         imageView.image = nil
-        imageView.image = storageManager.loadImageFromCasheFrom(url)
+        imageView.image = storageManager.loadImageFromCasheWith(url)
     }
     
     private func setConstraints() {
