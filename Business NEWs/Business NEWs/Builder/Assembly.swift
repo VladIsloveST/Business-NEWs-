@@ -27,7 +27,7 @@ class ModuleBuilder: AssemblyBuilderProtocol {
     
     func createSearchBuilder(router: RouterProtocol) -> UIViewController {
         let searchView = SearchViewController()
-        let searchPresenter = PresenterSearchContoller(view: searchView, router: router, networkDataFetcher: networkDataFetcher)
+        let searchPresenter = SearchPresenter(view: searchView, router: router, networkDataFetcher: networkDataFetcher)
         searchView.presenter = searchPresenter
         return searchView
     }

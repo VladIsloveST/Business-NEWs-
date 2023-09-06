@@ -17,6 +17,8 @@ class SearchViewController: UIViewController {
     private var searchResultCollectioView: UICollectionView!
     private var historyTableView: HistoryTableView!
     private var containerView: UIView!
+    private var loadingIndicator: ProgressView!
+    private let currentHour = Calendar.current.component(.hour, from: Date())
     
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
@@ -38,6 +40,7 @@ class SearchViewController: UIViewController {
         setUpContainerView()
         setupHistoryView()
         setupNavBarButtons()
+        setupIndicator()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
         gestureRecognizer.numberOfTapsRequired = 1
@@ -142,6 +145,18 @@ class SearchViewController: UIViewController {
     private func handleBack() {
         presenter.turnBack()
     }
+    
+    private func setupIndicator() {
+        loadingIndicator = ProgressView()
+        searchResultCollectioView.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: searchResultCollectioView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: searchResultCollectioView.centerYAnchor),
+            loadingIndicator.widthAnchor.constraint(equalToConstant: 50),
+            loadingIndicator.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
 }
 
 // MARK: - Search Bar Delegate
@@ -152,29 +167,46 @@ extension SearchViewController: UISearchBarDelegate {
         flowDown()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
-            print("My Search Bar \(text)")
-            self?.presenter.search(line: text)
+            //print("My Search Bar \(text)")
+            //self?.loadingIndicator.isAnimating = true // ???
+            self?.presenter.search(line: text.lowercased(), page: 1)
             self?.historyTableView.added(item: text)
             self?.historyTableView.reloadData()
         })
-        print("textDidChange")
+        //print("textDidChange")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         flowUp()
+    }
+    
+    func presentShareSheet(url: URL) {
+        DispatchQueue.main.async {
+            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.present(activityViewPopover, animated: true)
+        }
     }
 }
 
 // MARK: - Collection View Data Source
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        15
+        presenter.searchResultArticles.filter { $0.title != "[Removed]" }.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
         guard let searchCell = searchResultCollectioView.dequeueReusableCell(
             withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+        let article = presenter.searchResultArticles.filter { $0.title != "[Removed]" }[indexPath.row]
+        searchCell.setupLableStackWith(size: view.frame.width * 0.04)
+        searchCell.mainLabel.text = article.title
+        searchCell.authorLable.text = article.author
+        searchCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
+        searchCell.didShare = { [weak self] in
+            guard let url = URL(string: article.url) else { return }
+            self?.presentShareSheet(url: url)
+        }
         return searchCell
     }
     
@@ -209,7 +241,9 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
 
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
+        loadingIndicator.isAnimating = false
         self.historyTableView.reloadData()
+        self.searchResultCollectioView.reloadData()
     }
 }
 
@@ -222,8 +256,9 @@ extension SearchViewController: PopOverTableViewDelegate {
             searchBar.text = historyTableView.mockData[row]
         case .search:
             let selectedRow = historyTableView.mockData[row]
+            loadingIndicator.isAnimating = true
             searchBar.text = selectedRow
-            presenter.search(line: selectedRow)
+            presenter.search(line: selectedRow, page: 1)
             flowDown()
         }
     }
