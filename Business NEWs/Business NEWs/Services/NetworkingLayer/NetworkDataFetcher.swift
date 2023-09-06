@@ -21,7 +21,7 @@ enum CategoriesOfArticles: String, CaseIterable {
 protocol NetworkDataFetcherProtocol {
     func getArticlesCategoryFrom(_ index: Int, page: Int,
                                  complition: @escaping (Result<Articles, Error>)-> Void)
-    func getSearchArticles(fromSearch: String)
+    func getSearchArticles(fromSearch: String, page: Int, complition: @escaping (Result<Articles, Error>) -> Void)
 }
 
 class NetworkDataFetcher: NetworkDataFetcherProtocol {
@@ -51,7 +51,9 @@ class NetworkDataFetcher: NetworkDataFetcherProtocol {
         fetchTracks(url: url, response: complition)
     }
     
-    func getSearchArticles(fromSearch: String) {
+    func getSearchArticles(fromSearch: String, page: Int, complition: @escaping (Result<Articles, Error>) -> Void) {
         print("from NetworkDataFetcher")
+        let url = "https://newsapi.org/v2/everything?q=\(fromSearch)&pageSize=12&page=\(page)&" // ???
+        fetchTracks(url: url, response: complition)
     }
 }

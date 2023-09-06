@@ -48,7 +48,6 @@ class HomeViewController: UIViewController {
         setupIndicator()
         setupCollectionView()
         notifyCells()
-        loadingIndicator.isAnimating = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -108,6 +107,7 @@ class HomeViewController: UIViewController {
             loadingIndicator.widthAnchor.constraint(equalToConstant: 50),
             loadingIndicator.heightAnchor.constraint(equalToConstant: 50)
         ])
+        loadingIndicator.isAnimating = true
     }
     
     private func setupNavBar() {
@@ -172,7 +172,7 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
         moveToTop = { cell.scrollToTop() }
         if !presenter.typesOfArticles.isEmpty {
-            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row] //.filter
+            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegat = self
             cell.articles = articlesOfTheSamePublisher.filter { $0.title != "[Removed]" } 
             cell.didFetchData = { [weak self] (page, isRefreshed) in
