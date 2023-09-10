@@ -8,14 +8,15 @@
 import Foundation
 import UIKit
 
-enum NetworkError: Error {
-    case missingURL
-    case emptyData
-    case responseAbsent
-    case redirection
-    case clientError
-    case serverError
-    case statusCodeIsUnknown
+enum NetworkError: String, Error {
+    case missingURL = "URL is nil"
+    case emptyData = "Response returned with no data to decode."
+    case responseAbsent = "Response is nil"
+    case redirection = "You need to take additional steps to fulfill the request."
+    case clientError = "You need to be authenticated first."
+    case serverError = "Bad request"
+    case statusCodeIsUnknown = "Unknown response code status"
+    case internetConnectionError = "The Internet connection appears to be offline."
 }
 
 enum StatusCodeResult<Error> {

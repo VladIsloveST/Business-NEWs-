@@ -23,6 +23,8 @@ class HomeViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: HomeViewControllerMenuDelegate?
     var presenter: ViewOutPut!
+    var isFirstAppear = true
+    
     
     private var moveToTop: () -> () = {}
     private let articlesCollectionView: UICollectionView = {
@@ -39,6 +41,7 @@ class HomeViewController: UIViewController {
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
     private var timer: Timer!
+    var countOfItems = CategoriesOfArticles.allCases.count
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +54,9 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        var isFirstAppear = true
+        super.viewDidAppear(animated)
         if isFirstAppear {
-            Array(4...7).forEach { index in
+            Array(4...countOfItems - 1).forEach { index in
                 presenter.getArticlesFromCategory(index: index, page: 1, isRefreshed: false)
             }
             isFirstAppear = false
@@ -165,7 +168,7 @@ class HomeViewController: UIViewController {
 // MARK: - Table View Data Source
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        8
+        countOfItems
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -212,9 +215,9 @@ extension HomeViewController: ViewInPut {
         articlesCollectionView.reloadData()
     }
     
-    func failer(error: Error) {
+    func failer(error: NetworkError) {
         DispatchQueue.main.async {
-            self.showAlert("Error", message: error.localizedDescription)
+            self.showAlert("Error", message: error.rawValue)
             //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         }
     }

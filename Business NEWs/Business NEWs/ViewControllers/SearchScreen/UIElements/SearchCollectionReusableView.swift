@@ -10,6 +10,8 @@ import UIKit
 class SearchCollectionReusableView: UICollectionReusableView {
     static var identifier = "SearchCollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
+    private let bottomSeparator = UIView()
+    private let contentInsetViewTop = UIView()
     
     override init(frame: CGRect) {
         super .init(frame: frame)
@@ -22,7 +24,6 @@ class SearchCollectionReusableView: UICollectionReusableView {
     }
     
     private func setupSeparators() {
-        let bottomSeparator = UIView()
         addSubview(bottomSeparator)
         bottomSeparator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -32,7 +33,6 @@ class SearchCollectionReusableView: UICollectionReusableView {
         ])
         bottomSeparator.backgroundColor = .black
         
-        let contentInsetViewTop = UIView()
         addSubview(contentInsetViewTop)
         contentInsetViewTop.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -41,5 +41,15 @@ class SearchCollectionReusableView: UICollectionReusableView {
             contentInsetViewTop.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         contentInsetViewTop.backgroundColor = .systemGray3
+    }
+    
+    func add(_ element: UISearchBar) {
+        addSubview(element)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            element.leftAnchor.constraint(equalTo: leftAnchor, constant: 12),
+            element.rightAnchor.constraint(equalTo: rightAnchor, constant: -12),
+            element.heightAnchor.constraint(equalTo: heightAnchor, constant: -20),
+        ])
     }
 }

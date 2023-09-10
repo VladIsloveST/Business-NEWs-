@@ -97,7 +97,7 @@ class SelectedArticlesViewController: UIViewController {
         searchBar = UISearchBar()
         expandableView.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
-        leftConstraint = searchBar.leftAnchor.constraint(equalTo: expandableView.leftAnchor)
+        leftConstraint = searchBar.leftAnchor.constraint(equalTo: expandableView.leftAnchor, constant: 12)
         NSLayoutConstraint.activate([
             searchBar.rightAnchor.constraint(equalTo: expandableView.rightAnchor),
             searchBar.topAnchor.constraint(equalTo: expandableView.topAnchor),

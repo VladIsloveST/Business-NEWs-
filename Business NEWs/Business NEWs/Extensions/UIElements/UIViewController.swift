@@ -10,7 +10,9 @@ import UIKit
 
 extension UIViewController {
     func showAlert(_ title: String, message: String, actionTitle: String = "Cancel") {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let attributedStringForMessage = NSAttributedString(string: message, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)])
+        let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
+        alert.setValue(attributedStringForMessage, forKey: "attributedMessage")
         let action = UIAlertAction(title: actionTitle, style: .cancel)
         alert.addAction(action)
         present(alert, animated: true)
