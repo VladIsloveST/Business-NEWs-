@@ -34,8 +34,10 @@ class NetworkDataFetcher: NetworkDataFetcherProtocol {
                 do {
                     let articles = try JSONDecoder().decode(Articles.self, from: data)
                     response(.success(articles))
-                } catch let jsonError{
+                } catch let jsonError {
                     print("\(jsonError). Unable to decode")
+                    response(.failure(NetworkError.unableToDecode))
+
                 }
             case .failure(let error):
                 print("\(error) - .failure")

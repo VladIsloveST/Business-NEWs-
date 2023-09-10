@@ -37,12 +37,12 @@ class ModuleBuilder: AssemblyBuilderProtocol {
 
 // MARK: - update ???
 protocol HomeAssemblyProtocol {
-    func createHomeBuilder(router: RouterProtocol) -> UIViewController
+    static func createHomeBuilder(router: RouterProtocol) -> UIViewController
 }
 
 class HomeAssembly: HomeAssemblyProtocol {
-    func createHomeBuilder(router: RouterProtocol) -> UIViewController {
-        let networkDataFetcher = NetworkDataFetcher()
+    static func createHomeBuilder(router: RouterProtocol) -> UIViewController {
+        let networkDataFetcher = NetworkDataFetcher()  // в білдері
         let homeView = HomeViewController()
         let storageManager = CasheManager.shared
         let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
@@ -53,12 +53,12 @@ class HomeAssembly: HomeAssemblyProtocol {
 }
 
 protocol SearchAssemblyProtocol {
-    func createSearchBuilder(router: RouterProtocol) -> UIViewController
+    static func createSearchBuilder(router: RouterProtocol) -> UIViewController
 }
 
 class SearchAssembly: SearchAssemblyProtocol {
-    func createSearchBuilder(router: RouterProtocol) -> UIViewController {
-        let networkDataFetcher = NetworkDataFetcher()
+    static func createSearchBuilder(router: RouterProtocol) -> UIViewController {
+        let networkDataFetcher = NetworkDataFetcher()   // в білдері
         let searchView = SearchViewController()
         let searchPresenter = SearchPresenter(view: searchView,
                                               router: router, networkDataFetcher: networkDataFetcher)
@@ -68,5 +68,14 @@ class SearchAssembly: SearchAssemblyProtocol {
 }
 
 final class Builder {
+    var homeScreen: HomeAssemblyProtocol!
+    var searchScreen: SearchAssemblyProtocol!
     
+    init() {
+        //         let networkDataFetcher = NetworkDataFetcher()
+
+//        homeScreen = HomeAssembly.createHomeBuilder(router: <#T##RouterProtocol#>)
+          
+//        searchScreen = SearchAssembly.createSearchBuilder(router: <#T##RouterProtocol#>)
+    }
 }

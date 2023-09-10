@@ -47,6 +47,8 @@ class SelectedArticlesViewController: UIViewController {
             savedCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         savedCollectionView.backgroundColor = .systemGray3
+        savedCollectionView.bounces = false
+
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {

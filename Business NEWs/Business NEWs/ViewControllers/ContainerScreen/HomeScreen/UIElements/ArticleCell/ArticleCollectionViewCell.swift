@@ -140,6 +140,12 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
             }
+            switch portraitCell.buttonSaving.isSelected {
+            case true:
+                print("save")
+            case false:
+                print("delete")
+            }
             return portraitCell
         } else {
             smallCell.setupLableStackWith(size: frame.size.width * 0.04)
@@ -149,6 +155,12 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             smallCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegat?.presentShareSheet(url: url)
+            }
+            switch smallCell.buttonSaving.isSelected {
+            case true:
+                print("save")
+            case false:
+                print("delete")
             }
             return smallCell
         }
