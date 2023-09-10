@@ -23,7 +23,7 @@ class SearchViewController: UIViewController {
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
     
-    private lazy var searchBar:UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
@@ -108,7 +108,7 @@ class SearchViewController: UIViewController {
         heightAnchorDown = containerView.heightAnchor.constraint(equalToConstant: 0)
         heightAnchorUp = containerView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
-            containerView.widthAnchor.constraint(equalToConstant: view.frame.width - 24),
+            containerView.widthAnchor.constraint(equalToConstant: view.frame.width - 50),
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containerView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 53)
         ])
@@ -166,9 +166,10 @@ extension SearchViewController: UISearchBarDelegate {
         
         flowDown()
         timer?.invalidate()
+        
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
             //print("My Search Bar \(text)")
-            //self?.loadingIndicator.isAnimating = true // ???
+            // self?.loadingIndicator.isAnimating = true
             self?.presenter.search(line: text.lowercased(), page: 1)
             self?.historyTableView.added(item: text)
             self?.historyTableView.reloadData()
@@ -213,15 +214,14 @@ extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind
                         kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind, withReuseIdentifier: SearchCollectionReusableView.identifier, for: indexPath)
-                as? SearchCollectionReusableView else { return UICollectionReusableView() }
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            header.addSubview(searchBar)
+            ofKind: kind,
+            withReuseIdentifier: SearchCollectionReusableView.identifier,
+            for: indexPath) as? SearchCollectionReusableView else { return UICollectionReusableView() }
+        if (kind == UICollectionView.elementKindSectionHeader) {
+            header.add(searchBar)
             return header
-        default:
-            return UICollectionReusableView()
         }
+        return UICollectionReusableView()
     }
 }
 
@@ -241,8 +241,7 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
 
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
-        loadingIndicator.isAnimating = false
-        self.historyTableView.reloadData()
+        //loadingIndicator.isAnimating = false
         self.searchResultCollectioView.reloadData()
     }
 }

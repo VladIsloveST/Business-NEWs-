@@ -14,8 +14,8 @@ protocol Cashe {
     static var shared: Cashe { get set }
 }
 
-final class StorageManager: Cashe {
-    static var shared: Cashe = StorageManager()
+final class CasheManager: Cashe {
+    static var shared: Cashe = CasheManager()
     private init() {}
     let imageCashe = NSCache<NSString, UIImage>()
     

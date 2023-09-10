@@ -10,7 +10,7 @@ import UIKit
 
 protocol ViewInPut: AnyObject {
     func success()
-    func failer(error: Error)
+    func failer(error: NetworkError)
 }
 
 protocol ViewOutPut: AnyObject {
@@ -56,7 +56,7 @@ class Presenter: ViewOutPut {
                 self.storageManager?.save(articles: items.articles)
                 self.typesOfArticles[index].append(contentsOf: items.articles)
             case .failure(let error):
-                self.view?.failer(error: error)
+                self.view?.failer(error: (error as? NetworkError) ?? NetworkError.internetConnectionError)
             }
             self.group.leave()
         }

@@ -12,14 +12,14 @@ class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
     var imageView = ResizableImageView()
-    let storageManager = StorageManager.shared
+    let storageManager = CasheManager.shared
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(imageView)
         setConstraints()
         imageView.backgroundColor = .white
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
     }
     
     required init?(coder: NSCoder) {
