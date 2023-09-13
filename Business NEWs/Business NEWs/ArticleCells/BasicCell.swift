@@ -10,11 +10,13 @@ import UIKit
 class BasicCollectionViewCell: UICollectionViewCell {
         
     var didShare: () -> () = {}
+    var didSelected: () -> () = {}
     
     let buttonSaving: UIButton = {
         let button = UIButton(normalStateImage: "bookmark",
                               selectedStateImage: "bookmark.fill")
         button.addTarget(self, action: #selector(tappedSelect), for: .touchUpInside)
+        button.tintColor = .myTextColor
         return button
     }()
     
@@ -27,9 +29,11 @@ class BasicCollectionViewCell: UICollectionViewCell {
         switch buttonSaving.isSelected {
         case true:
             print("Not Selected")
+            didSelected()
             return buttonSaving.isSelected = false
         case false:
             print("Selected")
+            didSelected()
             return buttonSaving.isSelected = true
         }
     }
@@ -38,6 +42,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up")
         button.addTarget(self, action: #selector(presentShareSheet), for: .touchDown)
+        button.tintColor = .myTextColor
         button.becomeFirstResponder()
         return button
     }()
@@ -50,7 +55,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
     var mainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
-        label.textColor = .white
+        label.textColor = .myTextColor
         label.text = "Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium. Helvetica Neue Medium."
         label.numberOfLines = 0
         label.setLineSpacing(lineSpacing: 3)
@@ -83,10 +88,11 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        //coreDataManager = CoreDataManager.shared
         addSubview(mainLabel)
         addSubview(buttonStackView)
         addSubview(lableStackView)
-        backgroundColor = .darkGray
+        backgroundColor = .cellBackgroundColor
         
         buttonStackView.addArrangedSubview(buttonShare)
         buttonStackView.addArrangedSubview(buttonSaving)
@@ -100,9 +106,17 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     func setupLableStackWith(size: CGFloat) {
         authorLable.font = UIFont(name: "Arial", size: size)
-        authorLable.textColor = .white
+        authorLable.textColor = .myTextColor
         publishedLable.font = UIFont(name: "Arial", size: size)
-        publishedLable.textColor = .white
+        publishedLable.textColor = .myTextColor
+    }
+    
+    func setupLableTextColor() {
+        authorLable.textColor = .myTextColor
+        publishedLable.textColor = .myTextColor
+        mainLabel.textColor = .myTextColor
+//        buttonShare.tintColor = .myTextColor
+//        buttonSaving.tintColor = .myTextColor
     }
     
     func convertDateFormater(_ date: String, currentHour: Int) {

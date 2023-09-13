@@ -7,32 +7,29 @@
 
 import UIKit
 
-class ArticleCollectionViewCell: UICollectionViewCell {
+class ArticlesCollectionViewCell: UICollectionViewCell {
     static let identifier = "ArticleCollectionViewCell"
     
     var articleCollectionView: UICollectionView!
     private var refreshControl: UIRefreshControl!
     private var separatorLine: UIView!
-    var delegat: HomeViewControllerShareDelegate?
+    private var coreDataManager: CoreDataProtocol!
+    var delegate: HomeViewControllerDelegate?
+     
+    
     private let currentHour = Calendar.current.component(.hour, from: Date())
     var didFetchData: (Int, Bool) -> () = { _,_ in }
     
-    //    private var page = 1
-    //    private var totalNumbers = 12 {
-    //        didSet {
-    //            print("totalNumbers increase")
-    //            articleCollectionView.reloadData()
-    //        }
-    //    }
-    
+    private var page = 1
     var articles: [ArticleData] = [] {
         didSet {
-            articleCollectionView.reloadData()
+            performBatchUpdates()
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        coreDataManager = CoreDataManager.shared
         setupCollectionView()
         setupRefreshControl()
         addSeparatorLineView()
@@ -83,7 +80,6 @@ class ArticleCollectionViewCell: UICollectionViewCell {
             articleCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
         articleCollectionView.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 20, right: 0)
-        articleCollectionView.backgroundColor = .systemGray3
     }
     
     private func setupRefreshControl() {
@@ -116,12 +112,21 @@ class ArticleCollectionViewCell: UICollectionViewCell {
     func scrollToTop() {
         self.articleCollectionView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
     }
+        
+    private func performBatchUpdates() {
+        let indexPath = IndexPath(item: self.articles.count - 1, section: 0)
+        let indexPaths: [IndexPath] = [indexPath]
+
+        articleCollectionView.performBatchUpdates({ () -> Void in
+            articleCollectionView.insertItems(at: indexPaths)
+        }, completion: nil)
+    }
 }
 
 // MARK: - Collection View Data Source
-extension ArticleCollectionViewCell: UICollectionViewDataSource {
+extension ArticlesCollectionViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        articles.count //totalNumbers
+        articles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -138,13 +143,16 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             portraitCell.updateImage(from: article.urlToImage)
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
-                self?.delegat?.presentShareSheet(url: url)
+                self?.delegate?.presentShareSheet(url: url)
             }
-            switch portraitCell.buttonSaving.isSelected {
-            case true:
-                print("save")
-            case false:
-                print("delete")
+            portraitCell.didSelected = { [weak self] in
+                switch portraitCell.buttonSaving.isSelected {
+                case true:
+                    print("delete")
+                case false:
+                    self?.coreDataManager.createArticle(article)
+                    print("save")
+                }
             }
             return portraitCell
         } else {
@@ -154,13 +162,7 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
             smallCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
             smallCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
-                self?.delegat?.presentShareSheet(url: url)
-            }
-            switch smallCell.buttonSaving.isSelected {
-            case true:
-                print("save")
-            case false:
-                print("delete")
+                self?.delegate?.presentShareSheet(url: url)
             }
             return smallCell
         }
@@ -168,20 +170,16 @@ extension ArticleCollectionViewCell: UICollectionViewDataSource {
 }
 
 // MARK: - Collection View Data Source Prefetching
-extension ArticleCollectionViewCell: UICollectionViewDataSourcePrefetching {
+extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        //        let filtered = indexPaths.filter({ $0.row >= totalNumbers - 1})
-        //        if filtered.count > 0 {
-        //            totalNumbers += 12
-        //            page += 1
-        //            self.didFetchData(page, false)
-        //        }
-        //        filtered.forEach({_ in
-        //        })
+        let filtered = indexPaths.filter({ $0.row >= articles.count - 4 })
+        if filtered.count > 0 {
+            page += 1
+            self.didFetchData(page, false)
+        }
     }
 }
 
 // MARK: - Collection View Delegate
-extension ArticleCollectionViewCell: UICollectionViewDelegate {
+extension ArticlesCollectionViewCell: UICollectionViewDelegate {
 }
-

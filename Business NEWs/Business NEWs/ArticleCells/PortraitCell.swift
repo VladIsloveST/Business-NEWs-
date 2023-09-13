@@ -13,7 +13,6 @@ class PortraitCell: BasicCollectionViewCell {
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        imageView.backgroundColor = .orange
         addSubview(imageView)
         addSubview(mainLabel)
         addSubview(buttonStackView)

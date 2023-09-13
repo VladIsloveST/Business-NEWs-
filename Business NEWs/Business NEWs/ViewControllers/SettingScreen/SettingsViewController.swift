@@ -12,8 +12,9 @@ protocol TabBarControllerDelegate: AnyObject {
 }
 
 class SettingsViewController: UIViewController {
-    
     weak var delegate: TabBarControllerDelegate?
+    weak var settingDelegate: SettingViewControllerDelegate?
+    var themeManager: ThemeManagerProtocol!
     
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
@@ -23,6 +24,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        themeManager = ThemeManager.shared
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
@@ -79,6 +81,13 @@ extension SettingsViewController: UITableViewDataSource {
         let image = namesOfCells[indexPath.section][indexPath.row].1
         switch section {
         case 0:
+            if indexPath.row == 0 {
+                cell.setupSwitcher(isOn: self.themeManager.isDark)
+                cell.didChangeTheme = { [weak self] isDark in
+                    self?.themeManager.isDark = isDark
+                    self?.settingDelegate?.changeThema()
+                }
+            }
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
         case 1:
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)

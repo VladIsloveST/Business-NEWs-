@@ -18,8 +18,8 @@ enum CoreDataError: Error {
 protocol CoreDataProtocol {
     static var shared: CoreDataProtocol { get set }
     func createArticle(_ articleData: ArticleData)
-    func deleteArticle(id: String)
     func fetchArticles() -> [Article]
+    func deleteArticle(id: String)
 }
 
 final class CoreDataManager: NSObject, CoreDataProtocol {
@@ -35,24 +35,13 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
     }
     
     func createArticle(_ articleData: ArticleData) {
-        guard let articleDescription = NSEntityDescription
-            .entity(forEntityName: "Article", in: context)
-        else { return print(CoreDataError.unableToCreateDescription) }
+        guard let articleDescription = NSEntityDescription.entity(forEntityName: "Articl", in: context)
+        else { return print(CoreDataError.unableToCreateDescription) }  // context != nil
         let article = Article(entity: articleDescription, insertInto: context)
         article.title = articleData.title
         article.author = articleData.author
         article.url = articleData.url
         article.publishedAt = articleData.publishedAt
-        appDelegate.saveContext()
-    }
-    
-    func deleteArticle(id: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
-        do {
-            guard let articles = try? context.fetch(fetchRequest) as? [Article],
-                  let article = articles.first(where: { $0.publishedAt == id }) else { return }
-            context.delete(article)
-        }
         appDelegate.saveContext()
     }
     
@@ -64,6 +53,16 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
             print(CoreDataError.unableToFetchArticlesFromContext)
         }
         return []
+    }
+    
+    func deleteArticle(id: String) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
+        do {
+            guard let articles = try? context.fetch(fetchRequest) as? [Article],
+                  let article = articles.first(where: { $0.publishedAt == id }) else { return }
+            context.delete(article)
+        }
+        appDelegate.saveContext()
     }
     
     //    func fetchArticle(with title: String) -> Article? {

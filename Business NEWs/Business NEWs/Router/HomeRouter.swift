@@ -38,13 +38,14 @@ class HomeRouter: RouterProtocol {
     func showSearch() {
         if let navigatinController = navigatinController {
             guard let searchViewController = assemblyBuilder?.createSearchBuilder(router: self) else { return }
-            navigatinController.pushViewController(searchViewController, animated: true)
+            navigatinController.navigationBar.barTintColor = .orange
+            navigatinController.pushViewController(searchViewController, animated: false)
         }
     }
     
     func popToRoot() {
         if let navigatinController = navigatinController {
-            navigatinController.popToRootViewController(animated: true)
+            navigatinController.popToRootViewController(animated: false)
         }
     }
 }

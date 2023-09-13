@@ -9,9 +9,12 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
+    var containerViewController: ContainerViewController!
+    
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        containerViewController = ContainerViewController()
         configureTabBar()
         setupViewControllers()
     }
@@ -35,6 +38,8 @@ class TabBarController: UITabBarController {
         if #available(iOS 15.0, *) {
             let settingsVC = SettingsViewController()
             settingsVC.delegate = self
+            let homeViewController = containerViewController?.navgationController.viewControllers.first
+            settingsVC.settingDelegate = (homeViewController as? SettingViewControllerDelegate)
             present(settingsVC, animated: true)
         }
     }
@@ -45,7 +50,7 @@ class TabBarController: UITabBarController {
                                 title: "Saved",
                                 systemImageName: "bookmark",
                                 selectedImageName: "bookmark.fill"),
-            createTabBarItem(ContainerViewController(),
+            createTabBarItem(containerViewController,
                              title: "Home",
                              imageName: "house",
                              selectedImageName: "house.fill"),
@@ -72,7 +77,6 @@ extension TabBarController: UITabBarControllerDelegate {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
             return true
         }
-        
         if selectedIndex == 2 {
             return false
         }

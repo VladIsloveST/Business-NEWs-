@@ -6,9 +6,9 @@
 //
 
 import UIKit
+
 class SettingTableViewCell: UITableViewCell {
     static let idettifire = "SettingTableViewCell"
-    
     private var infoLabel = UILabel()
     private var infoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +19,7 @@ class SettingTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let forwardImageView: UIImageView = {
+    private var forwardImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .lightGray
         let configuration = UIImage.SymbolConfiguration(weight: .bold)
@@ -28,6 +28,9 @@ class SettingTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private var switcher: UISwitch!
+    var didChangeTheme: (Bool) -> () = { _ in }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -35,14 +38,6 @@ class SettingTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configureUIElement(labelText: String, imageName: String, imageColor: UIColor) {
-        infoLabel.text = labelText
-        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
-        let image = UIImage(systemName: imageName, withConfiguration: configuration)
-        infoImageView.image = image
-        infoImageView.backgroundColor = imageColor
     }
     
     private func setupConstraints() {
@@ -68,5 +63,35 @@ class SettingTableViewCell: UITableViewCell {
             forwardImageView.heightAnchor.constraint(equalToConstant: 18),
             forwardImageView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+    }
+    
+    func configureUIElement(labelText: String, imageName: String, imageColor: UIColor) {
+        infoLabel.text = labelText
+        let configuration = UIImage.SymbolConfiguration(weight: .regular)
+        let image = UIImage(systemName: imageName, withConfiguration: configuration)
+        infoImageView.image = image
+        infoImageView.backgroundColor = imageColor
+    }
+    
+    func setupSwitcher(isOn: Bool) {
+        switcher = UISwitch()
+        let centerYAnchorConstant = (switcher.frame.height - frame.height) / 2
+        contentView.addSubview(switcher)
+        switcher.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            switcher.rightAnchor.constraint(equalTo: rightAnchor, constant: -30),
+            switcher.widthAnchor.constraint(equalToConstant: 40),
+            switcher.heightAnchor.constraint(equalToConstant: 18),
+            switcher.centerYAnchor.constraint(equalTo: centerYAnchor, constant: centerYAnchorConstant)
+        ])
+        forwardImageView.isHidden = true
+        switcher.isOn = isOn
+        switcher.becomeFirstResponder()
+        switcher.addTarget(self, action: #selector(changeColor), for: .valueChanged)
+        switcher.onTintColor = .darkGray
+    }
+    
+    @objc private func changeColor() {
+        didChangeTheme(switcher.isOn)
     }
 }
