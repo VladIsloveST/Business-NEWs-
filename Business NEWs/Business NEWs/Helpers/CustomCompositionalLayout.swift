@@ -32,7 +32,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
         
             if layoutAttribute.indexPath.item % numberOfItemsInSection == 0 {
                 lightSeparatorAttribute.frame = CGRect(x: cellFrame.origin.x, y: cellFrame.origin.y - 41,
-                                                  width: cellFrame.size.width, height: 2)
+                                                       width: cellFrame.size.width, height: 1.5)
                 decorationAttributes.append(lightSeparatorAttribute)
                 lightSeparatorAttribute.zIndex = Int.max
             } else {
@@ -64,7 +64,7 @@ private final class DarkSeparator: UICollectionReusableView {
 private final class LightSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
+        self.backgroundColor = .darkGray
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -188,16 +188,7 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticlesCollectionViewCell else { return UICollectionViewCell() }
         moveToTop = { cell.scrollToTop() }
-        changeThemaInCell = {
-            cell.articleCollectionView.backgroundColor = .myBackgroundColor
-            cell.articleCollectionView.cells.forEach { cellsmall in
-                cellsmall.backgroundColor = .cellBackgroundColor
-                let basicCell = cellsmall as? BasicCollectionViewCell
-               // basicCell?.setupLableTextColor()
-                basicCell?.buttonShare.tintColor = .myTextColor
-                basicCell?.buttonSaving.tintColor = .myTextColor
-            }
-        }
+        changeThemaInCell = { cell.cells.forEach{$0.setupColor()} }
         if !presenter.typesOfArticles.isEmpty {
             let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegate = self
@@ -267,6 +258,7 @@ extension HomeViewController: HomeViewControllerDelegate {
 // MARK: - Change color
 extension HomeViewController: SettingViewControllerDelegate {
     func changeThema() {
-       changeThemaInCell()
+        articlesCollectionView.backgroundColor = .myBackgroundColor
+        changeThemaInCell()
     }
 }

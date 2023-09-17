@@ -15,7 +15,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     private var separatorLine: UIView!
     private var coreDataManager: CoreDataProtocol!
     var delegate: HomeViewControllerDelegate?
-     
+    var cells = [BasicCollectionViewCell]()
     
     private let currentHour = Calendar.current.component(.hour, from: Date())
     var didFetchData: (Int, Bool) -> () = { _,_ in }
@@ -80,6 +80,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
             articleCollectionView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
         articleCollectionView.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 20, right: 0)
+        articleCollectionView.backgroundColor = .clear
     }
     
     private func setupRefreshControl() {
@@ -116,7 +117,6 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     private func performBatchUpdates() {
         let indexPath = IndexPath(item: self.articles.count - 1, section: 0)
         let indexPaths: [IndexPath] = [indexPath]
-
         articleCollectionView.performBatchUpdates({ () -> Void in
             articleCollectionView.insertItems(at: indexPaths)
         }, completion: nil)
@@ -154,6 +154,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
                     print("save")
                 }
             }
+            cells.append(portraitCell)
             return portraitCell
         } else {
             smallCell.setupLableStackWith(size: frame.size.width * 0.04)
@@ -164,6 +165,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)
             }
+            cells.append(smallCell)
             return smallCell
         }
     }

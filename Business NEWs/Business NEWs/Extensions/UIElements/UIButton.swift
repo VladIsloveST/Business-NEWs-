@@ -12,11 +12,10 @@ extension UIButton {
     convenience init(normalStateImage: String, selectedStateImage: String) {
         self.init()
         let configuration = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular, scale: .large)
-        let normalStateImage = UIImage(systemName: normalStateImage, withConfiguration: configuration)?
-            .withTintColor(.myTextColor, renderingMode: .alwaysOriginal)
+        let normalStateImage = UIImage(systemName: normalStateImage, withConfiguration: configuration)
+        normalStateImage?.withRenderingMode(.alwaysTemplate)
         let selectedStateImage = UIImage(systemName: selectedStateImage, withConfiguration: configuration)
-//        ?
-//            .withTintColor(.myTextColor, renderingMode: .alwaysOriginal)
+        selectedStateImage?.withRenderingMode(.alwaysTemplate)
         self.setImage(normalStateImage, for: .normal)
         self.setImage(selectedStateImage, for: .selected)
         self.isSelected = false

@@ -16,13 +16,8 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let button = UIButton(normalStateImage: "bookmark",
                               selectedStateImage: "bookmark.fill")
         button.addTarget(self, action: #selector(tappedSelect), for: .touchUpInside)
-        button.tintColor = .myTextColor
         return button
     }()
-    
-    private var publicationDate = ""
-    private var hoursAgo = 0
-    var note = " • recently"
     
     @objc
     private func tappedSelect() {
@@ -42,8 +37,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up")
         button.addTarget(self, action: #selector(presentShareSheet), for: .touchDown)
-        button.tintColor = .myTextColor
-        button.becomeFirstResponder()
         return button
     }()
     
@@ -86,18 +79,18 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
+    private var publicationDate = ""
+    private var hoursAgo = 0
+    var note = " • recently"
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //coreDataManager = CoreDataManager.shared
         addSubview(mainLabel)
         addSubview(buttonStackView)
         addSubview(lableStackView)
         backgroundColor = .cellBackgroundColor
-        
-        buttonStackView.addArrangedSubview(buttonShare)
-        buttonStackView.addArrangedSubview(buttonSaving)
-        lableStackView.addArrangedSubview(authorLable)
-        lableStackView.addArrangedSubview(publishedLable)
+        buttonShare.tintColor = .myTextColor
+        buttonSaving.tintColor = .myTextColor
     }
     
     required init?(coder: NSCoder) {
@@ -111,12 +104,13 @@ class BasicCollectionViewCell: UICollectionViewCell {
         publishedLable.textColor = .myTextColor
     }
     
-    func setupLableTextColor() {
+    func setupColor() {
+        backgroundColor = .cellBackgroundColor
+        mainLabel.textColor = .myTextColor
         authorLable.textColor = .myTextColor
         publishedLable.textColor = .myTextColor
-        mainLabel.textColor = .myTextColor
-//        buttonShare.tintColor = .myTextColor
-//        buttonSaving.tintColor = .myTextColor
+        buttonShare.tintColor = .myTextColor
+        buttonSaving.tintColor = .myTextColor
     }
     
     func convertDateFormater(_ date: String, currentHour: Int) {
