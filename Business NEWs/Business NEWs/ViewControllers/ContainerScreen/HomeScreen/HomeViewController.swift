@@ -11,12 +11,16 @@ protocol HomeViewControllerMenuDelegate: AnyObject {
     func didTapMenuButton()
 }
 
-protocol HomeViewControllerShareDelegate: AnyObject {
+protocol HomeViewControllerDelegate: AnyObject {
     func presentShareSheet(url: URL)
 }
 
 protocol ArticlesMovementDelegate: AnyObject {
     func scrollToMenu(index: Int)
+}
+
+protocol SettingViewControllerDelegate: AnyObject {
+    func changeThema()
 }
 
 class HomeViewController: UIViewController {
@@ -25,9 +29,15 @@ class HomeViewController: UIViewController {
     var presenter: ViewOutPut!
     var isFirstAppear = true
     
-    
     private var moveToTop: () -> () = {}
-    private let articlesCollectionView: UICollectionView = {
+    private var changeThemaInCell: () -> () = {} {
+        didSet {
+            changeThemaInCell()
+        }
+    }
+//    var appendArticles: (Int?) -> () = { index in }
+    
+    let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
@@ -42,7 +52,7 @@ class HomeViewController: UIViewController {
     private var topMenu: UIMenu!
     private var timer: Timer!
     var countOfItems = CategoriesOfArticles.allCases.count
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTopMenu()
@@ -51,6 +61,11 @@ class HomeViewController: UIViewController {
         setupIndicator()
         setupCollectionView()
         notifyCells()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        changeThema() 
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,8 +87,8 @@ class HomeViewController: UIViewController {
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
         
-        articlesCollectionView.register(ArticleCollectionViewCell.self,
-                                        forCellWithReuseIdentifier: ArticleCollectionViewCell.identifier)
+        articlesCollectionView.register(ArticlesCollectionViewCell.self,
+                                        forCellWithReuseIdentifier: ArticlesCollectionViewCell.identifier)
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -156,7 +171,7 @@ class HomeViewController: UIViewController {
         timer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
             if visibleCells.isEmpty { self?.timer.invalidate() }
             visibleCells.forEach({ cell in
-                (cell as? ArticleCollectionViewCell)?.articleCollectionView.visibleCells.filter {
+                (cell as? ArticlesCollectionViewCell)?.articleCollectionView.visibleCells.filter {
                     ($0 as? BasicCollectionViewCell)?.note != " • lately" }.forEach { cell in
                         (cell as? BasicCollectionViewCell)?.updatePublishedLabel()
                     }
@@ -172,12 +187,16 @@ extension HomeViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticleCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell",
+                                                                    for: indexPath)
+                as? ArticlesCollectionViewCell else { return UICollectionViewCell() }
         moveToTop = { cell.scrollToTop() }
+        changeThemaInCell = { cell.cells.forEach{ $0.setupColor() } }
+        
         if !presenter.typesOfArticles.isEmpty {
-            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
-            cell.delegat = self
-            cell.articles = articlesOfTheSamePublisher.filter { $0.title != "[Removed]" } 
+            cell.delegate = self
+            let articles = presenter.typesOfArticles[indexPath.row]
+            cell.articles = articles
             cell.didFetchData = { [weak self] (page, isRefreshed) in
                 self?.presenter
                     .getArticlesFromCategory(index: indexPath.row, page: page, isRefreshed: isRefreshed)
@@ -216,9 +235,9 @@ extension HomeViewController: ViewInPut {
     }
     
     func failer(error: NetworkError) {
+        //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         DispatchQueue.main.async {
             self.showAlert("Error", message: error.rawValue)
-            //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         }
     }
 }
@@ -230,11 +249,20 @@ extension HomeViewController: ArticlesMovementDelegate {
     }
 }
 
-extension HomeViewController: HomeViewControllerShareDelegate {
+extension HomeViewController: HomeViewControllerDelegate {
     func presentShareSheet(url: URL) {
         DispatchQueue.main.async {
             let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             self.present(activityViewPopover, animated: true)
         }
+    }
+}
+
+
+// MARK: - Change color
+extension HomeViewController: SettingViewControllerDelegate {
+    func changeThema() {
+        articlesCollectionView.backgroundColor = .myBackgroundColor
+        changeThemaInCell()
     }
 }

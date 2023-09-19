@@ -20,22 +20,25 @@ enum CategoriesOfArticles: String, CaseIterable {
 
 protocol NetworkDataFetcherProtocol {
     func getArticlesCategoryFrom(_ index: Int, page: Int,
-                                 complition: @escaping (Result<Articles, Error>)-> Void)
+                                 complition: @escaping (Result<Articles, Error>) -> Void)
     func getSearchArticles(fromSearch: String, page: Int, complition: @escaping (Result<Articles, Error>) -> Void)
 }
 
 class NetworkDataFetcher: NetworkDataFetcherProtocol {
+    typealias ArticlesClousure = (Result<Articles, Error>) -> Void
     let networkService = NetworkService()
     
-    private func fetchTracks(url: String, response: @escaping (Result<Articles, Error>) -> Void ) {
+    private func fetchTracks(url: String, response: @escaping ArticlesClousure ) {
         networkService.requestFrom(urlWitoutApiKey: url) { result in
             switch result {
             case .success(let data):
                 do {
                     let articles = try JSONDecoder().decode(Articles.self, from: data)
                     response(.success(articles))
-                } catch let jsonError{
+                } catch let jsonError {
                     print("\(jsonError). Unable to decode")
+                    response(.failure(NetworkError.unableToDecode))
+
                 }
             case .failure(let error):
                 print("\(error) - .failure")

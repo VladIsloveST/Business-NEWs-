@@ -12,8 +12,9 @@ protocol TabBarControllerDelegate: AnyObject {
 }
 
 class SettingsViewController: UIViewController {
-    
     weak var delegate: TabBarControllerDelegate?
+    weak var settingDelegate: SettingViewControllerDelegate?
+    var themeManager: ThemeManagerProtocol!
     
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
@@ -23,6 +24,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        themeManager = ThemeManager.shared
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
@@ -43,7 +45,7 @@ class SettingsViewController: UIViewController {
         tableView.contentInset.top = -5
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.idettifire)
+        tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.identifier)
         tableView.separatorInset.right = 20
         tableView.separatorInset.left = 55
         view.addSubview(tableView)
@@ -73,12 +75,19 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.idettifire, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
         let section = indexPath.section
         let text = namesOfCells[indexPath.section][indexPath.row].0
         let image = namesOfCells[indexPath.section][indexPath.row].1
         switch section {
         case 0:
+            if indexPath.row == 0 {
+                cell.setupSwitcher(isOn: self.themeManager.isDark)
+                cell.didChangeTheme = { [weak self] isDark in
+                    self?.themeManager.isDark = isDark
+                    self?.settingDelegate?.changeThema()
+                }
+            }
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
         case 1:
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)

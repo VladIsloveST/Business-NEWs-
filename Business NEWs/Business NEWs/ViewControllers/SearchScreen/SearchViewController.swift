@@ -200,10 +200,7 @@ extension SearchViewController: UICollectionViewDataSource {
         guard let searchCell = searchResultCollectioView.dequeueReusableCell(
             withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
         let article = presenter.searchResultArticles.filter { $0.title != "[Removed]" }[indexPath.row]
-        searchCell.setupLableStackWith(size: view.frame.width * 0.04)
-        searchCell.mainLabel.text = article.title
-        searchCell.authorLable.text = article.author
-        searchCell.convertDateFormater(article.publishedAt, currentHour: currentHour)
+        searchCell.assignCellData(from: article, currentHour: currentHour)
         searchCell.didShare = { [weak self] in
             guard let url = URL(string: article.url) else { return }
             self?.presentShareSheet(url: url)

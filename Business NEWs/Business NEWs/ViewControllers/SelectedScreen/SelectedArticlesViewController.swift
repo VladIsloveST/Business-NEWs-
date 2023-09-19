@@ -17,12 +17,20 @@ class SelectedArticlesViewController: UIViewController {
     private var savedCollectionView: UICollectionView!
     private var searchBar: UISearchBar!
     private let expandableView = ExpandableView()
+    private var coreDataManager: CoreDataProtocol!
+    private var article = [Article]()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        coreDataManager = CoreDataManager.shared
         setupCollectionView()
         setupSearchBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        article = coreDataManager.fetchArticles()
     }
     
     // MARK: - Private Methods
@@ -47,6 +55,8 @@ class SelectedArticlesViewController: UIViewController {
             savedCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         savedCollectionView.backgroundColor = .systemGray3
+        savedCollectionView.bounces = false
+
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {

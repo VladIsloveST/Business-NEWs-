@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 
 protocol Cashe {
-    func save(articles: [ArticleData])
-    func loadImageFromCasheWith(_ url: String?) -> UIImage?
     static var shared: Cashe { get set }
+    func loadImageFromCasheWith(_ url: String?) -> UIImage?
+    func save(articles: [ArticleData])
 }
 
 final class CasheManager: Cashe {
     static var shared: Cashe = CasheManager()
     private init() {}
-    let imageCashe = NSCache<NSString, UIImage>()
+    private let imageCashe = NSCache<NSString, UIImage>()
     
     func loadImageFromCasheWith(_ url: String?) -> UIImage? {
         guard let name = url else { return nil }
@@ -25,6 +25,17 @@ final class CasheManager: Cashe {
             return cachedImage
         }
         return nil
+    }
+    
+    private func loadingImageUsingCashe(withURL: String?) {
+        guard let name = withURL else { return }
+        guard let url = URL(string: name) else { return }
+        
+        let imageData = try? Data(contentsOf: url)
+        guard let imageData = imageData else { return }
+        if let image = UIImage(data: imageData) {
+            self.imageCashe.setObject(image, forKey: name as NSString)
+        }
     }
     
     func save(articles: [ArticleData]) {
@@ -41,28 +52,5 @@ final class CasheManager: Cashe {
                 self?.loadingImageUsingCashe(withURL: article.urlToImage)
             }
         }
-    }
-    
-    private func loadingImageUsingCashe(withURL: String?) {
-        guard let name = withURL else { return }
-        guard let url = URL(string: name) else { return }
-        
-        let imageData = try? Data(contentsOf: url)
-        guard let imageData = imageData else { return }
-        if let image = UIImage(data: imageData) {
-            self.imageCashe.setObject(image, forKey: name as NSString)
-        }
-//        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-//        guard let image = UIImage(data: imageData) else { return }
-//        guard let data = image.jpegData(compressionQuality: 1) else { return }
-//        let fileURL = documentsDirectory.appendingPathComponent(name)
-//        print(fileURL)
-//        if !FileManager.default.fileExists(atPath: fileURL.path) {
-//            do {
-//                try data.write(to: fileURL)
-//            } catch let error {
-//                print("Error saving file with ", error)
-//            }
-//        }
     }
 }

@@ -17,7 +17,7 @@ class ContainerView_UITests: Business_NEWsUITests {
         menuCollectionView.staticTexts["TechCrunch"].tap()
         //let thirdCollectionView = articlesCollectionView.cells.collectionViews.containing(.other, identifier:"Horizontal scroll bar, 3 page").element
                         
-  //      XCTAssertTrue(thirdCollectionView.isHittable)
+//   х     XCTAssertTrue(thirdCollectionView.isHittable)
 //        articlesCollectionView.element.swipeRight()
 //        articlesCollectionView.element.swipeRight()
     }
