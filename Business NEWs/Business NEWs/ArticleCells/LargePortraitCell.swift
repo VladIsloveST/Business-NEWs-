@@ -26,7 +26,12 @@ class LargePortraitCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateImage(from url: String?) {
+    override func assignCellData(from article: ArticleData, currentHour: Int) {
+        super.assignCellData(from: article, currentHour: currentHour)
+        updateImage(from: article.urlToImage)
+    }
+    
+    private func updateImage(from url: String?) {
         imageView.image = nil
         imageView.image = storageManager.loadImageFromCasheWith(url)
     }
@@ -37,25 +42,11 @@ class LargePortraitCell: BasicCollectionViewCell {
             imageView.topAnchor.constraint(equalTo: topAnchor)
         ])
         
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
-            mainLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -70),
-            mainLabel.widthAnchor.constraint(equalToConstant: frame.width - 40),
-            mainLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
-        
-        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            buttonStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
-            buttonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
-        ])
-        
-        lableStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            lableStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-            lableStackView.rightAnchor.constraint(equalTo: buttonStackView.leftAnchor, constant: 0)
+            generalStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
+            generalStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
+            generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            generalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
     }
 }

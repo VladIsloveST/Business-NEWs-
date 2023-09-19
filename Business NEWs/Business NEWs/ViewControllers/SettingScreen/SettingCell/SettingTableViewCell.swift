@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingTableViewCell: UITableViewCell {
-    static let idettifire = "SettingTableViewCell"
+    static let identifier = "SettingTableViewCell"
     private var infoLabel = UILabel()
     private var infoImageView: UIImageView = {
         let imageView = UIImageView()

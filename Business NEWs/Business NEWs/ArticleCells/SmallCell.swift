@@ -14,8 +14,7 @@ class SmallCell: BasicCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setConstraint()
-        mainLabel.font = UIFont(name: "Hiragino Mincho ProN W3", size: 20)
-        mainLabel.text = "Hiragino Mincho ProN W3 HiraginoHiragino Mincho ProN W3Hiragino Mincho Pro"
+        setLableFont()
     }
     
     required init?(coder: NSCoder) {
@@ -23,25 +22,10 @@ class SmallCell: BasicCollectionViewCell {
     }
     
     private func setConstraint() {
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            mainLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-            mainLabel.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
-            mainLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
-        
-        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            buttonStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
-            buttonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15)
-        ])
-        
-        lableStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            lableStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
-            lableStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            lableStackView.rightAnchor.constraint(equalTo: buttonStackView.leftAnchor, constant: 0)
+            generalStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
+            generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            generalStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

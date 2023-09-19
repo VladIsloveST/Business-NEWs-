@@ -29,13 +29,14 @@ class HomeViewController: UIViewController {
     var presenter: ViewOutPut!
     var isFirstAppear = true
     
-    
     private var moveToTop: () -> () = {}
     private var changeThemaInCell: () -> () = {} {
         didSet {
             changeThemaInCell()
         }
     }
+//    var appendArticles: (Int?) -> () = { index in }
+    
     let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -186,13 +187,16 @@ extension HomeViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell", for: indexPath) as? ArticlesCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCollectionViewCell",
+                                                                    for: indexPath)
+                as? ArticlesCollectionViewCell else { return UICollectionViewCell() }
         moveToTop = { cell.scrollToTop() }
-        changeThemaInCell = { cell.cells.forEach{$0.setupColor()} }
+        changeThemaInCell = { cell.cells.forEach{ $0.setupColor() } }
+        
         if !presenter.typesOfArticles.isEmpty {
-            let articlesOfTheSamePublisher = presenter.typesOfArticles[indexPath.row]
             cell.delegate = self
-            cell.articles = articlesOfTheSamePublisher.filter { $0.title != "[Removed]" } 
+            let articles = presenter.typesOfArticles[indexPath.row]
+            cell.articles = articles
             cell.didFetchData = { [weak self] (page, isRefreshed) in
                 self?.presenter
                     .getArticlesFromCategory(index: indexPath.row, page: page, isRefreshed: isRefreshed)
@@ -231,9 +235,9 @@ extension HomeViewController: ViewInPut {
     }
     
     func failer(error: NetworkError) {
+        //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         DispatchQueue.main.async {
             self.showAlert("Error", message: error.rawValue)
-            //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         }
     }
 }

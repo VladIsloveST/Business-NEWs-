@@ -45,7 +45,7 @@ class SettingsViewController: UIViewController {
         tableView.contentInset.top = -5
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.idettifire)
+        tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.identifier)
         tableView.separatorInset.right = 20
         tableView.separatorInset.left = 55
         view.addSubview(tableView)
@@ -75,7 +75,7 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.idettifire, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
         let section = indexPath.section
         let text = namesOfCells[indexPath.section][indexPath.row].0
         let image = namesOfCells[indexPath.section][indexPath.row].1
