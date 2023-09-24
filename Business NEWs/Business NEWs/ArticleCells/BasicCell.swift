@@ -8,7 +8,7 @@
 import UIKit
 
 class BasicCollectionViewCell: UICollectionViewCell {
-    typealias UndefinedAction = () -> ()
+    
    
     var didShare: UndefinedAction = {}
     var didSelected: UndefinedAction = {}

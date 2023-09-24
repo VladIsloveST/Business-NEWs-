@@ -9,11 +9,13 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-    func showAlert(_ title: String, message: String, actionTitle: String = "Cancel") {
-        let attributedStringForMessage = NSAttributedString(string: message, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)])
-        let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
+    func showAlertWith(message: String,
+                       title: String = "Error",
+                       actionTitle: String = "Cancel") {
+        let attributedStringForMessage = NSAttributedString(string: message.localized, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)])
+        let alert = UIAlertController(title: title.localized, message: "", preferredStyle: .alert)
         alert.setValue(attributedStringForMessage, forKey: "attributedMessage")
-        let action = UIAlertAction(title: actionTitle, style: .cancel)
+        let action = UIAlertAction(title: actionTitle.localized, style: .cancel)
         alert.addAction(action)
         present(alert, animated: true)
     }

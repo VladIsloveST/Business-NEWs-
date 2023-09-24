@@ -26,7 +26,6 @@ enum StatusCodeResult<Error> {
 }
 
 class NetworkService {
-    typealias CompletionHandler = (Result<Data, Error>) -> Void
     private let baseApiKey = "apiKey=e70eac065c3b4e8b9520a03dc1643d26" //apiKey=e70eac065c3b4e8b9520a03dc1643d26",  977e4b83946b42a1aba422dc52cefbb1
     // b34e284c63fa438a8aa6e99bf561cc01
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {

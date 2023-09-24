@@ -47,11 +47,11 @@ class TabBarController: UITabBarController {
     fileprivate func setupViewControllers() {
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
-                                title: "Saved",
+                                title: "Saved".localized,
                                 systemImageName: "bookmark",
                                 selectedImageName: "bookmark.fill"),
             createTabBarItem(containerViewController,
-                             title: "Home",
+                             title: "Home".localized,
                              imageName: "house",
                              selectedImageName: "house.fill"),
             UIViewController()

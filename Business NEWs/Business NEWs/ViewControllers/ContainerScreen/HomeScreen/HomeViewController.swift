@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 protocol HomeViewControllerMenuDelegate: AnyObject {
     func didTapMenuButton()
@@ -29,13 +30,12 @@ class HomeViewController: UIViewController {
     var presenter: ViewOutPut!
     var isFirstAppear = true
     
-    private var moveToTop: () -> () = {}
-    private var changeThemaInCell: () -> () = {} {
+    private var moveToTop: UndefinedAction = {}
+    private var changeThemaInCell: UndefinedAction = {} {
         didSet {
             changeThemaInCell()
         }
     }
-//    var appendArticles: (Int?) -> () = { index in }
     
     let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -142,7 +142,7 @@ class HomeViewController: UIViewController {
         moreButtonItem.customView?.transform = CGAffineTransform(rotationAngle: .pi / 2)
         navigationItem.leftBarButtonItem = menuButtonItem
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
-        navigationItem.title = "Home"
+        navigationItem.title = "Home".localized
     }
     
     @objc
@@ -237,7 +237,7 @@ extension HomeViewController: ViewInPut {
     func failer(error: NetworkError) {
         //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         DispatchQueue.main.async {
-            self.showAlert("Error", message: error.rawValue)
+            self.showAlertWith(message: error.rawValue)
         }
     }
 }

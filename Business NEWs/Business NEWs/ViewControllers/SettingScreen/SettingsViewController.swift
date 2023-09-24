@@ -53,7 +53,7 @@ class SettingsViewController: UIViewController {
     
     private func setupNavBar() {
         let navBar = UINavigationBar(frame: CGRect(x: 20, y: -30, width: view.bounds.width, height: 100))
-        let navItem = UINavigationItem(title: "Settings")
+        let navItem = UINavigationItem(title: "Settings".localized)
         navBar.items = [navItem]
         navBar.prefersLargeTitles = true
         view.addSubview(navBar)
