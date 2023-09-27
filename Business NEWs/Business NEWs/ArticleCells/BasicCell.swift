@@ -125,9 +125,10 @@ class BasicCollectionViewCell: UICollectionViewCell {
         publishedLable.font = UIFont(name: "Arial", size: (frame.size.width + 40) * 0.04)
     }
     
-    func assignCellData(from article: ArticleData, currentHour: Int) {
+    func assignCellData(from article: ArticleData, currentHour: Int?) {
         mainLabel.text = article.title
         authorLable.text = article.author
+        guard let currentHour = currentHour else { return }
         convertDateFormater(article.publishedAt, currentHour: currentHour)
     }
     

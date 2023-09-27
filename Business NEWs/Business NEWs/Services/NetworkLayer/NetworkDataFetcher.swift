@@ -14,7 +14,6 @@ enum CategoriesOfArticles: String, CaseIterable {
     case business = "top-headlines?country=us&category=technology"
     case tesla = "everything?q=tesla"
     case bitcoin = "everything?q=bitcoin"
-    case ua = "top-headlines?country=ua"
     case bbc = "top-headlines?sources=bbc-news"
 }
 

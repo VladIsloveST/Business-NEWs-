@@ -40,7 +40,7 @@ class SearchCollectionReusableView: UICollectionReusableView {
             contentInsetViewTop.widthAnchor.constraint(equalToConstant: self.frame.width),
             contentInsetViewTop.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        contentInsetViewTop.backgroundColor = .systemGray3
+        contentInsetViewTop.backgroundColor = .myBackgroundColor
     }
     
     func add(_ element: UISearchBar) {

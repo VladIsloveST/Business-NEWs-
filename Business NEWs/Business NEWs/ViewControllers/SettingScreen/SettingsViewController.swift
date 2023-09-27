@@ -77,7 +77,7 @@ extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
         let section = indexPath.section
-        let text = namesOfCells[indexPath.section][indexPath.row].0
+        let text = namesOfCells[indexPath.section][indexPath.row].0.localized
         let image = namesOfCells[indexPath.section][indexPath.row].1
         switch section {
         case 0:
@@ -88,6 +88,7 @@ extension SettingsViewController: UITableViewDataSource {
                     self?.settingDelegate?.changeThema()
                 }
             }
+            if indexPath.row == 2 { cell.setupSwitcher(isOn: true) }
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
         case 1:
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)

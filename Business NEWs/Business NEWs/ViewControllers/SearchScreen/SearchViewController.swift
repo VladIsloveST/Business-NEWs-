@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = " Search..."
+        searchBar.placeholder =  " " + "Search".localized + "..."
         searchBar.sizeToFit()
         searchBar.backgroundImage = UIImage()
         return searchBar
@@ -34,7 +34,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-        navigationItem.title = "Search"
+        navigationItem.title = "Search".localized
         
         setupSearchCollectioView()
         setUpContainerView()
@@ -88,7 +88,7 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.register(SearchCollectionReusableView.self,
                                            forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
                                            withReuseIdentifier: SearchCollectionReusableView.identifier)
-        searchResultCollectioView.backgroundColor = .systemGray3
+        searchResultCollectioView.backgroundColor = .myBackgroundColor
         searchResultCollectioView.contentInset.bottom = 20
     }
     

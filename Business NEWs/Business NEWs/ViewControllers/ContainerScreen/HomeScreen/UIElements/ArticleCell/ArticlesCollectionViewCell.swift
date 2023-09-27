@@ -151,7 +151,6 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
             }
             portraitCell.didSelected = { [weak self] in
                 portraitCell.buttonSaving.isSelected ? print("delete") : self?.coreDataManager.createArticle(article)
-                    print("save")
             }
             cells.append(portraitCell)
             return portraitCell

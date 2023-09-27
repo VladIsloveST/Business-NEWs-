@@ -21,7 +21,7 @@ class CollectionReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super .init(frame: frame)
-        backgroundColor = .systemGray3
+        backgroundColor = .myBackgroundColor
         setViews()
     }
     

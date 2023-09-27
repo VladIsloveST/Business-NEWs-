@@ -26,7 +26,7 @@ class LargePortraitCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func assignCellData(from article: ArticleData, currentHour: Int) {
+    override func assignCellData(from article: ArticleData, currentHour: Int?) {
         super.assignCellData(from: article, currentHour: currentHour)
         updateImage(from: article.urlToImage)
     }

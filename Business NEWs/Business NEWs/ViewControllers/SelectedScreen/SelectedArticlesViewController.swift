@@ -18,7 +18,7 @@ class SelectedArticlesViewController: UIViewController {
     private var searchBar: UISearchBar!
     private let expandableView = ExpandableView()
     private var coreDataManager: CoreDataProtocol!
-    private var article = [Article]()
+    private var article: [Article] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,20 +26,22 @@ class SelectedArticlesViewController: UIViewController {
         coreDataManager = CoreDataManager.shared
         setupCollectionView()
         setupSearchBar()
+        //article = coreDataManager.fetchArticles()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        savedCollectionView.backgroundColor = .myBackgroundColor
         article = coreDataManager.fetchArticles()
+        print(article.count)
+        savedCollectionView.reloadData()
     }
     
     // MARK: - Private Methods
     private func  setupCollectionView() {
         savedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-
         savedCollectionView.delegate = self
         savedCollectionView.dataSource = self
-        
         savedCollectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
         savedCollectionView.register(PortraitCell.self, forCellWithReuseIdentifier: PortraitCell.identifier)
         savedCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
@@ -54,9 +56,8 @@ class SelectedArticlesViewController: UIViewController {
             savedCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             savedCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        savedCollectionView.backgroundColor = .systemGray3
+        savedCollectionView.backgroundColor = .myBackgroundColor
         savedCollectionView.bounces = false
-
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -78,16 +79,16 @@ class SelectedArticlesViewController: UIViewController {
             case .recent:
                 let topItem = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                       heightDimension: .estimated(5)))
+                                                       heightDimension: .estimated(1)))
                 let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
-                                                          height: .estimated(1))
+                                                          height: .estimated(100))
                 let localVerticalGroup = CompositionalLayout.createGroup(aligment: .vertical,
                                                             width: .fractionalWidth(1),
-                                                            height: .estimated(1),
+                                                            height: .estimated(400),
                                                             subitems: item)
                 let generalGroup = NSCollectionLayoutGroup.vertical(
                     layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                       heightDimension: .estimated(1)),
+                                                       heightDimension: .estimated(400)),
                     subitems: [topItem, localVerticalGroup])
                 let section = CompositionalLayout.createSection(group: generalGroup, interGroupSpacing: 0)
                 section.boundarySupplementaryItems = [self.createSupplementaryHeaderItem()]
@@ -137,7 +138,16 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        types[section].count
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            print(article.count)
+            return article.count
+        default:
+            return 0
+        }
+//            .types[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -147,18 +157,28 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
             withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
         guard let portraitCell = collectionView.dequeueReusableCell(
             withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
-        guard let smallCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
+        guard let smallCell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath)
+                as? SmallCell else { return cell }
         switch types[indexPath.section] {
         case .recent(_):
-            switch indexPath.item {
-            case 0:
-                return portraitCell
-            default:
+//            switch indexPath.item {
+//            case 0:
+//                return portraitCell
+//            default:
+                let article = article[indexPath.row]
+                let articleData = ArticleData(author: article.author,
+                                              title: article.title ?? "",
+                                              url: article.url ?? "",
+                                              urlToImage: nil,
+                                              publishedAt: article.publishedAt ?? "")
+            print(articleData.title)
+                smallCell.assignCellData(from: articleData, currentHour: nil)
                 return smallCell
-            }
+           // }
         case .outdated(_):
-            return storyCell
+            
+            return smallCell
         }
     }
     

@@ -35,8 +35,9 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
     }
     
     func createArticle(_ articleData: ArticleData) {
-        guard let articleDescription = NSEntityDescription.entity(forEntityName: "Articl", in: context)
-        else { return print(CoreDataError.unableToCreateDescription) }  // context != nil
+        guard let articleDescription = NSEntityDescription.entity(
+            forEntityName: Article.description(), in: context)
+        else { return print(CoreDataError.unableToCreateDescription) }
         let article = Article(entity: articleDescription, insertInto: context)
         article.title = articleData.title
         article.author = articleData.author

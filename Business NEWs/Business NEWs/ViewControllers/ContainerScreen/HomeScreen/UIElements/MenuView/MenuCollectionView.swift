@@ -12,7 +12,7 @@ class MenuCollectionView: UICollectionView {
     
     weak var homeControllerDelegate: ArticlesMovementDelegate?
     
-    private let nameCategoryArray = ["Wall St.", "Apple", "TechCrunch", "Business", "Tesla", "Bitcoin", "Ukraine", "BBC"]
+    private let nameCategoryArray = ["Wall St.", "Apple", "TechCrunch", "Business", "Tesla", "Bitcoin", "BBC"]
     
     private let underlineView: UIView = {
         let view = UIView()
@@ -117,7 +117,6 @@ class MenuCollectionView: UICollectionView {
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? MenuCollectionViewCell else { return UICollectionViewCell() }
             cell.nameCategoryLabel.text = nameCategoryArray[indexPath.item]
-            //cell.nameCategoryLabel.font =
             return cell
         }
     }
