@@ -28,8 +28,8 @@ class SettingTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private var switcher: UISwitch!
-    var didChangeTheme: (Bool) -> () = { _ in }
+    var switcher: UISwitch!
+    private var didChangeSetup: (Bool) -> () = { _ in }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,7 +73,7 @@ class SettingTableViewCell: UITableViewCell {
         infoImageView.backgroundColor = imageColor
     }
     
-    func setupSwitcher(isOn: Bool) {
+    func setupSwitcher(isOn: Bool, didChangeSetup: @escaping (Bool) -> () ) {
         switcher = UISwitch()
         let centerYAnchorConstant = (switcher.frame.height - frame.height) / 2
         contentView.addSubview(switcher)
@@ -87,11 +87,13 @@ class SettingTableViewCell: UITableViewCell {
         forwardImageView.isHidden = true
         switcher.isOn = isOn
         switcher.becomeFirstResponder()
-        switcher.addTarget(self, action: #selector(changeColor), for: .valueChanged)
+        switcher.addTarget(self, action: #selector(changeSetup), for: .valueChanged)
         switcher.onTintColor = .darkGray
+        
+        self.didChangeSetup = didChangeSetup
     }
     
-    @objc private func changeColor() {
-        didChangeTheme(switcher.isOn)
+    @objc private func changeSetup() {
+        didChangeSetup(switcher.isOn)
     }
 }

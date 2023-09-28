@@ -10,7 +10,7 @@ import UIKit
 
 protocol RouterMain {
     var  navigatinController: UINavigationController? { get set }
-    var  assemblyBuilder: AssemblyBuilderProtocol? { get set }
+    var  assemblyModule: AssemblyModuleProtocol? { get set }
 }
 
 protocol RouterProtocol: RouterMain {
@@ -21,24 +21,23 @@ protocol RouterProtocol: RouterMain {
 
 class HomeRouter: RouterProtocol {
     var navigatinController: UINavigationController?
-    var assemblyBuilder: AssemblyBuilderProtocol?
+    var assemblyModule: AssemblyModuleProtocol?
         
-    init(navigatinController: UINavigationController, assemblyBuilder: AssemblyBuilderProtocol) {
+    init(navigatinController: UINavigationController, assemblyModule: AssemblyModuleProtocol) {
         self.navigatinController = navigatinController
-        self.assemblyBuilder = assemblyBuilder
+        self.assemblyModule = assemblyModule
     }
     
     func initialViewController() {
         if let navigatinController = navigatinController {
-            guard let homeViewController = assemblyBuilder?.createHomeBuilder(router: self) else { return }
+            guard let homeViewController = assemblyModule?.assembleHome(router: self) else { return }
             navigatinController.viewControllers = [homeViewController]
         }
     }
     
     func showSearch() {
         if let navigatinController = navigatinController {
-            guard let searchViewController = assemblyBuilder?.createSearchBuilder(router: self) else { return }
-            navigatinController.navigationBar.barTintColor = .orange
+            guard let searchViewController = assemblyModule?.assembleSearch(router: self) else { return }
             navigatinController.pushViewController(searchViewController, animated: false)
         }
     }

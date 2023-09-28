@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     class var myBackgroundColor: UIColor {
-        switch ThemeManager.shared.isDark {
+        switch SettingManager.shared.isDark {
         case true:
             return .systemGray3
         case false:
@@ -19,7 +19,7 @@ extension UIColor {
     }
     
     class var cellBackgroundColor: UIColor {
-        switch ThemeManager.shared.isDark {
+        switch SettingManager.shared.isDark {
         case true:
             return .darkGray
         case false:
@@ -28,7 +28,7 @@ extension UIColor {
     }
     
     class var myTextColor: UIColor {
-        switch ThemeManager.shared.isDark {
+        switch SettingManager.shared.isDark {
         case true:
             return .white
         case false:

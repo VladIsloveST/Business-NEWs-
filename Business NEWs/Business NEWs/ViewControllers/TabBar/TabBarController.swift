@@ -36,10 +36,10 @@ class TabBarController: UITabBarController {
     
     fileprivate func routeToSettings() {
         if #available(iOS 15.0, *) {
-            let settingsVC = SettingsViewController()
-            settingsVC.delegate = self
+            let settingsVC = SettingsAssembly.assembleSettings()
+            (settingsVC as? SettingsViewController)?.delegate = self
             let homeViewController = containerViewController?.navgationController.viewControllers.first
-            settingsVC.settingDelegate = (homeViewController as? SettingViewControllerDelegate)
+            (settingsVC as? SettingsViewController)?.settingDelegate = (homeViewController as? SettingViewControllerDelegate)
             present(settingsVC, animated: true)
         }
     }

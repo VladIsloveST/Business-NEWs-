@@ -11,10 +11,15 @@ protocol TabBarControllerDelegate: AnyObject {
     func removeFromInactiveState()
 }
 
+protocol SettingsDelegate: AnyObject {
+    func setValue(isNotify: Bool)
+}
+
 class SettingsViewController: UIViewController {
     weak var delegate: TabBarControllerDelegate?
     weak var settingDelegate: SettingViewControllerDelegate?
-    var themeManager: ThemeManagerProtocol!
+    private var settingManager: SettingManagerProtocol!
+    var localNotification: LocalNotificatioProtocol!
     
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
@@ -24,7 +29,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        themeManager = ThemeManager.shared
+        settingManager = SettingManager.shared
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
@@ -82,13 +87,22 @@ extension SettingsViewController: UITableViewDataSource {
         switch section {
         case 0:
             if indexPath.row == 0 {
-                cell.setupSwitcher(isOn: self.themeManager.isDark)
-                cell.didChangeTheme = { [weak self] isDark in
-                    self?.themeManager.isDark = isDark
+                cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
+                    self?.settingManager.isDark = isDark
                     self?.settingDelegate?.changeThema()
                 }
             }
-            if indexPath.row == 2 { cell.setupSwitcher(isOn: true) }
+            if indexPath.row == 2 {
+                cell.setupSwitcher(isOn: self.settingManager.isNotify) { [weak self] isNotify in
+                    self?.settingManager.isNotify = isNotify
+                    if isNotify {
+                        self?.localNotification.checkForPermission()
+                        self?.localNotification.directToSettings { cell.switcher.isOn = false }
+                    } else {
+                        self?.localNotification.removeNotification()
+                    }
+                }
+            }
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
         case 1:
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)
@@ -112,6 +126,12 @@ extension SettingsViewController: UITableViewDelegate {
 extension SettingsViewController: UISheetPresentationControllerDelegate {
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         delegate?.removeFromInactiveState()
+    }
+}
+
+extension SettingsViewController: SettingsDelegate {
+    func setValue(isNotify: Bool) {
+        settingManager.isNotify = isNotify
     }
 }
 

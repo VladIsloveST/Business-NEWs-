@@ -153,10 +153,10 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
-        guard let storyCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
-        guard let portraitCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
+//        guard let storyCell = collectionView.dequeueReusableCell(
+//            withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
+//        guard let portraitCell = collectionView.dequeueReusableCell(
+//            withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
         guard let smallCell = collectionView
             .dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath)
                 as? SmallCell else { return cell }

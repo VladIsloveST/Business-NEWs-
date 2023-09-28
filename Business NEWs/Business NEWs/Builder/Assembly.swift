@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-protocol AssemblyBuilderProtocol {
-    func createHomeBuilder(router: RouterProtocol) -> UIViewController
-    func createSearchBuilder(router: RouterProtocol) -> UIViewController
+protocol AssemblyModuleProtocol {
+    func assembleHome(router: RouterProtocol) -> UIViewController
+    func assembleSearch(router: RouterProtocol) -> UIViewController
 }
 
-class ModuleBuilder: AssemblyBuilderProtocol {
+class AssemblyModule: AssemblyModuleProtocol {
     
-    func createHomeBuilder(router: RouterProtocol) -> UIViewController {
+    func assembleHome(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()
         let homeView = HomeViewController()
         let storageManager = CasheManager.shared
@@ -25,12 +25,26 @@ class ModuleBuilder: AssemblyBuilderProtocol {
         return homeView
     }
     
-    func createSearchBuilder(router: RouterProtocol) -> UIViewController {
+    func assembleSearch(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()
         let searchView = SearchViewController()
         let searchPresenter = SearchPresenter(view: searchView, router: router, networkDataFetcher: networkDataFetcher)
         searchView.presenter = searchPresenter
         return searchView
+    }
+}
+
+protocol SettingsAssemblyProtocol {
+    static func assembleSettings() -> UIViewController
+}
+
+class SettingsAssembly: SettingsAssemblyProtocol {
+    static func assembleSettings() -> UIViewController {
+        let settingsView = SettingsViewController()
+        let localNotification = LocalNotification()
+        settingsView.localNotification = localNotification
+        localNotification.delegate = settingsView
+        return settingsView
     }
 }
 
@@ -53,11 +67,11 @@ class HomeAssembly: HomeAssemblyProtocol {
 }
 
 protocol SearchAssemblyProtocol {
-    static func createSearchBuilder(router: RouterProtocol) -> UIViewController
+    static func assembleSearch(router: RouterProtocol) -> UIViewController
 }
 
 class SearchAssembly: SearchAssemblyProtocol {
-    static func createSearchBuilder(router: RouterProtocol) -> UIViewController {
+    static func assembleSearch(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()   // в білдері
         let searchView = SearchViewController()
         let searchPresenter = SearchPresenter(view: searchView,
@@ -72,7 +86,6 @@ final class Builder {
     var searchScreen: SearchAssemblyProtocol!
     
     init() {
-        //         let networkDataFetcher = NetworkDataFetcher()
 
 //        homeScreen = HomeAssembly.createHomeBuilder(router: <#T##RouterProtocol#>)
           
