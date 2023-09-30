@@ -11,30 +11,44 @@ protocol SettingManagerProtocol {
     static var shared: SettingManagerProtocol { get }
     var isDark: Bool { get set }
     var isNotify: Bool { get set }
+    var language: Language { get set }
+}
+
+enum Language: String, CaseIterable {
+    case deutsch = "de"
+    case english = "en"
 }
 
 final class SettingManager: SettingManagerProtocol {
     static var shared: SettingManagerProtocol = SettingManager()
     private let userDefaults = UserDefaults.standard
-    private let themeKey = "themeKey"
-    private let notifyKey = "notifyKey"
+    private let themeKey = "theme"
+    private let notifyKey = "notify"
+    private let languageKey = "language"
     private init() {}
     
     var isDark: Bool {
         set {
-            userDefaults.set(newValue, forKey: themeKey)
-        }
+            userDefaults.set(newValue, forKey: themeKey) }
         get {
-            userDefaults.bool(forKey: themeKey)
-        }
+            userDefaults.bool(forKey: themeKey) }
     }
     
     var isNotify: Bool {
         set {
-            userDefaults.set(newValue, forKey: notifyKey)
-        }
+            userDefaults.set(newValue, forKey: notifyKey) }
         get {
-            userDefaults.bool(forKey: notifyKey)
+            userDefaults.bool(forKey: notifyKey) }
+    }
+    
+    var language: Language {
+        get {
+            let enviroment = userDefaults.value(forKey: languageKey) as? String ?? "en"
+            return Language(rawValue: enviroment)!
+        }
+        set(environment) {
+            userDefaults.set(environment.rawValue, forKey: languageKey)
+            userDefaults.synchronize()
         }
     }
 }

@@ -15,7 +15,7 @@ class ContainerViewController: UIViewController {
     }
     
     private var menuState: MenuState = .closed
-    private let menuVC = MenuViewController()
+    private let menuViewController = MenuViewController()
     var navgationController = UINavigationController()
      
     override func viewDidLoad() {
@@ -24,11 +24,11 @@ class ContainerViewController: UIViewController {
     }
     
     private func addChildVCs() {
-        menuVC.delegate = self
-        addChild(menuVC)
-        view.addSubview(menuVC.view)
-        menuVC.didMove(toParent: self)
-        menuVC.size = navgationController.view.bounds.width / 22
+        menuViewController.delegate = self
+        addChild(menuViewController)
+        view.addSubview(menuViewController.view)
+        menuViewController.didMove(toParent: self)
+        menuViewController.size = navgationController.view.bounds.width / 22
         
         let assembly = AssemblyModule()
         navgationController.navigationBar.prefersLargeTitles = true

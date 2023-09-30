@@ -63,6 +63,18 @@ class SettingsViewController: UIViewController {
         navBar.prefersLargeTitles = true
         view.addSubview(navBar)
     }
+    
+    private func showAlertOn() {
+        let message = "Changing your language requires that you exit Business NEWs.".localized
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let language = settingManager.language
+
+        let action = UIAlertAction(title: "Exit".localized , style: .default, handler: { [weak self] _ in
+            self?.localNotification.closeApplicationWithNotification(language: language)
+        })
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
 }
 
 // MARK: - Table View Data Source
@@ -84,15 +96,22 @@ extension SettingsViewController: UITableViewDataSource {
         let section = indexPath.section
         let text = namesOfCells[indexPath.section][indexPath.row].0.localized
         let image = namesOfCells[indexPath.section][indexPath.row].1
-        switch section {
-        case 0:
-            if indexPath.row == 0 {
+        if section == 0 {
+            cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
+
+            switch indexPath.row {
+            case 0:
                 cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
                     self?.settingManager.isDark = isDark
                     self?.settingDelegate?.changeThema()
                 }
-            }
-            if indexPath.row == 2 {
+            case 1:
+                let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0
+                cell.setupSegmentedControl(selected: index) { [weak self] selectedIndex in
+                    self?.settingManager.language = Language.allCases[selectedIndex]
+                    self?.showAlertOn()
+                }
+            case 2:
                 cell.setupSwitcher(isOn: self.settingManager.isNotify) { [weak self] isNotify in
                     self?.settingManager.isNotify = isNotify
                     if isNotify {
@@ -102,12 +121,11 @@ extension SettingsViewController: UITableViewDataSource {
                         self?.localNotification.removeNotification()
                     }
                 }
+            default:
+                break
             }
-            cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
-        case 1:
+        } else {
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)
-        default:
-            break
         }
         return cell
     }

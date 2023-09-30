@@ -9,6 +9,15 @@
 "Saved" = "Gerettet";
 "Home" = "Heim";
 "Settings" = "Einstellungen";
+"Thema" = "Erscheinungsbild";
+"Language" = "Sprache";
+"Notification" = "Mittelungen";
+"Changing your language requires that you exit Business NEWs." = "Um Ihre Sprache zu ändern, müssen Sie Business NEWs beenden.";
+"Exit" = "Ausfahrt";
+"Tap to reopen the application" = "Tippen Sie, um die Anwendung erneut zu öffnen";
+"Language changed to " = "Sprache geändert zu ";
+"Reviews" = "Rezensionen";
+"About the App" = "Über die Anwendung";
 "Error" = "Fehler";
 "Cancel" = "Stornieren";
 "URL is nil." = "URL ist null.";

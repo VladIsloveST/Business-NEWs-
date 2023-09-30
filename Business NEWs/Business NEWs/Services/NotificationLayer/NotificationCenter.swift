@@ -12,6 +12,7 @@ protocol LocalNotificatioProtocol {
     func checkForPermission()
     func removeNotification()
     func directToSettings(_ completionHandler: @escaping UndefinedAction)
+    func closeApplicationWithNotification(language: Language)
 }
 
 
@@ -66,12 +67,29 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
         let isDaily = true
         let content = UNMutableNotificationContent(title: title, body: body, sound: .default)
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current,
-                                            hour: 19, minute:  15)
+                                            hour: 19, minute:  42)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: isDaily)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
         notificationCenter.add(request) { error in
             print(error?.localizedDescription as Any)
+        }
+    }
+    
+    func closeApplicationWithNotification(language: Language) {
+        let identifier = "reopen"
+        let title = "Language changed to ".localized + "\(language)"
+        let body = "Tap to reopen the application".localized
+        let content = UNMutableNotificationContent(title: title, body: body, sound: .default)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+        notificationCenter.add(request) { error in
+            print(error?.localizedDescription as Any)
+        }
+        
+        DispatchQueue.main.async {
+            exit(EXIT_SUCCESS)
         }
     }
 }

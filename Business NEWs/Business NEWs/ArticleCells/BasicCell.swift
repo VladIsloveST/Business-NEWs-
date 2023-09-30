@@ -23,7 +23,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
     @objc
     private func tappedSelect() {
         didSelected()
-        buttonSaving.isSelected = buttonSaving.isSelected ? false : true
+        buttonSaving.isSelected = !buttonSaving.isSelected
     }
     
     private let buttonShare: UIButton = {

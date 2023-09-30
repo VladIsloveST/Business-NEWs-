@@ -56,7 +56,7 @@ protocol HomeAssemblyProtocol {
 
 class HomeAssembly: HomeAssemblyProtocol {
     static func createHomeBuilder(router: RouterProtocol) -> UIViewController {
-        let networkDataFetcher = NetworkDataFetcher()  // в білдері
+        let networkDataFetcher = NetworkDataFetcher()
         let homeView = HomeViewController()
         let storageManager = CasheManager.shared
         let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
@@ -72,7 +72,7 @@ protocol SearchAssemblyProtocol {
 
 class SearchAssembly: SearchAssemblyProtocol {
     static func assembleSearch(router: RouterProtocol) -> UIViewController {
-        let networkDataFetcher = NetworkDataFetcher()   // в білдері
+        let networkDataFetcher = NetworkDataFetcher()
         let searchView = SearchViewController()
         let searchPresenter = SearchPresenter(view: searchView,
                                               router: router, networkDataFetcher: networkDataFetcher)
