@@ -9,9 +9,11 @@ import UIKit
 
 class BasicCollectionViewCell: UICollectionViewCell {
     
-   
+    private var publicationDate = ""
+    private var hoursAgo = 24
+    var note = " • recently"
     var didShare: UndefinedAction = {}
-    var didSelected: UndefinedAction = {}
+    var didSelecte: UndefinedAction = {}
     
     let buttonSaving: UIButton = {
         let button = UIButton(normalStateImage: "bookmark",
@@ -22,14 +24,14 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func tappedSelect() {
-        didSelected()
+        didSelecte()
         buttonSaving.isSelected = !buttonSaving.isSelected
     }
     
     private let buttonShare: UIButton = {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
-                              selectedStateImage: "square.and.arrow.up")
-        button.addTarget(self, action: #selector(presentShareSheet), for: .touchDown)
+                              selectedStateImage: "square.and.arrow.up.fill")
+        button.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
         return button
     }()
     
@@ -91,12 +93,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(horizontalStackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
-
     }()
-    
-    private var publicationDate = ""
-    private var hoursAgo = 0
-    var note = " • recently"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -125,28 +122,36 @@ class BasicCollectionViewCell: UICollectionViewCell {
         publishedLable.font = UIFont(name: "Arial", size: (frame.size.width + 40) * 0.04)
     }
     
-    func assignCellData(from article: ArticleData, currentHour: Int?) {
+    func assignCellData(from article: ArticleData, isSaved: Bool, currentDate: DateComponents?) {
         mainLabel.text = article.title
         authorLable.text = article.author
-        guard let currentHour = currentHour else { return }
-        convertDateFormater(article.publishedAt, currentHour: currentHour)
+        guard let currentDate = currentDate else { return publishedLable.text = publicationDate }
+        buttonSaving.isSelected = isSaved
+        convertDateFormater(article.publishedAt, currentDate: currentDate)
     }
+    
     
     func updatePublishedLabel() {
         note = hoursAgo > 1 ? " • \(hoursAgo) hours ago" : " • \(hoursAgo) hour ago"
-        if hoursAgo == 24 { note = " • lately" }
+        if hoursAgo >= 24 { note = " • lately" }
         if hoursAgo == 0 { note = " • recently" }
         publishedLable.text = publicationDate + note
         if hoursAgo < 24 { hoursAgo += 1 }
     }
     
-    private func convertDateFormater(_ date: String, currentHour: Int) {
+    private func convertDateFormater(_ date: String, currentDate: DateComponents) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         guard let newDate = dateFormatter.date(from: date) else { return }
+        guard let currentHour = currentDate.hour,
+              let currentDay = currentDate.day else { return }
         let publicationHour = Calendar.current.component(.hour, from: newDate)
-        hoursAgo = (currentHour >= publicationHour) ?
-                            (currentHour - publicationHour) : (currentHour + 24 - publicationHour)
+        let publicationDay = Calendar.current.component(.day, from: newDate)
+        if (currentDay - publicationDay) == 0  {
+            hoursAgo = currentHour - publicationHour
+        } else if (currentDay - publicationDay) == 1 {
+            hoursAgo = currentHour + 24 - publicationHour
+        }
         dateFormatter.dateFormat = "EEEE, MMM d"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         publicationDate = dateFormatter.string(from: newDate)

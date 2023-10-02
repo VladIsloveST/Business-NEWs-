@@ -26,14 +26,14 @@ class LargePortraitCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func assignCellData(from article: ArticleData, currentHour: Int?) {
-        super.assignCellData(from: article, currentHour: currentHour)
+    override func assignCellData(from article: ArticleData, isSaved: Bool, currentDate: DateComponents?) {
+        super.assignCellData(from: article, isSaved: isSaved, currentDate: currentDate)
         updateImage(from: article.urlToImage)
     }
     
     private func updateImage(from url: String?) {
         imageView.image = nil
-        imageView.image = storageManager.loadImageFromCasheWith(url)
+        imageView.image = storageManager.fetchImageFromCasheWith(url)
     }
     
     private func setConstraints() {

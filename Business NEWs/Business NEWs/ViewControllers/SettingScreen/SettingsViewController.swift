@@ -64,13 +64,24 @@ class SettingsViewController: UIViewController {
         view.addSubview(navBar)
     }
     
-    private func showAlertOn() {
+    private func showAlertCloseApp() {
         let message = "Changing your language requires that you exit Business NEWs.".localized
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        let language = settingManager.language
-
+        
         let action = UIAlertAction(title: "Exit".localized , style: .default, handler: { [weak self] _ in
-            self?.localNotification.closeApplicationWithNotification(language: language)
+            guard let self = self else { return }
+            
+            if self.settingManager.isNotify {
+                let language = self.settingManager.language
+                self.localNotification.reopenNotification(language: language)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    exit(0)
+                }
+            }
         })
         alert.addAction(action)
         self.present(alert, animated: true)
@@ -109,7 +120,7 @@ extension SettingsViewController: UITableViewDataSource {
                 let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0
                 cell.setupSegmentedControl(selected: index) { [weak self] selectedIndex in
                     self?.settingManager.language = Language.allCases[selectedIndex]
-                    self?.showAlertOn()
+                    self?.showAlertCloseApp()
                 }
             case 2:
                 cell.setupSwitcher(isOn: self.settingManager.isNotify) { [weak self] isNotify in

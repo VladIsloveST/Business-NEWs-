@@ -18,7 +18,7 @@ class SearchViewController: UIViewController {
     private var historyTableView: HistoryTableView!
     private var containerView: UIView!
     private var loadingIndicator: ProgressView!
-    private let currentHour = Calendar.current.component(.hour, from: Date())
+    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
@@ -199,8 +199,8 @@ extension SearchViewController: UICollectionViewDataSource {
         let cell = UICollectionViewCell()
         guard let searchCell = searchResultCollectioView.dequeueReusableCell(
             withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
-        let article = presenter.searchResultArticles.filter { $0.title != "[Removed]" }[indexPath.row]
-        searchCell.assignCellData(from: article, currentHour: currentHour)
+        let article = presenter.searchResultArticles.filter { $0.title != "[Removed]" } [indexPath.row]
+        searchCell.assignCellData(from: article, isSaved: false, currentDate: currentDateTime)
         searchCell.didShare = { [weak self] in
             guard let url = URL(string: article.url) else { return }
             self?.presentShareSheet(url: url)

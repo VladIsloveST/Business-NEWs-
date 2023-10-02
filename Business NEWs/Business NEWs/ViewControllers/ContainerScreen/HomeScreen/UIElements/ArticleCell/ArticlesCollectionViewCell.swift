@@ -17,7 +17,8 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     var delegate: HomeViewControllerDelegate?
     var cells = [BasicCollectionViewCell]()
     
-    private let currentHour = Calendar.current.component(.hour, from: Date())
+    private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
+    
     var didFetchData: (Int, Bool) -> () = { _,_ in }
     
     private var page = 1
@@ -25,7 +26,6 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
         didSet {
             articleCollectionView.reloadData()
             performBatchUpdates()
-            //articleCollectionView.collectionViewLayout.invalidateLayout()
         }
     }
     
@@ -144,21 +144,30 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
         let article = articles[indexPath.row]
         
         if indexPath.row % 4 == 0 {
-            portraitCell.assignCellData(from: article, currentHour: currentHour)
+            let isSaved = coreDataManager.checkAvaible(with: article.title)
+            portraitCell.assignCellData(from: article, isSaved: isSaved, currentDate: currentDateTime)
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)
             }
-            portraitCell.didSelected = { [weak self] in
-                portraitCell.buttonSaving.isSelected ? print("delete") : self?.coreDataManager.createArticle(article)
+            portraitCell.didSelecte = { [weak self] in
+                portraitCell.buttonSaving.isSelected ?
+                self?.coreDataManager.deleteArticle(id: article.title)
+                : self?.coreDataManager.createArticle(article)
             }
             cells.append(portraitCell)
             return portraitCell
         } else {
-            smallCell.assignCellData(from: article, currentHour: currentHour)
+            let isSaved = coreDataManager.checkAvaible(with: article.title)
+            smallCell.assignCellData(from: article, isSaved: isSaved, currentDate: currentDateTime)
             smallCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)
+            }
+            smallCell.didSelecte = { [weak self] in
+                portraitCell.buttonSaving.isSelected ?
+                self?.coreDataManager.deleteArticle(id: article.title)
+                : self?.coreDataManager.createArticle(article)
             }
             cells.append(smallCell)
             return smallCell

@@ -18,7 +18,8 @@ class SelectedArticlesViewController: UIViewController {
     private var searchBar: UISearchBar!
     private let expandableView = ExpandableView()
     private var coreDataManager: CoreDataProtocol!
-    private var article: [Article] = []
+    private var articles: [Article] = []
+    private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,19 +27,21 @@ class SelectedArticlesViewController: UIViewController {
         coreDataManager = CoreDataManager.shared
         setupCollectionView()
         setupSearchBar()
-        //article = coreDataManager.fetchArticles()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         savedCollectionView.backgroundColor = .myBackgroundColor
-        article = coreDataManager.fetchArticles()
-        print(article.count)
+        articles = coreDataManager.fetchArticles()
         savedCollectionView.reloadData()
+        print(articles.count)
+        articles.forEach {
+            print("\($0.title ?? "") - \(articles.firstIndex(of: $0) ?? 404)")
+        }
     }
     
     // MARK: - Private Methods
-    private func  setupCollectionView() {
+    private func setupCollectionView() {           
         savedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         savedCollectionView.delegate = self
         savedCollectionView.dataSource = self
@@ -142,8 +145,8 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         case 0:
             return 0
         case 1:
-            print(article.count)
-            return article.count
+            print(articles.count)
+            return articles.count
         default:
             return 0
         }
@@ -153,29 +156,28 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
-//        guard let storyCell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
-//        guard let portraitCell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
+        //        guard let storyCell = collectionView.dequeueReusableCell(
+        //            withReuseIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else { return cell }
+        //        guard let portraitCell = collectionView.dequeueReusableCell(
+        //            withReuseIdentifier: PortraitCell.identifier, for: indexPath) as? PortraitCell else { return cell }
         guard let smallCell = collectionView
             .dequeueReusableCell(withReuseIdentifier: SmallCell.identifier, for: indexPath)
                 as? SmallCell else { return cell }
         switch types[indexPath.section] {
         case .recent(_):
-//            switch indexPath.item {
-//            case 0:
-//                return portraitCell
-//            default:
-                let article = article[indexPath.row]
-                let articleData = ArticleData(author: article.author,
-                                              title: article.title ?? "",
-                                              url: article.url ?? "",
-                                              urlToImage: nil,
-                                              publishedAt: article.publishedAt ?? "")
-            print(articleData.title)
-                smallCell.assignCellData(from: articleData, currentHour: nil)
-                return smallCell
-           // }
+            //            switch indexPath.item {
+            //            case 0:
+            //                return portraitCell
+            //            default:
+            let article = articles[indexPath.row]
+            let articleData = ArticleData(author: article.author,
+                                          title: article.title ?? "",
+                                          url: article.url ?? "",
+                                          urlToImage: nil,
+                                          publishedAt: article.publishedAt ?? "")
+            smallCell.assignCellData(from: articleData, isSaved: true, currentDate: currentDateTime)
+            return smallCell
+            // }
         case .outdated(_):
             
             return smallCell
