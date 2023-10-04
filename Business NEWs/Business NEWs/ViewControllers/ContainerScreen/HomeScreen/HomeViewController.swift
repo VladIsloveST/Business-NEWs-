@@ -65,7 +65,8 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        changeThema() 
+        articlesCollectionView.reloadData()
+        changeThema()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -257,7 +258,6 @@ extension HomeViewController: HomeViewControllerDelegate {
         }
     }
 }
-
 
 // MARK: - Change color
 extension HomeViewController: SettingViewControllerDelegate {

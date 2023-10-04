@@ -17,7 +17,8 @@ protocol SettingsDelegate: AnyObject {
 
 class SettingsViewController: UIViewController {
     weak var delegate: TabBarControllerDelegate?
-    weak var settingDelegate: SettingViewControllerDelegate?
+    weak var settingDelegateHome: SettingViewControllerDelegate?
+    weak var settingDelegateSaved: SettingViewControllerDelegate?
     private var settingManager: SettingManagerProtocol!
     var localNotification: LocalNotificatioProtocol!
     
@@ -114,7 +115,9 @@ extension SettingsViewController: UITableViewDataSource {
             case 0:
                 cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
                     self?.settingManager.isDark = isDark
-                    self?.settingDelegate?.changeThema()
+                    self?.settingDelegateHome?.changeThema()
+                    self?.settingDelegateSaved?.changeThema()
+
                 }
             case 1:
                 let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0

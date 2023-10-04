@@ -24,7 +24,6 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     private var page = 1
     var articles: [ArticleData] = [] {
         didSet {
-            articleCollectionView.reloadData()
             performBatchUpdates()
         }
     }
@@ -165,7 +164,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
                 self?.delegate?.presentShareSheet(url: url)
             }
             smallCell.didSelecte = { [weak self] in
-                portraitCell.buttonSaving.isSelected ?
+                smallCell.buttonSaving.isSelected ?
                 self?.coreDataManager.deleteArticle(id: article.title)
                 : self?.coreDataManager.createArticle(article)
             }
@@ -178,7 +177,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Data Source Prefetching
 extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let filtered = indexPaths.filter({ $0.row >= articles.count - 1 })
+        let filtered = indexPaths.filter({ $0.row >= articles.count - 4 })
         if filtered.count > 0 {
             page += 1
             self.didFetchData(page, false)

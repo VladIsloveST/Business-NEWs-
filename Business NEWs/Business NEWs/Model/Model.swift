@@ -17,7 +17,7 @@ struct ArticleData: Codable {
     var title: String
 //    let description: String?
     let url: String
-    let urlToImage: String?
+    var urlToImage: String? = nil
     let publishedAt: String
 //    let content: String
 }

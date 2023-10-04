@@ -14,11 +14,19 @@ class SelectedArticlesViewController: UIViewController {
     
     private var types = MockData.shared.articleData
     
-    private var savedCollectionView: UICollectionView!
+    lazy private var savedCollectionView: UICollectionView = {
+        let flowLayout = createLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
+        
     private var searchBar: UISearchBar!
     private let expandableView = ExpandableView()
     private var coreDataManager: CoreDataProtocol!
     private var articles: [Article] = []
+    private var searchedArticles: [Article] = []
+    private var searching = false
+    private var timer: Timer?
     private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
     
     // MARK: - Lifecycle
@@ -36,13 +44,12 @@ class SelectedArticlesViewController: UIViewController {
         savedCollectionView.reloadData()
         print(articles.count)
         articles.forEach {
-            print("\($0.title ?? "") - \(articles.firstIndex(of: $0) ?? 404)")
+            print("\($0.title) - \(articles.firstIndex(of: $0) ?? 404)")
         }
     }
     
     // MARK: - Private Methods
-    private func setupCollectionView() {           
-        savedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+    private func setupCollectionView() {
         savedCollectionView.delegate = self
         savedCollectionView.dataSource = self
         savedCollectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
@@ -117,6 +124,7 @@ class SelectedArticlesViewController: UIViewController {
             searchBar.topAnchor.constraint(equalTo: expandableView.topAnchor),
             searchBar.bottomAnchor.constraint(equalTo: expandableView.bottomAnchor)
         ])
+        searchBar.delegate = self
         navigationItem.titleView = expandableView
         navigationItem.rightBarButtonItem = UIBarButtonItem(imageSystemName: "magnifyingglass",
                                                             target: self, action: #selector(toggle))
@@ -130,6 +138,13 @@ class SelectedArticlesViewController: UIViewController {
             self.navigationItem.titleView?.alpha = isOpen ? 0 : 1
             self.navigationItem.titleView?.layoutIfNeeded()
         })
+    }
+    
+    private func presentShareSheet(url: URL) {
+        DispatchQueue.main.async {
+            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.present(activityViewPopover, animated: true)
+        }
     }
 }
 
@@ -145,8 +160,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
         case 0:
             return 0
         case 1:
-            print(articles.count)
-            return articles.count
+             return searching ? searchedArticles.count : articles.count
         default:
             return 0
         }
@@ -169,13 +183,19 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
             //            case 0:
             //                return portraitCell
             //            default:
-            let article = articles[indexPath.row]
-            let articleData = ArticleData(author: article.author,
-                                          title: article.title ?? "",
-                                          url: article.url ?? "",
-                                          urlToImage: nil,
-                                          publishedAt: article.publishedAt ?? "")
+            let article = searching ? searchedArticles[indexPath.row] : articles[indexPath.row]
+            let articleData = ArticleData(author: article.author, title: article.title,
+                                          url: article.url, publishedAt: article.publishedAt)
             smallCell.assignCellData(from: articleData, isSaved: true, currentDate: currentDateTime)
+            smallCell.didSelecte = { [weak self] in
+                smallCell.buttonSaving.isSelected ?
+                self?.coreDataManager.deleteArticle(id: articleData.title)
+                : self?.coreDataManager.createArticle(articleData)
+            }
+            smallCell.didShare = { [weak self] in
+                guard let url = URL(string: articleData.url) else { return }
+                self?.presentShareSheet(url: url)
+            }
             return smallCell
             // }
         case .outdated(_):
@@ -200,3 +220,29 @@ extension SelectedArticlesViewController: UICollectionViewDataSource {
 // MARK: - Collection View Delegate
 extension SelectedArticlesViewController: UICollectionViewDelegate {
 }
+
+extension SelectedArticlesViewController: SettingViewControllerDelegate {
+    func changeThema() {
+        savedCollectionView.backgroundColor = .myBackgroundColor
+        print("Invoke")  // спрацьовує, але без зміни кольору
+    }
+}
+
+// MARK: - Search Bar Delegate
+extension SelectedArticlesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let text = searchBar.text, !text.isEmpty {
+            searching = true
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
+                self?.searchedArticles = self?.coreDataManager.searchArticles(with: text) ?? []
+            })
+        } else {
+            searching = false
+            searchedArticles.removeAll()
+        }
+        savedCollectionView.reloadData()
+    }
+    
+}
+

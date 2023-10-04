@@ -10,11 +10,13 @@ import UIKit
 class TabBarController: UITabBarController {
     
     var containerViewController: ContainerViewController!
+    var selectedArticlesViewController: SelectedArticlesViewController!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         containerViewController = ContainerViewController()
+        selectedArticlesViewController = SelectedArticlesViewController()
         configureTabBar()
         setupViewControllers()
     }
@@ -39,7 +41,8 @@ class TabBarController: UITabBarController {
             let settingsVC = SettingsAssembly.assembleSettings()
             (settingsVC as? SettingsViewController)?.delegate = self
             let homeViewController = containerViewController?.navgationController.viewControllers.first
-            (settingsVC as? SettingsViewController)?.settingDelegate = (homeViewController as? SettingViewControllerDelegate)
+            (settingsVC as? SettingsViewController)?.settingDelegateHome = (homeViewController as? SettingViewControllerDelegate)
+            (settingsVC as? SettingsViewController)?.settingDelegateSaved = selectedArticlesViewController!
             present(settingsVC, animated: true)
         }
     }

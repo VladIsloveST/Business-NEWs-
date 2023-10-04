@@ -20,6 +20,7 @@ protocol CoreDataProtocol {
     func createArticle(_ articleData: ArticleData)
     func fetchArticles() -> [Article]
     func deleteArticle(id: String)
+    func searchArticles(with searchBarText: String) -> [Article]
     func checkAvaible(with title: String) -> Bool
 }
 
@@ -70,10 +71,16 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
         appDelegate.saveContext()
     }
     
-    func fetchArticle(with title: String) -> Article? {
+    func searchArticles(with searchBarText: String) -> [Article] {
         let articles = fetchArticles()
-        guard let article = articles.first(where: { $0.title == title }) else { return nil }
-        return article
+        var searcheArticles: [Article] = []
+        
+        articles.forEach {
+            if $0.title.lowercased().contains(searchBarText.lowercased()) {
+                searcheArticles.append($0)
+            }
+        }
+        return searcheArticles
     }
     
     func checkAvaible(with title: String) -> Bool {

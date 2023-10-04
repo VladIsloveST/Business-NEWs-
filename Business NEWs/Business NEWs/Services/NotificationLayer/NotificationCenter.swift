@@ -72,6 +72,7 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
         notificationCenter.add(request) { error in
             print(error?.localizedDescription as Any)
+            print("???")
         }
     }
     
