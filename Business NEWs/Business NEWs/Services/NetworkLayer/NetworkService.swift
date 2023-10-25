@@ -26,7 +26,7 @@ enum StatusCodeResult<Error> {
 }
 
 class NetworkService {
-    private let baseApiKey = "apiKey=b34e284c63fa438a8aa6e99bf561cc01" //apiKey=977e4b83946b42a1aba422dc52cefbb1
+    private let baseApiKey = "apiKey=977e4b83946b42a1aba422dc52cefbb1" //apiKey=b34e284c63fa438a8aa6e99bf561cc01" 
     // b34e284c63fa438a8aa6e99bf561cc01
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {
         print(response.statusCode)

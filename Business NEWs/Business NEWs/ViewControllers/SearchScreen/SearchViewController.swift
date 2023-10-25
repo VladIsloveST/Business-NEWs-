@@ -53,7 +53,7 @@ class SearchViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(700)),
-            subitem: item, count: 5)
+            repeatingSubitem: item, count: 5)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 80

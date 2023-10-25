@@ -24,7 +24,13 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     private var page = 1
     var articles: [ArticleData] = [] {
         didSet {
-            performBatchUpdates()
+           // if oldValue.isEmpty {
+             articleCollectionView.reloadData()
+
+            //} else {
+              //performBatchUpdates()
+
+            //}
         }
     }
     
@@ -51,7 +57,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
         let localVerticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
-            subitem: item, count: 3)
+            repeatingSubitem: item, count: 3)
         let generalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
@@ -116,7 +122,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     func scrollToTop() {
         self.articleCollectionView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
     }
-        
+    
     private func performBatchUpdates() {
         let indexPath = IndexPath(item: self.articles.count - 1, section: 0)
         let indexPaths: [IndexPath] = [indexPath]
@@ -187,11 +193,9 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
 
 // MARK: - Collection View Delegate
 extension ArticlesCollectionViewCell: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if indexPath.row == articles.count - 1 {
-//            page += 1
-//            self.didFetchData(page, false)
-//        }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: articles[indexPath.row].url) {
+            UIApplication.shared.open(url)
+        }
     }
 }
