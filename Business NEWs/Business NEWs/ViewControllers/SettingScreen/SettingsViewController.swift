@@ -12,7 +12,7 @@ protocol TabBarControllerDelegate: AnyObject {
 }
 
 protocol SettingsDelegate: AnyObject {
-    func setValue(isNotify: Bool)
+    func setValueIsNotify()
 }
 
 class SettingsViewController: UIViewController {
@@ -69,7 +69,7 @@ class SettingsViewController: UIViewController {
         let message = "Changing your language requires that you exit Business NEWs.".localized
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "Exit".localized , style: .default, handler: { [weak self] _ in
+        let action = UIAlertAction(title: "Exit".localized , style: .default) { [weak self] _ in
             guard let self = self else { return }
             
             if self.settingManager.isNotify {
@@ -83,7 +83,7 @@ class SettingsViewController: UIViewController {
                     exit(0)
                 }
             }
-        })
+        }
         alert.addAction(action)
         self.present(alert, animated: true)
     }
@@ -117,7 +117,6 @@ extension SettingsViewController: UITableViewDataSource {
                     self?.settingManager.isDark = isDark
                     self?.settingDelegateHome?.changeThema()
                     self?.settingDelegateSaved?.changeThema()
-
                 }
             case 1:
                 let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0
@@ -162,8 +161,8 @@ extension SettingsViewController: UISheetPresentationControllerDelegate {
 }
 
 extension SettingsViewController: SettingsDelegate {
-    func setValue(isNotify: Bool) {
-        settingManager.isNotify = isNotify
+    func setValueIsNotify() {
+        settingManager.isNotify = true
     }
 }
 

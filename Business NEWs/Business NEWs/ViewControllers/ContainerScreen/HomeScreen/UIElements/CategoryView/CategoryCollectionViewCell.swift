@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MenuCollectionViewCell: UICollectionViewCell {
+class CategoryCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     let nameCategoryLabel: UILabel = {
@@ -21,10 +21,10 @@ class MenuCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
+            nameCategoryLabel.alpha = self.isSelected ? 1 : 0.95
             nameCategoryLabel.font = self.isSelected ?
             UIFont(name: "Helvetica Neue Bold", size: 18) :
             UIFont(name: "Helvetica Neue Medium", size: 18)
-            nameCategoryLabel.alpha = self.isSelected ? 1 : 0.95
         }
     }
     
@@ -49,3 +49,4 @@ class MenuCollectionViewCell: UICollectionViewCell {
         backgroundColor = .white
     }
 }
+

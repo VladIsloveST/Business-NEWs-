@@ -32,7 +32,6 @@ class CustomTabBar: UITabBar {
         button.configurationUpdateHandler = { button in
             button.isHighlighted = false
         }
-        
         button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
         button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
         self.addSubview(button)

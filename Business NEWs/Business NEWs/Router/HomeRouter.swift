@@ -14,7 +14,6 @@ protocol RouterMain {
 }
 
 protocol RouterProtocol: RouterMain {
-    //func initialViewController()
     func showSearch()
     func popToRoot()
 }

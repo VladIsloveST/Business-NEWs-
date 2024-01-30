@@ -29,7 +29,7 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
                 self.notificationCenter.requestAuthorization(options: [.alert, .sound]) { [weak self] (granted, error) in
                     guard error == nil else { return }
                     if granted {
-                        self?.delegate?.setValue(isNotify: true)
+                        self?.delegate?.setValueIsNotify()
                         self?.dispatchNotification()
                     }
                 }
@@ -50,7 +50,7 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
             if settings.alertSetting == .disabled {
                 if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                     DispatchQueue.main.async { [weak self] in
-                        self?.delegate?.setValue(isNotify: true)
+                        self?.delegate?.setValueIsNotify()
                         completionHandler()
                         UIApplication.shared.open(settingsURL)
                     }

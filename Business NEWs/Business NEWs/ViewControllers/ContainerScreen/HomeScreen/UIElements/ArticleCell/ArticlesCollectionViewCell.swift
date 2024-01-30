@@ -18,19 +18,12 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     var cells = [BasicCollectionViewCell]()
     
     private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
-    
-    var didFetchData: (Int, Bool) -> () = { _,_ in }
-    
+    private var didFetchData: UploadArticles = { _,_ in }
     private var page = 1
-    var articles: [ArticleData] = [] {
+    private var articles: [ArticleData] = [] {
         didSet {
-           // if oldValue.isEmpty {
              articleCollectionView.reloadData()
-
-            //} else {
-              //performBatchUpdates()
-
-            //}
+            // performBatchUpdates()
         }
     }
     
@@ -46,6 +39,11 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func fill(articles: [ArticleData], didFetchData: @escaping UploadArticles) {
+        self.articles = articles
+        self.didFetchData = didFetchData
+    }
+    
     // MARK: - Actions
     private func createLayout() -> CustomFlowLayout {
         let topItem = NSCollectionLayoutItem(
@@ -53,7 +51,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
                                                heightDimension: .estimated(1)))
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(40)))
+                                               heightDimension: .estimated(140)))
         let localVerticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
@@ -160,6 +158,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
                 self?.coreDataManager.deleteArticle(id: article.title)
                 : self?.coreDataManager.createArticle(article)
             }
+            //portraitCell.layoutIfNeeded()
             cells.append(portraitCell)
             return portraitCell
         } else {

@@ -23,10 +23,14 @@ class SmallCell: BasicCollectionViewCell {
     
     private func setConstraint() {
         NSLayoutConstraint.activate([
-            generalStackView.widthAnchor.constraint(equalToConstant: frame.width - 40),
             generalStackView.heightAnchor.constraint(lessThanOrEqualToConstant: frame.height),
+            generalStackView.widthAnchor.constraint(equalToConstant: frame.width - 40),
             generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             generalStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }
+//generalStackView.topAnchor.constraint(equalTo: bottomAnchor, constant: 14),
+//generalStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
+//generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//generalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)

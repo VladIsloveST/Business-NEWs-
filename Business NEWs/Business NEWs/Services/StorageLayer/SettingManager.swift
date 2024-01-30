@@ -42,13 +42,13 @@ final class SettingManager: SettingManagerProtocol {
     }
     
     var language: Language {
-        get {
-            let enviroment = userDefaults.value(forKey: languageKey) as? String ?? "en"
-            return Language(rawValue: enviroment)!
-        }
         set(environment) {
             userDefaults.set(environment.rawValue, forKey: languageKey)
-            userDefaults.synchronize()
         }
+        get {
+            let enviroment = userDefaults.value(forKey: languageKey) as? String
+            return Language(rawValue: enviroment ?? "en")!
+        }
+        
     }
 }

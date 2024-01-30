@@ -57,7 +57,8 @@ class Presenter: ViewOutPut {
                 let filteredArticles = items.articles.filter { $0.title != "[Removed]" }
                 self.typesOfArticles[index].append(contentsOf: filteredArticles)
             case .failure(let error):
-                self.view?.failer(error: (error as? NetworkError) ?? NetworkError.internetConnectionError)
+                let safeFail = (error as? NetworkError) ?? NetworkError.internetConnectionError
+                self.view?.failer(error: safeFail)
             }
             self.group.leave()
         }

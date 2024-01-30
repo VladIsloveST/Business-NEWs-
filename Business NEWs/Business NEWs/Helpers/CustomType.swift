@@ -8,5 +8,6 @@
 import Foundation
 
 typealias UndefinedAction = () -> ()
+typealias UploadArticles = (Int, Bool) -> ()
 typealias CompletionHandler = (Result<Data, Error>) -> Void
 

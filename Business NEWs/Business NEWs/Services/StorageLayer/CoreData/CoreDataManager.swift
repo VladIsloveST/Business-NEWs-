@@ -63,24 +63,13 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
     
     func deleteArticle(id: String) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
-        do {
-            guard let articles = try? context.fetch(fetchRequest) as? [Article],
-                  let article = articles.first(where: { $0.title == id }) else { return }
-            context.delete(article)
-        }
+        guard let article = fetchArticles().first(where: { $0.title == id }) else { return }
+        context.delete(article)
         appDelegate.saveContext()
     }
     
     func searchArticles(with searchBarText: String) -> [Article] {
-        let articles = fetchArticles()
-        var searcheArticles: [Article] = []
-        
-        articles.forEach {
-            if $0.title.lowercased().contains(searchBarText.lowercased()) {
-                searcheArticles.append($0)
-            }
-        }
-        return searcheArticles
+        fetchArticles().filter{ $0.title.lowercased().contains(searchBarText) }
     }
     
     func checkAvaible(with title: String) -> Bool {

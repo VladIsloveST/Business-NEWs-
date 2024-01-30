@@ -8,15 +8,15 @@
 import UIKit
 
 enum MenuOptions: String {
-    case home = "Home"
-    case info = "Information"
-    case appRating = "App Rating"
-    case shareApp = "ShareApp"
-    case settings = "Settings"
-    case homeTest = "HomeTest"
-    case infoTest = "information"
-    case appRatingTest = "AppRating"
-    case shareAppTest = "ShareAppTest"
+    case home = "1.1"
+    case info = "1.2"
+    case appRating = "2.1"
+    case shareApp = "3.1"
+    case settings = "3.2"
+    case homeTest = "3.3"
+    case infoTest = "4.1"
+    case appRatingTest = "5.1"
+    case shareAppTest = "5.2"
 }
 
 struct Section {
@@ -71,11 +71,11 @@ class MenuViewController: UIViewController {
     
     private func setupTestName() {
         menuSections = [
-            Section(title: "Home", sectionOptions: [MenuOptions.appRating, MenuOptions.home]),
-            Section(title: "Information", sectionOptions: [MenuOptions.info]),
-            Section(title: "App Rating", sectionOptions: [MenuOptions.homeTest]),
-            Section(title: "ShareApp", sectionOptions: [MenuOptions.infoTest, MenuOptions.shareAppTest, MenuOptions.appRatingTest]),
-            Section(title: "Settings", sectionOptions: [MenuOptions.shareApp, MenuOptions.settings])
+            Section(title: "1 row", sectionOptions: [MenuOptions.home, MenuOptions.info]),
+            Section(title: "2 row", sectionOptions: [MenuOptions.appRating]),
+            Section(title: "3 row", sectionOptions: [MenuOptions.shareApp, MenuOptions.settings, MenuOptions.homeTest]),
+            Section(title: "4 row", sectionOptions: [MenuOptions.infoTest]),
+            Section(title: "5 row", sectionOptions: [MenuOptions.appRatingTest, MenuOptions.shareAppTest])
         ]
     }
     

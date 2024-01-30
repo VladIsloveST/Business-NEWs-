@@ -75,7 +75,6 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.dataSource = self
         searchResultCollectioView.prefetchDataSource = self
         searchResultCollectioView.isPrefetchingEnabled = true
-
         
         view.addSubview(searchResultCollectioView)
         searchResultCollectioView.translatesAutoresizingMaskIntoConstraints = false
@@ -166,6 +165,13 @@ class SearchViewController: UIViewController {
             searchResultCollectioView.insertItems(at: indexPaths)
         }, completion: nil)
     }
+    
+    private func presentShareSheet(url: URL) {
+        DispatchQueue.main.async {
+            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.present(activityViewPopover, animated: true)
+        }
+    }
 }
 
 // MARK: - Search Bar Delegate
@@ -185,13 +191,6 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         flowUp()
     }
-    
-    func presentShareSheet(url: URL) {
-        DispatchQueue.main.async {
-            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            self.present(activityViewPopover, animated: true)
-        }
-    }
 }
 
 // MARK: - Collection View Data Source
@@ -210,7 +209,6 @@ extension SearchViewController: UICollectionViewDataSource {
             searchCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.presentShareSheet(url: url)
-                
             }
         }
         return searchCell
@@ -234,6 +232,12 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchBar.endEditing(true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: presenter.searchResultArticles[indexPath.row].url) {
+            UIApplication.shared.open(url)
+        }
     }
 }
 

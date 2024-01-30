@@ -12,7 +12,7 @@ class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
     var imageView = ResizableImageView()
-    let storageManager = CasheManager.shared
+    private let storageManager = CasheManager.shared
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,7 +44,7 @@ class LargePortraitCell: BasicCollectionViewCell {
         
         NSLayoutConstraint.activate([
             generalStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
-            generalStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
+            generalStackView.widthAnchor.constraint(equalToConstant: frame.width - 40),
             generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             generalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
@@ -57,7 +57,6 @@ class ResizableImageView: UIImageView {
             guard let image = image else { return }
             if superview != nil {
                 let aspectRatio = superview!.frame.width / image.size.width
-                
                 let resizeConstraints = [
                     self.widthAnchor.constraint(equalToConstant: image.size.width * aspectRatio),
                     self.heightAnchor.constraint(equalToConstant: image.size.height * aspectRatio)

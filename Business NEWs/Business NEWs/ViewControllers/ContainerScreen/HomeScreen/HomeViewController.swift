@@ -17,7 +17,7 @@ protocol HomeViewControllerDelegate: AnyObject {
 }
 
 protocol ArticlesMovementDelegate: AnyObject {
-    func scrollToMenu(index: Int)
+    func scrollToCategory(at index: Int)
 }
 
 protocol SettingViewControllerDelegate: AnyObject {
@@ -47,7 +47,7 @@ class HomeViewController: UIViewController {
         return collectionView
     }()
     
-    private var menuCollectionView: MenuCollectionView!
+    private var categoryCollectionView: CategoryCollectionView!
     private var loadingIndicator: ProgressView!
     private var topMenu: UIMenu!
     private var timer: Timer!
@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTopMenu()
-        setupMenu()
+        setupCategory()
         setupNavBar()
         setupIndicator()
         setupCollectionView()
@@ -79,22 +79,16 @@ class HomeViewController: UIViewController {
         }
     }
     
-    @objc
-    func scrollToTop() {
-        moveToTop()
-    }
-    
     private func setupCollectionView() {
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
-        
         articlesCollectionView.register(ArticlesCollectionViewCell.self,
                                         forCellWithReuseIdentifier: ArticlesCollectionViewCell.identifier)
         view.addSubview(articlesCollectionView)
         articlesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             articlesCollectionView.widthAnchor.constraint(equalToConstant: view.bounds.width),
-            articlesCollectionView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor),
+            articlesCollectionView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor),
             articlesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         articlesCollectionView.isPagingEnabled = true
@@ -102,18 +96,18 @@ class HomeViewController: UIViewController {
         articlesCollectionView.bounces = false
     }
     
-    private func setupMenu() {
-        menuCollectionView = MenuCollectionView()
-        view.addSubview(menuCollectionView)
-        menuCollectionView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupCategory() {
+        categoryCollectionView = CategoryCollectionView()
+        view.addSubview(categoryCollectionView)
+        categoryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            menuCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
-            menuCollectionView.heightAnchor.constraint(equalToConstant: 60)
+            categoryCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            categoryCollectionView.widthAnchor.constraint(equalToConstant: view.frame.width),
+            categoryCollectionView.heightAnchor.constraint(equalToConstant: 60)
         ])
-        menuCollectionView.homeControllerDelegate = self
-        menuCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
-        //menuCollectionView.size = view.bounds.width / 22
+        categoryCollectionView.homeControllerDelegate = self
+        categoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
+        //categoryCollectionView.size = view.bounds.width / 22
     }
     
     private func setupIndicator() {
@@ -144,6 +138,11 @@ class HomeViewController: UIViewController {
         navigationItem.leftBarButtonItem = menuButtonItem
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
         navigationItem.title = "Home".localized
+    }
+    
+    @objc
+    private func scrollToTop() {
+        moveToTop()
     }
     
     @objc
@@ -197,10 +196,9 @@ extension HomeViewController: UICollectionViewDataSource {
         if !presenter.typesOfArticles.isEmpty {
             cell.delegate = self
             let articles = presenter.typesOfArticles[indexPath.row]
-            cell.articles = articles
-            cell.didFetchData = { [weak self] (page, isRefreshed) in
-                self?.presenter
-                    .getArticlesFromCategory(index: indexPath.row, page: page, isRefreshed: isRefreshed)
+            cell.fill(articles: articles) { [weak self] (page, isRefreshed) in
+                self?.presenter.getArticlesFromCategory(index: indexPath.row,
+                                                        page: page, isRefreshed: isRefreshed)
             }
         }
         return cell
@@ -213,9 +211,9 @@ extension HomeViewController: UICollectionViewDelegate {
                                    targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexPath = IndexPath(item: Int(index), section: 0)
-        menuCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-        menuCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        menuCollectionView.animateMovementUnderlineView(item: indexPath.item)
+        categoryCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+        categoryCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        categoryCollectionView.animateMovementUnderlineView(item: indexPath.item)
     }
 }
 
@@ -244,7 +242,7 @@ extension HomeViewController: ViewInPut {
 }
 
 extension HomeViewController: ArticlesMovementDelegate {
-    func scrollToMenu(index: Int) {
+    func scrollToCategory(at index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         articlesCollectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
@@ -266,3 +264,4 @@ extension HomeViewController: SettingViewControllerDelegate {
         changeThemaInCell()
     }
 }
+
