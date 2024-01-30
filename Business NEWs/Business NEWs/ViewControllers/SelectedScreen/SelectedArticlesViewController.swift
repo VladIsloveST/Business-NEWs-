@@ -157,12 +157,12 @@ extension SelectedArticlesViewController: UISearchBarDelegate {
             timer?.invalidate()
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
                 self?.searchedArticles = self?.coreDataManager.searchArticles(with: text.lowercased()) ?? []
+                self?.savedCollectionView.reloadData()
             })
         } else {
             isSearching = false
             searchedArticles.removeAll()
         }
-        savedCollectionView.reloadData()
     }
 }
 
