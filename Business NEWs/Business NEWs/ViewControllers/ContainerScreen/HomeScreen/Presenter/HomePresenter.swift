@@ -53,11 +53,12 @@ class Presenter: ViewOutPut {
             
             switch result {
             case .success(let items):
-                self.storageManager?.save(articles: items.articles)
+                self.storageManager?.saveImagesFrom(articles: items.articles)
                 let filteredArticles = items.articles.filter { $0.title != "[Removed]" }
                 self.typesOfArticles[index].append(contentsOf: filteredArticles)
             case .failure(let error):
-                self.view?.failer(error: (error as? NetworkError) ?? NetworkError.internetConnectionError)
+                let safeFail = (error as? NetworkError) ?? NetworkError.internetConnectionError
+                self.view?.failer(error: safeFail)
             }
             self.group.leave()
         }

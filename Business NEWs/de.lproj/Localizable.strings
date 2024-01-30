@@ -1,0 +1,32 @@
+/* 
+  Localizable.strings
+  Business NEWs
+
+  Created by Mac on 22.09.2023.
+  
+*/
+
+"Saved" = "Gerettet";
+"Home" = "Heim";
+"Search" = "Suchen";
+"Settings" = "Einstellungen";
+"Thema" = "Erscheinungsbild";
+"Language" = "Sprache";
+"Notification" = "Mittelungen";
+"Changing your language requires that you exit Business NEWs." = "Um Ihre Sprache zu ändern, müssen Sie Business NEWs beenden.";
+"Exit" = "Ausfahrt";
+"Tap to reopen the application" = "Tippen Sie, um die Anwendung erneut zu öffnen";
+"Language changed to " = "Sprache geändert zu ";
+"Reviews" = "Rezensionen";
+"About the App" = "Über die Anwendung";
+"Error" = "Fehler";
+"Cancel" = "Stornieren";
+"URL is nil." = "URL ist null.";
+"Response returned with no data to decode." = "Die Antwort wurde ohne zu dekodierende Daten zurückgegeben.";
+"Response is nil." = "Die Antwort ist gleich Null.";
+"You need to take additional steps to fulfill the request." = "Sie müssen zusätzliche Schritte unternehmen, um der Anfrage nachzukommen.";
+"You need to be authenticated first." = "Sie müssen zunächst authentifiziert werden.";
+"Bad request." = "Ungültige Anforderung.";
+"Unknown response code status." = "Unbekannter Antwortcodestatus.";
+"We could't decode the response." = "Wir konnten die Antwort nicht entschlüsseln.";
+"The Internet connection appears to be offline." = "Die Internetverbindung scheint offline zu sein.";

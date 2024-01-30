@@ -10,8 +10,8 @@ import UIKit
 
 protocol Cashe {
     static var shared: Cashe { get set }
-    func loadImageFromCasheWith(_ url: String?) -> UIImage?
-    func save(articles: [ArticleData])
+    func fetchImageFromCasheWith(_ url: String?) -> UIImage?
+    func saveImagesFrom(articles: [ArticleData])
 }
 
 final class CasheManager: Cashe {
@@ -19,7 +19,7 @@ final class CasheManager: Cashe {
     private init() {}
     private let imageCashe = NSCache<NSString, UIImage>()
     
-    func loadImageFromCasheWith(_ url: String?) -> UIImage? {
+    func fetchImageFromCasheWith(_ url: String?) -> UIImage? {
         guard let name = url else { return nil }
         if let cachedImage = imageCashe.object(forKey: name as NSString) {
             return cachedImage
@@ -27,7 +27,23 @@ final class CasheManager: Cashe {
         return nil
     }
     
-    private func loadingImageUsingCashe(withURL: String?) {
+    func saveImagesFrom(articles: [ArticleData]) {
+        let concurrentQueue = DispatchQueue(label: "cashe.label.concurrent", attributes: .concurrent)
+        let neededItems = articles.indices.filter{ $0 % 4 == 0 }.map{ articles[$0] }
+        var isSerialLoad = true
+        neededItems.forEach { [ weak self ] article in
+            if isSerialLoad {
+                self?.loadImageToCashe(withURL: article.urlToImage)
+                isSerialLoad = !isSerialLoad
+                return
+            }
+            concurrentQueue.async {
+                self?.loadImageToCashe(withURL: article.urlToImage)
+            }
+        }
+    }
+    
+    private func loadImageToCashe(withURL: String?) {
         guard let name = withURL else { return }
         guard let url = URL(string: name) else { return }
         
@@ -35,22 +51,6 @@ final class CasheManager: Cashe {
         guard let imageData = imageData else { return }
         if let image = UIImage(data: imageData) {
             self.imageCashe.setObject(image, forKey: name as NSString)
-        }
-    }
-    
-    func save(articles: [ArticleData]) {
-        let dispQueue = DispatchQueue(label: "cashe.label.concurrent", attributes: .concurrent)
-        var isFirst = true
-        let neededItems = articles.indices.filter{ $0 % 4 == 0 }.map{ articles[$0] }
-        neededItems.forEach { [ weak self ] article in
-            if isFirst {
-                self?.loadingImageUsingCashe(withURL: article.urlToImage)
-                isFirst = false
-                return
-            }
-            dispQueue.async {
-                self?.loadingImageUsingCashe(withURL: article.urlToImage)
-            }
         }
     }
 }

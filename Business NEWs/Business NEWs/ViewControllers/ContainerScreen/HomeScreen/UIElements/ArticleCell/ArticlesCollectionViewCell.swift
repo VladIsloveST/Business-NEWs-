@@ -17,15 +17,13 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     var delegate: HomeViewControllerDelegate?
     var cells = [BasicCollectionViewCell]()
     
-    private let currentHour = Calendar.current.component(.hour, from: Date())
-    var didFetchData: (Int, Bool) -> () = { _,_ in }
-    
+    private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
+    private var didFetchData: UploadArticles = { _,_ in }
     private var page = 1
-    var articles: [ArticleData] = [] {
+    private var articles: [ArticleData] = [] {
         didSet {
-            articleCollectionView.reloadData()
-            performBatchUpdates()
-            //articleCollectionView.collectionViewLayout.invalidateLayout()
+             articleCollectionView.reloadData()
+            // performBatchUpdates()
         }
     }
     
@@ -41,6 +39,11 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func fill(articles: [ArticleData], didFetchData: @escaping UploadArticles) {
+        self.articles = articles
+        self.didFetchData = didFetchData
+    }
+    
     // MARK: - Actions
     private func createLayout() -> CustomFlowLayout {
         let topItem = NSCollectionLayoutItem(
@@ -48,11 +51,11 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
                                                heightDimension: .estimated(1)))
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(40)))
+                                               heightDimension: .estimated(140)))
         let localVerticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
-            subitem: item, count: 3)
+            repeatingSubitem: item, count: 3)
         let generalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(400)),
@@ -117,7 +120,7 @@ class ArticlesCollectionViewCell: UICollectionViewCell {
     func scrollToTop() {
         self.articleCollectionView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
     }
-        
+    
     private func performBatchUpdates() {
         let indexPath = IndexPath(item: self.articles.count - 1, section: 0)
         let indexPaths: [IndexPath] = [indexPath]
@@ -144,22 +147,31 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
         let article = articles[indexPath.row]
         
         if indexPath.row % 4 == 0 {
-            portraitCell.assignCellData(from: article, currentHour: currentHour)
+            let isSaved = coreDataManager.checkAvaible(with: article.title)
+            portraitCell.assignCellData(from: article, isSaved: isSaved, currentDate: currentDateTime)
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)
             }
-            portraitCell.didSelected = { [weak self] in
-                portraitCell.buttonSaving.isSelected ? print("delete") : self?.coreDataManager.createArticle(article)
-                    print("save")
+            portraitCell.didSelecte = { [weak self] in
+                portraitCell.buttonSaving.isSelected ?
+                self?.coreDataManager.deleteArticle(id: article.title)
+                : self?.coreDataManager.createArticle(article)
             }
+            //portraitCell.layoutIfNeeded()
             cells.append(portraitCell)
             return portraitCell
         } else {
-            smallCell.assignCellData(from: article, currentHour: currentHour)
+            let isSaved = coreDataManager.checkAvaible(with: article.title)
+            smallCell.assignCellData(from: article, isSaved: isSaved, currentDate: currentDateTime)
             smallCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)
+            }
+            smallCell.didSelecte = { [weak self] in
+                smallCell.buttonSaving.isSelected ?
+                self?.coreDataManager.deleteArticle(id: article.title)
+                : self?.coreDataManager.createArticle(article)
             }
             cells.append(smallCell)
             return smallCell
@@ -170,7 +182,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
 // MARK: - Collection View Data Source Prefetching
 extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let filtered = indexPaths.filter({ $0.row >= articles.count - 1 })
+        let filtered = indexPaths.filter({ $0.row >= articles.count - 4 })
         if filtered.count > 0 {
             page += 1
             self.didFetchData(page, false)
@@ -180,11 +192,9 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
 
 // MARK: - Collection View Delegate
 extension ArticlesCollectionViewCell: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if indexPath.row == articles.count - 1 {
-//            page += 1
-//            self.didFetchData(page, false)
-//        }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: articles[indexPath.row].url) {
+            UIApplication.shared.open(url)
+        }
     }
 }

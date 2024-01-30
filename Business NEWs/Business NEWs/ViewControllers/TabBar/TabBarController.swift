@@ -10,11 +10,13 @@ import UIKit
 class TabBarController: UITabBarController {
     
     var containerViewController: ContainerViewController!
+    var selectedArticlesViewController: SelectedArticlesViewController!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         containerViewController = ContainerViewController()
+        selectedArticlesViewController = SelectedArticlesViewController()
         configureTabBar()
         setupViewControllers()
     }
@@ -36,10 +38,11 @@ class TabBarController: UITabBarController {
     
     fileprivate func routeToSettings() {
         if #available(iOS 15.0, *) {
-            let settingsVC = SettingsViewController()
-            settingsVC.delegate = self
+            let settingsVC = SettingsAssembly.assembleSettings()
+            (settingsVC as? SettingsViewController)?.delegate = self
             let homeViewController = containerViewController?.navgationController.viewControllers.first
-            settingsVC.settingDelegate = (homeViewController as? SettingViewControllerDelegate)
+            (settingsVC as? SettingsViewController)?.settingDelegateHome = (homeViewController as? SettingViewControllerDelegate)
+            (settingsVC as? SettingsViewController)?.settingDelegateSaved = selectedArticlesViewController!
             present(settingsVC, animated: true)
         }
     }
@@ -47,11 +50,11 @@ class TabBarController: UITabBarController {
     fileprivate func setupViewControllers() {
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
-                                title: "Saved",
+                                title: "Saved".localized,
                                 systemImageName: "bookmark",
                                 selectedImageName: "bookmark.fill"),
             createTabBarItem(containerViewController,
-                             title: "Home",
+                             title: "Home".localized,
                              imageName: "house",
                              selectedImageName: "house.fill"),
             UIViewController()

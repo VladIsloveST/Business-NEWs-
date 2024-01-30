@@ -14,7 +14,6 @@ enum CategoriesOfArticles: String, CaseIterable {
     case business = "top-headlines?country=us&category=technology"
     case tesla = "everything?q=tesla"
     case bitcoin = "everything?q=bitcoin"
-    case ua = "top-headlines?country=ua"
     case bbc = "top-headlines?sources=bbc-news"
 }
 
@@ -25,8 +24,9 @@ protocol NetworkDataFetcherProtocol {
 }
 
 class NetworkDataFetcher: NetworkDataFetcherProtocol {
-    typealias ArticlesClousure = (Result<Articles, Error>) -> Void
-    let networkService = NetworkService()
+    private typealias ArticlesClousure = (Result<Articles, Error>) -> Void
+    private let networkService = NetworkService()
+    private let language = "language=" + SettingManager.shared.language.rawValue
     
     private func fetchTracks(url: String, response: @escaping ArticlesClousure ) {
         networkService.requestFrom(urlWitoutApiKey: url) { result in
@@ -50,13 +50,12 @@ class NetworkDataFetcher: NetworkDataFetcherProtocol {
     func getArticlesCategoryFrom(_ index: Int, page: Int,
                                  complition: @escaping (Result<Articles, Error>) -> Void) {
         guard index < CategoriesOfArticles.allCases.count else { return }
-        let url = "https://newsapi.org/v2/" + CategoriesOfArticles.allCases[index].rawValue + "&pageSize=12&page=\(page)&"
+        let url = "https://newsapi.org/v2/" + CategoriesOfArticles.allCases[index].rawValue + "&pageSize=12&page=\(page)&" + language
         fetchTracks(url: url, response: complition)
     }
     
     func getSearchArticles(fromSearch: String, page: Int, complition: @escaping (Result<Articles, Error>) -> Void) {
-        print("from NetworkDataFetcher")
-        let url = "https://newsapi.org/v2/everything?q=\(fromSearch)&pageSize=12&page=\(page)&" // ???
+        let url = "https://newsapi.org/v2/everything?q=\(fromSearch)&pageSize=12&page=\(page)&" + language
         fetchTracks(url: url, response: complition)
     }
 }

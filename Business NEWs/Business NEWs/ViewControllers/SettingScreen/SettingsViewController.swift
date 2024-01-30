@@ -11,10 +11,16 @@ protocol TabBarControllerDelegate: AnyObject {
     func removeFromInactiveState()
 }
 
+protocol SettingsDelegate: AnyObject {
+    func setValueIsNotify()
+}
+
 class SettingsViewController: UIViewController {
     weak var delegate: TabBarControllerDelegate?
-    weak var settingDelegate: SettingViewControllerDelegate?
-    var themeManager: ThemeManagerProtocol!
+    weak var settingDelegateHome: SettingViewControllerDelegate?
+    weak var settingDelegateSaved: SettingViewControllerDelegate?
+    private var settingManager: SettingManagerProtocol!
+    var localNotification: LocalNotificatioProtocol!
     
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
@@ -24,7 +30,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        themeManager = ThemeManager.shared
+        settingManager = SettingManager.shared
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
@@ -53,10 +59,33 @@ class SettingsViewController: UIViewController {
     
     private func setupNavBar() {
         let navBar = UINavigationBar(frame: CGRect(x: 20, y: -30, width: view.bounds.width, height: 100))
-        let navItem = UINavigationItem(title: "Settings")
+        let navItem = UINavigationItem(title: "Settings".localized)
         navBar.items = [navItem]
         navBar.prefersLargeTitles = true
         view.addSubview(navBar)
+    }
+    
+    private func showAlertCloseApp() {
+        let message = "Changing your language requires that you exit Business NEWs.".localized
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Exit".localized , style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            
+            if self.settingManager.isNotify {
+                let language = self.settingManager.language
+                self.localNotification.reopenNotification(language: language)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    exit(0)
+                }
+            }
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }
 
@@ -77,22 +106,39 @@ extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else { return UITableViewCell() }
         let section = indexPath.section
-        let text = namesOfCells[indexPath.section][indexPath.row].0
+        let text = namesOfCells[indexPath.section][indexPath.row].0.localized
         let image = namesOfCells[indexPath.section][indexPath.row].1
-        switch section {
-        case 0:
-            if indexPath.row == 0 {
-                cell.setupSwitcher(isOn: self.themeManager.isDark)
-                cell.didChangeTheme = { [weak self] isDark in
-                    self?.themeManager.isDark = isDark
-                    self?.settingDelegate?.changeThema()
-                }
-            }
+        if section == 0 {
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
-        case 1:
+
+            switch indexPath.row {
+            case 0:
+                cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
+                    self?.settingManager.isDark = isDark
+                    self?.settingDelegateHome?.changeThema()
+                    self?.settingDelegateSaved?.changeThema()
+                }
+            case 1:
+                let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0
+                cell.setupSegmentedControl(selected: index) { [weak self] selectedIndex in
+                    self?.settingManager.language = Language.allCases[selectedIndex]
+                    self?.showAlertCloseApp()
+                }
+            case 2:
+                cell.setupSwitcher(isOn: self.settingManager.isNotify) { [weak self] isNotify in
+                    self?.settingManager.isNotify = isNotify
+                    if isNotify {
+                        self?.localNotification.checkForPermission()
+                        self?.localNotification.directToSettings { cell.switcher.isOn = false }
+                    } else {
+                        self?.localNotification.removeNotification()
+                    }
+                }
+            default:
+                break
+            }
+        } else {
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .gray)
-        default:
-            break
         }
         return cell
     }
@@ -111,6 +157,12 @@ extension SettingsViewController: UITableViewDelegate {
 extension SettingsViewController: UISheetPresentationControllerDelegate {
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         delegate?.removeFromInactiveState()
+    }
+}
+
+extension SettingsViewController: SettingsDelegate {
+    func setValueIsNotify() {
+        settingManager.isNotify = true
     }
 }
 

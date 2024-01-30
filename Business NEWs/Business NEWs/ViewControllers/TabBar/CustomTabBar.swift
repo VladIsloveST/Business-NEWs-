@@ -11,19 +11,19 @@ import UIKit
 class CustomTabBar: UITabBar {
     
     // MARK: - Variables
-    var didTapButton: (() -> ())?
+    var didTapButton: (UndefinedAction)?
     
     lazy var settingsButton: UIButton = {
         
         let button = CustomButtonBehavior()
-        button.frame.size = CGSize(width: 65, height: 50)
+        button.frame.size = CGSize(width: 90, height: 50)
         button.isSelected = false
         button.tintAdjustmentMode = .normal
         
         var filled = UIButton.Configuration.filled()
         filled.baseForegroundColor = .systemGray
         filled.baseBackgroundColor = .clear
-        filled.attributedTitle = AttributedString("Settings", attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10)]))
+        filled.attributedTitle = AttributedString("Settings".localized, attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10)]))
         filled.titleAlignment = .center
         filled.imagePlacement = .top
         filled.imagePadding = 5
@@ -32,7 +32,6 @@ class CustomTabBar: UITabBar {
         button.configurationUpdateHandler = { button in
             button.isHighlighted = false
         }
-        
         button.addTarget(self, action: #selector(self.touchUpInsideAction), for: .touchUpInside)
         button.addTarget(self, action: #selector(self.touchDownAction), for: .touchDown)
         self.addSubview(button)

@@ -11,21 +11,20 @@ import UIKit
 class SearchViewController: UIViewController {
     
     var presenter: SearchViewOutPut!
-    
     private var timer: Timer?
-    
+    private var page = 1
     private var searchResultCollectioView: UICollectionView!
     private var historyTableView: HistoryTableView!
     private var containerView: UIView!
     private var loadingIndicator: ProgressView!
-    private let currentHour = Calendar.current.component(.hour, from: Date())
+    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = " Search..."
+        searchBar.placeholder =  " " + "Search".localized + "..."
         searchBar.sizeToFit()
         searchBar.backgroundImage = UIImage()
         return searchBar
@@ -34,7 +33,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-        navigationItem.title = "Search"
+        navigationItem.title = "Search".localized
         
         setupSearchCollectioView()
         setUpContainerView()
@@ -54,7 +53,7 @@ class SearchViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(700)),
-            subitem: item, count: 5)
+            repeatingSubitem: item, count: 5)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 80
@@ -75,6 +74,7 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.delegate = self
         searchResultCollectioView.dataSource = self
         searchResultCollectioView.prefetchDataSource = self
+        searchResultCollectioView.isPrefetchingEnabled = true
         
         view.addSubview(searchResultCollectioView)
         searchResultCollectioView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +88,7 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.register(SearchCollectionReusableView.self,
                                            forSupplementaryViewOfKind: SearchCollectionReusableView.kind,
                                            withReuseIdentifier: SearchCollectionReusableView.identifier)
-        searchResultCollectioView.backgroundColor = .systemGray3
+        searchResultCollectioView.backgroundColor = .myBackgroundColor
         searchResultCollectioView.contentInset.bottom = 20
     }
     
@@ -157,6 +157,21 @@ class SearchViewController: UIViewController {
             loadingIndicator.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
+    private func performBatchUpdates() {
+        let indexPath = IndexPath(item: self.presenter.searchResultArticles.count - 1, section: 0)
+        let indexPaths: [IndexPath] = [indexPath]
+        searchResultCollectioView.performBatchUpdates({ () -> Void in
+            searchResultCollectioView.insertItems(at: indexPaths)
+        }, completion: nil)
+    }
+    
+    private func presentShareSheet(url: URL) {
+        DispatchQueue.main.async {
+            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            self.present(activityViewPopover, animated: true)
+        }
+    }
 }
 
 // MARK: - Search Bar Delegate
@@ -166,44 +181,35 @@ extension SearchViewController: UISearchBarDelegate {
         
         flowDown()
         timer?.invalidate()
-        
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
-            //print("My Search Bar \(text)")
-            // self?.loadingIndicator.isAnimating = true
             self?.presenter.search(line: text.lowercased(), page: 1)
             self?.historyTableView.added(item: text)
             self?.historyTableView.reloadData()
         })
-        //print("textDidChange")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         flowUp()
-    }
-    
-    func presentShareSheet(url: URL) {
-        DispatchQueue.main.async {
-            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            self.present(activityViewPopover, animated: true)
-        }
     }
 }
 
 // MARK: - Collection View Data Source
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        presenter.searchResultArticles.filter { $0.title != "[Removed]" }.count
+        presenter.searchResultArticles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = UICollectionViewCell()
         guard let searchCell = searchResultCollectioView.dequeueReusableCell(
             withReuseIdentifier: SmallCell.identifier, for: indexPath) as? SmallCell else { return cell }
-        let article = presenter.searchResultArticles.filter { $0.title != "[Removed]" }[indexPath.row]
-        searchCell.assignCellData(from: article, currentHour: currentHour)
-        searchCell.didShare = { [weak self] in
-            guard let url = URL(string: article.url) else { return }
-            self?.presentShareSheet(url: url)
+        if !presenter.searchResultArticles.isEmpty {
+            let article = presenter.searchResultArticles[indexPath.row]
+            searchCell.assignCellData(from: article, isSaved: false, currentDate: currentDateTime)
+            searchCell.didShare = { [weak self] in
+                guard let url = URL(string: article.url) else { return }
+                self?.presentShareSheet(url: url)
+            }
         }
         return searchCell
     }
@@ -227,19 +233,30 @@ extension SearchViewController: UICollectionViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchBar.endEditing(true)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let url = URL(string: presenter.searchResultArticles[indexPath.row].url) {
+            UIApplication.shared.open(url)
+        }
+    }
 }
 
 // MARK: - Collection View Data Source Prefetching
 extension SearchViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        // prefetching logic
+        let filtered = indexPaths.filter({ $0.row >= presenter.searchResultArticles.count - 4 })
+        if filtered.count > 0 {
+            page += 1
+            presenter.search(line: searchBar.text ?? "", page: page)
+        }
     }
 }
 
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
-        //loadingIndicator.isAnimating = false
-        self.searchResultCollectioView.reloadData()
+        loadingIndicator.isAnimating = false
+        //performBatchUpdates()
+        self.searchResultCollectioView.reloadData() //зникає ???
     }
 }
 

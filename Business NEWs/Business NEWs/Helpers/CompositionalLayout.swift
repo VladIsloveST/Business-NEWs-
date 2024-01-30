@@ -42,7 +42,7 @@ struct CompositionalLayout {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = scrollingBehavior
         section.interGroupSpacing = interGroupSpacing
-        section.supplementariesFollowContentInsets = false
+        //section.supplementariesFollowContentInsets = false
         section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing: 20)
         return section
     }

@@ -28,8 +28,11 @@ class SettingTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private var switcher: UISwitch!
-    var didChangeTheme: (Bool) -> () = { _ in }
+    var switcher: UISwitch!
+    private var didChangeSetup: (Bool) -> () = { _ in }
+    
+    var languageToggle: UISegmentedControl!
+    private var didChangeLanguage: (Int) -> () = { _ in }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,7 +76,7 @@ class SettingTableViewCell: UITableViewCell {
         infoImageView.backgroundColor = imageColor
     }
     
-    func setupSwitcher(isOn: Bool) {
+    func setupSwitcher(isOn: Bool, didChangeSetup: @escaping (Bool) -> () ) {
         switcher = UISwitch()
         let centerYAnchorConstant = (switcher.frame.height - frame.height) / 2
         contentView.addSubview(switcher)
@@ -86,12 +89,37 @@ class SettingTableViewCell: UITableViewCell {
         ])
         forwardImageView.isHidden = true
         switcher.isOn = isOn
-        switcher.becomeFirstResponder()
-        switcher.addTarget(self, action: #selector(changeColor), for: .valueChanged)
+        switcher.addTarget(self, action: #selector(changeSetup), for: .valueChanged)
         switcher.onTintColor = .darkGray
+
+        self.didChangeSetup = didChangeSetup
     }
     
-    @objc private func changeColor() {
-        didChangeTheme(switcher.isOn)
+    @objc private func changeSetup() {
+        didChangeSetup(switcher.isOn)
+    }
+    
+    func setupSegmentedControl(selected: Int, didChangeLanguage: @escaping (Int) -> () ) {
+        let languages =  ["deutch", "english"]
+        languageToggle = UISegmentedControl(items: languages)
+        contentView.addSubview(languageToggle)
+        languageToggle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            languageToggle.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
+            languageToggle.widthAnchor.constraint(equalToConstant: 150),
+            languageToggle.heightAnchor.constraint(equalToConstant: 25),
+            languageToggle.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+        forwardImageView.isHidden = true
+        languageToggle.selectedSegmentIndex = selected
+        
+        languageToggle.addTarget(self, action: #selector(changeLanguage), for: .valueChanged)
+        languageToggle.backgroundColor = .lightGray
+
+        self.didChangeLanguage = didChangeLanguage
+    }
+    
+    @objc private func changeLanguage() {
+        didChangeLanguage(languageToggle.selectedSegmentIndex)
     }
 }

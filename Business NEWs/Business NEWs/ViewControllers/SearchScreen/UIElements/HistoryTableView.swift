@@ -22,7 +22,8 @@ class HistoryTableView: UITableView {
     
     private var flowLayout = UICollectionViewFlowLayout()
     
-    var mockData = ["Built environments", "are where", "humans have", "fundamentally", "transformed landscapes", "such as urban", "settings"]
+    var mockData = ["Built environments", "are where", "humans have", "fundamentally", 
+                    "transformed landscapes", "such as urban", "settings"]
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -54,16 +55,17 @@ class HistoryTableView: UITableView {
 // MARK: - Collection View Data Source
 extension HistoryTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print(mockData.count)
-        return mockData.count
+        mockData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.identifier, for: indexPath) as? HistoryTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.identifier, 
+                                                       for: indexPath) 
+                as? HistoryTableViewCell else { return UITableViewCell() }
         cell.searchLabel.text = mockData[indexPath.row]
         cell.didDelete = {
             self.mockData.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .top)
+            tableView.deleteRows(at: [indexPath], with: .left)
             self.mainCellDelegate?.selectItem(row: indexPath.row, with: .delete)
             self.reloadData()
         }

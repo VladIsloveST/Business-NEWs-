@@ -11,7 +11,7 @@ class ContainerView_UITests: Business_NEWsUITests {
     
     func test_UITestingContainerView_articlesCollectionView_scrollAndTap() {
         let menuCollectionView = app.collectionViews
-        let articlesCollectionView = app.collectionViews.matching(identifier: "articlesCollectionView")
+        //let articlesCollectionView = app.collectionViews.matching(identifier: "articlesCollectionView")
 
         menuCollectionView.staticTexts["Apple"].tap()
         menuCollectionView.staticTexts["TechCrunch"].tap()

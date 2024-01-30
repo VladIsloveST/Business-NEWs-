@@ -15,7 +15,7 @@ class ContainerViewController: UIViewController {
     }
     
     private var menuState: MenuState = .closed
-    private let menuVC = MenuViewController()
+    private let menuViewController = MenuViewController()
     var navgationController = UINavigationController()
      
     override func viewDidLoad() {
@@ -24,15 +24,15 @@ class ContainerViewController: UIViewController {
     }
     
     private func addChildVCs() {
-        menuVC.delegate = self
-        addChild(menuVC)
-        view.addSubview(menuVC.view)
-        menuVC.didMove(toParent: self)
-        menuVC.size = navgationController.view.bounds.width / 22
+        menuViewController.delegate = self
+        addChild(menuViewController)
+        view.addSubview(menuViewController.view)
+        menuViewController.didMove(toParent: self)
+        menuViewController.size = navgationController.view.bounds.width / 22
         
-        let assembly = ModuleBuilder()
+        let assembly = AssemblyModule()
         navgationController.navigationBar.prefersLargeTitles = true
-        let router = HomeRouter(navigatinController: navgationController, assemblyBuilder: assembly)
+        let router = HomeRouter(navigatinController: navgationController, assemblyModule: assembly)
         router.initialViewController()
         (navgationController.viewControllers.first as? HomeViewController)?.delegate = self
         addChild(navgationController)
@@ -46,11 +46,12 @@ extension ContainerViewController: HomeViewControllerMenuDelegate {
         toggleMenu(complition: nil)
     }
     
-    func toggleMenu(complition: (() -> Void)? ) {
+    private func toggleMenu(complition: (() -> Void)? ) {
         let homeViewController = (self.navgationController.viewControllers.first as? HomeViewController)
         switch menuState {
         case .closed:
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn) {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0, options: .curveEaseIn) {
                 self.navgationController.view.frame.origin.x = (self.navgationController.view.frame.size.width) / 2.5
                 homeViewController?.view.alpha = 0.95
                 homeViewController?.view.isUserInteractionEnabled = false
@@ -61,7 +62,8 @@ extension ContainerViewController: HomeViewControllerMenuDelegate {
             }
             
         case .opened:
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseOut) {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0, options: .curveEaseOut) {
                 self.navgationController.view.frame.origin.x = 0
                 homeViewController?.view.alpha = 1
                 homeViewController?.view.isUserInteractionEnabled = true
@@ -69,7 +71,7 @@ extension ContainerViewController: HomeViewControllerMenuDelegate {
                 if done {
                     self?.menuState = .closed
                     DispatchQueue.main.async {
-                         complition?()
+                        complition?()
                     }
                 }
             }
