@@ -16,7 +16,7 @@ protocol ViewInPut: AnyObject {
 protocol ViewOutPut: AnyObject {
     var typesOfArticles: [[ArticleData]] { get set }
     init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
-         storageManager: Cashe, router: RouterProtocol)
+         storageManager: Cache, router: RouterProtocol)
     func tapOnTheSearch()
     func getArticlesFromCategory(index: Int, page: Int, isRefreshed: Bool)
 }
@@ -25,12 +25,12 @@ class Presenter: ViewOutPut {
     weak var view: ViewInPut?
     private let group = DispatchGroup()
     private let networkDataFetcher: NetworkDataFetcherProtocol
-    var storageManager: Cashe?
+    var storageManager: Cache?
     var router: RouterProtocol?
     var typesOfArticles: [[ArticleData]] = Array(repeating: [], count: 8)
     
     required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
-                  storageManager: Cashe, router: RouterProtocol) {
+                  storageManager: Cache, router: RouterProtocol) {
         self.view = view
         self.networkDataFetcher = networkDataFetcher
         self.storageManager = storageManager

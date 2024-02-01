@@ -12,7 +12,7 @@ class LargePortraitCell: BasicCollectionViewCell {
     static let identifier = "LargePortraitCell"
     
     var imageView = ResizableImageView()
-    private let storageManager = CasheManager.shared
+    private let storageManager = CacheManager.shared
     
     override init(frame: CGRect) {
         super.init(frame: frame)

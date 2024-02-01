@@ -8,21 +8,26 @@
 import Foundation
 import UIKit
 
-protocol Cashe {
-    static var shared: Cashe { get set }
+protocol Cache {
+    static var shared: Cache { get set }
     func fetchImageFromCasheWith(_ url: String?) -> UIImage?
     func saveImagesFrom(articles: [ArticleData])
+    func removeAllObjects()
 }
 
-final class CasheManager: Cashe {
-    static var shared: Cashe = CasheManager()
+final class CacheManager: Cache {
+    static var shared: Cache = CacheManager()
     private init() {}
-    private let imageCashe = NSCache<NSString, UIImage>()
+    private let imageCache = NSCache<NSString, ImageCache>()
+    
+    func removeAllObjects() {
+        imageCache.removeAllObjects()
+    }
     
     func fetchImageFromCasheWith(_ url: String?) -> UIImage? {
         guard let name = url else { return nil }
-        if let cachedImage = imageCashe.object(forKey: name as NSString) {
-            return cachedImage
+        if let cachedImage = imageCache.object(forKey: name as NSString) {
+            return cachedImage.image
         }
         return nil
     }
@@ -44,13 +49,14 @@ final class CasheManager: Cashe {
     }
     
     private func loadImageToCashe(withURL: String?) {
-        guard let name = withURL else { return }
-        guard let url = URL(string: name) else { return }
-        
+        guard let name = withURL,
+              let url = URL(string: name) else { return }
         let imageData = try? Data(contentsOf: url)
         guard let imageData = imageData else { return }
-        if let image = UIImage(data: imageData) {
-            self.imageCashe.setObject(image, forKey: name as NSString)
-        }
+       
+        let cacheImage = ImageCache()
+        cacheImage.image = UIImage(data: imageData)
+        imageCache.setObject(cacheImage, forKey: name as NSString)
     }
 }
+
