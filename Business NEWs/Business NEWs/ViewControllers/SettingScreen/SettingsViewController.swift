@@ -30,7 +30,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        settingManager = SettingManager.shared
+        settingManager = SettingManager()
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
