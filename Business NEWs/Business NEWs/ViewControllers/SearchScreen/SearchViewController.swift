@@ -13,37 +13,25 @@ class SearchViewController: UIViewController {
     var presenter: SearchViewOutPut!
     private var timer: Timer?
     private var page = 1
-    private var searchResultCollectioView: UICollectionView!
-    private var historyTableView: HistoryTableView!
-    private var containerView: UIView!
-    private var loadingIndicator: ProgressView!
     private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
-    
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder =  " " + "Search".localized + "..."
-        searchBar.sizeToFit()
-        searchBar.backgroundImage = UIImage()
-        return searchBar
-    }()
+    private var searchResultCollectioView: UICollectionView!
+    private var historyTableView: HistoryTableView!
+    private var containerView: UIView!
+    private var loadingIndicator: ProgressView!
+    private var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
-        navigationItem.title = "Search".localized
-        
         setupSearchCollectioView()
         setUpContainerView()
+        setGesture()
         setupHistoryView()
-        setupNavBarButtons()
+        setupNavigationBar()
         setupIndicator()
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
-        gestureRecognizer.numberOfTapsRequired = 1
-        searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
+        setupSearchBar()
     }
     
     private func createLayout() -> CustomFlowLayout {
@@ -92,6 +80,12 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.contentInset.bottom = 20
     }
     
+    private func setGesture() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
+        gestureRecognizer.numberOfTapsRequired = 1
+        searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
+    }
+    
     private func setupHistoryView() {
         historyTableView = HistoryTableView()
         historyTableView.accessibilityIdentifier = "historyTableView"
@@ -99,6 +93,13 @@ class SearchViewController: UIViewController {
         historyTableView.translatesAutoresizingMaskIntoConstraints = false
         historyTableView.constraint(equalToAnchors: containerView)
         historyTableView.mainCellDelegate = self
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = "Search".localized
+        let backButtonItem = UIBarButtonItem(
+            imageSystemName: "chevron.backward", target: self, action: #selector(handleBack))
+        navigationItem.leftBarButtonItem = backButtonItem
     }
     
     private func setUpContainerView() {
@@ -113,6 +114,14 @@ class SearchViewController: UIViewController {
             containerView.topAnchor.constraint(equalTo: searchResultCollectioView.topAnchor, constant: 53)
         ])
         containerView.layer.addShadow()
+    }
+    
+    private func setupSearchBar() {
+        searchBar = UISearchBar()
+        searchBar.placeholder =  " " + "Search".localized + "..."
+        searchBar.sizeToFit()
+        searchBar.backgroundImage = UIImage()
+        searchBar.delegate = self
     }
     
     private func flowUp() {
@@ -133,12 +142,6 @@ class SearchViewController: UIViewController {
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
-    }
-    
-    private func setupNavBarButtons() {
-        let backButtonItem = UIBarButtonItem(
-            imageSystemName: "chevron.backward", target: self, action: #selector(handleBack))
-        navigationItem.leftBarButtonItem = backButtonItem
     }
     
     @objc

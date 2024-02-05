@@ -18,14 +18,14 @@ enum Action {
 }
 
 class HistoryTableView: UITableView {
+    
+    // MARK: - Properties
     weak var mainCellDelegate: PopOverTableViewDelegate?
-    
     private var flowLayout = UICollectionViewFlowLayout()
-    
     private let key = "history"
     var searchingHistory: [String] {
-        didSet {
-            UserDefaults.standard.setValue(searchingHistory, forKey: key)
+        willSet {
+            UserDefaults.standard.setValue(newValue, forKey: key)
         }
     }
     
