@@ -22,10 +22,15 @@ class HistoryTableView: UITableView {
     
     private var flowLayout = UICollectionViewFlowLayout()
     
-    var mockData = ["Built environments", "are where", "humans have", "fundamentally", 
-                    "transformed landscapes", "such as urban", "settings"]
+    private let key = "history"
+    var searchingHistory: [String] {
+        didSet {
+            UserDefaults.standard.setValue(searchingHistory, forKey: key)
+        }
+    }
     
     override init(frame: CGRect, style: UITableView.Style) {
+        searchingHistory = UserDefaults.standard.stringArray(forKey: key) ?? []
         super.init(frame: frame, style: style)
         configure()
     }
@@ -35,9 +40,9 @@ class HistoryTableView: UITableView {
     }
     
     func added(item: String) {
-        mockData.insert(item, at: 0)
-        if mockData.count > 10 {
-            mockData.removeLast()
+        searchingHistory.insert(item, at: 0)
+        if searchingHistory.count > 10 {
+            searchingHistory.removeLast()
         }
     }
     
@@ -55,16 +60,16 @@ class HistoryTableView: UITableView {
 // MARK: - Collection View Data Source
 extension HistoryTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        mockData.count
+        searchingHistory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.identifier, 
                                                        for: indexPath) 
                 as? HistoryTableViewCell else { return UITableViewCell() }
-        cell.searchLabel.text = mockData[indexPath.row]
+        cell.searchLabel.text = searchingHistory[indexPath.row]
         cell.didDelete = {
-            self.mockData.remove(at: indexPath.row)
+            self.searchingHistory.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .left)
             self.mainCellDelegate?.selectItem(row: indexPath.row, with: .delete)
             self.reloadData()

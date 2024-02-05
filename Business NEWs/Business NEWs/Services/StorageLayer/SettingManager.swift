@@ -40,12 +40,10 @@ final class SettingManager: SettingManagerProtocol {
     
     var language: Language {
         set(environment) {
-            userDefaults.set(environment.rawValue, forKey: languageKey)
-        }
+            userDefaults.set(environment.rawValue, forKey: languageKey) }
         get {
             let enviroment = userDefaults.value(forKey: languageKey) as? String
             return Language(rawValue: enviroment ?? "en")!
         }
-        
     }
 }

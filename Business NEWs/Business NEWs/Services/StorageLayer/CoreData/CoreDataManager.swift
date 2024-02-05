@@ -62,7 +62,6 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
     }
     
     func deleteArticle(id: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
         guard let article = fetchArticles().first(where: { $0.title == id }) else { return }
         context.delete(article)
         appDelegate.saveContext()

@@ -49,7 +49,7 @@ class SearchViewController: UIViewController {
     private func createLayout() -> CustomFlowLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(1)))
+                                               heightDimension: .fractionalHeight(0.2)))
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(700)),
@@ -266,9 +266,9 @@ extension SearchViewController: PopOverTableViewDelegate {
         case .delete:
             self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
         case .revert:
-            searchBar.text = historyTableView.mockData[row]
+            searchBar.text = historyTableView.searchingHistory[row]
         case .search:
-            let selectedRow = historyTableView.mockData[row]
+            let selectedRow = historyTableView.searchingHistory[row]
             loadingIndicator.isAnimating = true
             searchBar.text = selectedRow
             presenter.search(line: selectedRow, page: 1)

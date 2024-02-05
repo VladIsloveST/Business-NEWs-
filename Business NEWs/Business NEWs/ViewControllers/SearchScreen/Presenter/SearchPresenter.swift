@@ -50,7 +50,8 @@ class SearchPresenter: SearchViewOutPut {
             })
         }
         
-        dispatchWorkItem.perform()
+        print(Thread.current.isMainThread)
+        dispatchWorkItem.perform() // виокннана на MainThread
         
         dispatchWorkItem.notify(queue: DispatchQueue.main) {
             self.view?.showUpdateData()
