@@ -256,7 +256,7 @@ extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
         loadingIndicator.isAnimating = false
         //performBatchUpdates()
-        self.searchResultCollectioView.reloadData() //зникає ???
+        searchResultCollectioView.reloadData() // зникає
     }
 }
 

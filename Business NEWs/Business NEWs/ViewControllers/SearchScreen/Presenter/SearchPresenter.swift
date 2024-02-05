@@ -23,6 +23,9 @@ class SearchPresenter: SearchViewOutPut {
     weak var view: SearchViewInPut?
     var router: RouterProtocol?
     var networkDataFetcher: NetworkDataFetcherProtocol?
+    private var searchingLine = ""
+    private let concurrentQueue = DispatchQueue(label: "search.concurrent.queue",
+                                                attributes: .concurrent)
     
     required init(view: SearchViewInPut, router: RouterProtocol, networkDataFetcher: NetworkDataFetcherProtocol) {
         self.view = view
@@ -35,7 +38,9 @@ class SearchPresenter: SearchViewOutPut {
     }
     
     func search(line: String, page: Int) {
-        searchResultArticles = []
+        if searchingLine != line { searchResultArticles = [] }
+        searchingLine = line
+        
         let dispatchWorkItem = DispatchWorkItem {
             self.networkDataFetcher?.getSearchArticles(fromSearch: line, page: page,
                                                        complition: { [weak self] result in
@@ -49,9 +54,8 @@ class SearchPresenter: SearchViewOutPut {
                 }
             })
         }
-        
-        print(Thread.current.isMainThread)
-        dispatchWorkItem.perform() // виокннана на MainThread
+    
+        concurrentQueue.async(execute: dispatchWorkItem)
         
         dispatchWorkItem.notify(queue: DispatchQueue.main) {
             self.view?.showUpdateData()
