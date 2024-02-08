@@ -25,38 +25,36 @@ final class CacheManager: Cache {
     }
     
     func fetchImageFromCasheWith(_ url: String?) -> UIImage? {
-        guard let name = url else { return nil }
-        if let cachedImage = imageCache.object(forKey: name as NSString) {
-            return cachedImage.image
-        }
-        return nil
+        guard let cachedImage = imageCache.object(forKey: (url ?? "") as NSString) else { return nil }
+        return cachedImage.image
     }
     
     func saveImagesFrom(articles: [ArticleData]) {
         let concurrentQueue = DispatchQueue(label: "cashe.label.concurrent", attributes: .concurrent)
-        let neededItems = articles.indices.filter{ $0 % 4 == 0 }.map{ articles[$0] }
+        let filteredItems = articles.enumerated().filter { $0.offset % 4 == 0 }
         var isSerialLoad = true
-        neededItems.forEach { [ weak self ] article in
+        filteredItems.forEach { [weak self] article in
             if isSerialLoad {
-                self?.loadImageToCashe(withURL: article.urlToImage)
+                self?.loadImageToCashe(with: article.element.urlToImage)
                 isSerialLoad = !isSerialLoad
                 return
             }
             concurrentQueue.async {
-                self?.loadImageToCashe(withURL: article.urlToImage)
+                self?.loadImageToCashe(with: article.element.urlToImage)
             }
         }
     }
     
-    private func loadImageToCashe(withURL: String?) {
-        guard let name = withURL,
-              let url = URL(string: name) else { return }
-        let imageData = try? Data(contentsOf: url)
-        guard let imageData = imageData else { return }
-       
-        let cacheImage = ImageCache()
-        cacheImage.image = UIImage(data: imageData)
-        imageCache.setObject(cacheImage, forKey: name as NSString)
+    private func loadImageToCashe(with url: String?) {
+        guard let imageUrl = URL(string: url ?? "") else { return }
+        do {
+            let imageData = try Data(contentsOf: imageUrl)
+            let cacheImage = ImageCache()
+            cacheImage.image = UIImage(data: imageData)
+            imageCache.setObject(cacheImage, forKey: imageUrl.description as NSString)
+        } catch {
+            print(error)
+        }
     }
 }
 

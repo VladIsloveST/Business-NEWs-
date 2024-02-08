@@ -8,15 +8,10 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    
-    var containerViewController: ContainerViewController!
-    var selectedArticlesViewController: SelectedArticlesViewController!
-    
+  
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        containerViewController = ContainerViewController()
-        selectedArticlesViewController = SelectedArticlesViewController()
         configureTabBar()
         setupViewControllers()
     }
@@ -40,9 +35,6 @@ class TabBarController: UITabBarController {
         if #available(iOS 15.0, *) {
             let settingsVC = SettingsAssembly.assembleSettings()
             (settingsVC as? SettingsViewController)?.delegate = self
-            let homeViewController = containerViewController?.navgationController.viewControllers.first
-            (settingsVC as? SettingsViewController)?.settingDelegateHome = (homeViewController as? SettingViewControllerDelegate)
-            (settingsVC as? SettingsViewController)?.settingDelegateSaved = selectedArticlesViewController!
             present(settingsVC, animated: true)
         }
     }
@@ -53,7 +45,7 @@ class TabBarController: UITabBarController {
                                 title: "Saved".localized,
                                 systemImageName: "bookmark",
                                 selectedImageName: "bookmark.fill"),
-            createTabBarItem(containerViewController,
+            createTabBarItem(ContainerViewController(),
                              title: "Home".localized,
                              imageName: "house",
                              selectedImageName: "house.fill"),

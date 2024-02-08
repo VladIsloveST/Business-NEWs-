@@ -26,7 +26,9 @@ class SearchPresenter: SearchViewOutPut {
     private var searchingLine = ""
     private let group = DispatchGroup()
     
-    required init(view: SearchViewInPut, router: RouterProtocol, networkDataFetcher: NetworkDataFetcherProtocol) {
+    required init(view: SearchViewInPut, 
+                  router: RouterProtocol,
+                  networkDataFetcher: NetworkDataFetcherProtocol) {
         self.view = view
         self.router = router
         self.networkDataFetcher = networkDataFetcher

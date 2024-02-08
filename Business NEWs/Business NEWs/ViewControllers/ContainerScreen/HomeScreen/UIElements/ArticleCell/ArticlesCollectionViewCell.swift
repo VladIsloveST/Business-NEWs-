@@ -149,6 +149,7 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
         if indexPath.row % 4 == 0 {
             let isSaved = coreDataManager.checkAvaible(with: article.title)
             portraitCell.assignCellData(from: article, isSaved: isSaved, currentDate: currentDateTime)
+            //portraitCell.reloadInputViews()
             portraitCell.didShare = { [weak self] in
                 guard let url = URL(string: article.url) else { return }
                 self?.delegate?.presentShareSheet(url: url)

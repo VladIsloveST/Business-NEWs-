@@ -30,7 +30,3 @@ class SmallCell: BasicCollectionViewCell {
         ])
     }
 }
-//generalStackView.topAnchor.constraint(equalTo: bottomAnchor, constant: 14),
-//generalStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 40),
-//generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//generalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)

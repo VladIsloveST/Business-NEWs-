@@ -27,13 +27,14 @@ class LargePortraitCell: BasicCollectionViewCell {
     }
     
     override func assignCellData(from article: ArticleData, isSaved: Bool, currentDate: DateComponents?) {
-        super.assignCellData(from: article, isSaved: isSaved, currentDate: currentDate)
         updateImage(from: article.urlToImage)
+        super.assignCellData(from: article, isSaved: isSaved, currentDate: currentDate)
     }
     
     private func updateImage(from url: String?) {
         imageView.image = nil
         imageView.image = storageManager.fetchImageFromCasheWith(url)
+        //contentView.reloadInputViews()
     }
     
     private func setConstraints() {
@@ -48,21 +49,5 @@ class LargePortraitCell: BasicCollectionViewCell {
             generalStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             generalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
-    }
-}
-
-class ResizableImageView: UIImageView {
-    override var image: UIImage? {
-        didSet {
-            guard let image = image else { return }
-            if superview != nil {
-                let aspectRatio = superview!.frame.width / image.size.width
-                let resizeConstraints = [
-                    self.widthAnchor.constraint(equalToConstant: image.size.width * aspectRatio),
-                    self.heightAnchor.constraint(equalToConstant: image.size.height * aspectRatio)
-                ]
-                addConstraints(resizeConstraints)
-            }
-        }
     }
 }

@@ -26,10 +26,14 @@ class SelectedArticlesViewController: UIViewController {
     private var isSearching = false
     private var timer: Timer?
     private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
-    
+    private var cells = [BasicCollectionViewCell]()
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notifyColorChange(notification:)),
+                                               name: .appearanceDidChange, object: nil)
         coreDataManager = CoreDataManager.shared
         setupCollectionView()
         setupSearchBar()
@@ -37,21 +41,14 @@ class SelectedArticlesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        savedCollectionView.backgroundColor = .myBackgroundColor
         savedArticles = coreDataManager.fetchArticles()
         savedCollectionView.reloadData()
-//        print(savedArticles.count)
-//        savedArticles.forEach {
-//            print("\($0.title) - \(savedArticles.firstIndex(of: $0) ?? 404)")
-//        }
     }
     
     // MARK: - Private Methods
     private func setupCollectionView() {
         savedCollectionView.delegate = self
         savedCollectionView.dataSource = self
-        savedCollectionView.register(StoryCell.self, forCellWithReuseIdentifier: StoryCell.identifier)
-        savedCollectionView.register(PortraitCell.self, forCellWithReuseIdentifier: PortraitCell.identifier)
         savedCollectionView.register(SmallCell.self, forCellWithReuseIdentifier: SmallCell.identifier)
         savedCollectionView.register(CollectionReusableView.self,
                                     forSupplementaryViewOfKind: CollectionReusableView.kind,
@@ -111,6 +108,12 @@ class SelectedArticlesViewController: UIViewController {
         })
     }
     
+    @objc
+    private func notifyColorChange(notification: NSNotification) {
+        savedCollectionView.backgroundColor = .myBackgroundColor
+        cells.forEach{ $0.setupColor() }
+    }
+    
     private func presentShareSheet(url: URL) {
         DispatchQueue.main.async {
             let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
@@ -145,6 +148,7 @@ extension SelectedArticlesViewController: UICollectionViewDataSource, UICollecti
             guard let url = URL(string: articleData.url) else { return }
             self?.presentShareSheet(url: url)
         }
+        cells.append(smallCell)
         return smallCell
     }
 }
@@ -155,23 +159,14 @@ extension SelectedArticlesViewController: UISearchBarDelegate {
         if let text = searchBar.text, !text.isEmpty {
             isSearching = true
             timer?.invalidate()
-            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
                 self?.searchedArticles = self?.coreDataManager.searchArticles(with: text.lowercased()) ?? []
                 self?.savedCollectionView.reloadData()
-            })
+            }
         } else {
             isSearching = false
             searchedArticles.removeAll()
+            savedCollectionView.reloadData()
         }
     }
 }
-
-// MARK: - SettingViewController Delegate
-extension SelectedArticlesViewController: SettingViewControllerDelegate {
-    func changeThema() {
-        savedCollectionView.backgroundColor = .myBackgroundColor
-        //savedCollectionView.visibleCells.map { $0.backgroundColor = .cellBackgroundColor }
-        //print("Invoke")  // спрацьовує, але без зміни кольору
-    }
-}
-
