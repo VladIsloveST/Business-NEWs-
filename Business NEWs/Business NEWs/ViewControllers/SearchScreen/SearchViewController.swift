@@ -81,9 +81,10 @@ class SearchViewController: UIViewController {
     }
     
     private func setGesture() {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
         gestureRecognizer.numberOfTapsRequired = 1
         searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
+        gestureRecognizer.cancelsTouchesInView = false
     }
     
     private func setupHistoryView() {
@@ -124,7 +125,7 @@ class SearchViewController: UIViewController {
         searchBar.delegate = self
     }
     
-    private func flowUp() {
+    private func flowDown() {
         heightAnchorDown?.constant = historyTableView.contentSize.height
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
@@ -135,7 +136,7 @@ class SearchViewController: UIViewController {
     }
     
     @objc
-    private func flowDown() {
+    private func flowUp() {
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
         searchResultCollectioView.isScrollEnabled = true
@@ -180,9 +181,9 @@ class SearchViewController: UIViewController {
 // MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text, !text.isEmpty else { return flowUp() }
+        guard let text = searchBar.text, !text.isEmpty else { return flowDown() }
         
-        flowDown()
+        flowUp()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
             self?.presenter.search(line: text.lowercased(), page: 1)
@@ -192,7 +193,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        flowUp()
+        flowDown()
     }
 }
 
@@ -258,8 +259,7 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
         loadingIndicator.isAnimating = false
-        //performBatchUpdates()
-        searchResultCollectioView.reloadData() // зникає
+        searchResultCollectioView.reloadData()
     }
 }
 
@@ -275,7 +275,7 @@ extension SearchViewController: PopOverTableViewDelegate {
             loadingIndicator.isAnimating = true
             searchBar.text = selectedRow
             presenter.search(line: selectedRow, page: 1)
-            flowDown()
+            flowUp()
         }
     }
 }
