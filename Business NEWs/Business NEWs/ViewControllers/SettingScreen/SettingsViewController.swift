@@ -66,7 +66,6 @@ class SettingsViewController: UIViewController {
     private func showAlertCloseApp() {
         let message = "Changing your language requires that you exit Business NEWs.".localized
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        
         let action = UIAlertAction(title: "Exit".localized , style: .default) { [weak self] _ in
             guard let self = self else { return }
             

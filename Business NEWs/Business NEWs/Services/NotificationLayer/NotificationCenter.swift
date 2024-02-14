@@ -10,9 +10,9 @@ import NotificationCenter
 
 protocol LocalNotificatioProtocol {
     func checkForPermission()
-    func removeNotification()
     func directToSettings(_ completionHandler: @escaping UndefinedAction)
     func reopenNotification(language: Language)
+    func removeNotification()
 }
 
 
@@ -25,41 +25,38 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
         notificationCenter.delegate = self
         notificationCenter.getNotificationSettings { settings in
             switch settings.authorizationStatus {
+            case .authorized, .provisional:
+                self.scheduleNotification()
             case .notDetermined:
-                self.notificationCenter.requestAuthorization(options: [.alert, .sound]) { [weak self] (granted, error) in
-                    guard error == nil else { return }
-                    if granted {
-                        self?.delegate?.setValueIsNotify()
-                        self?.dispatchNotification()
-                    }
-                }
-            case .authorized:
-                self.dispatchNotification()                
+                self.requestAuthorization()
             default:
                 return
             }
         }
     }
     
-    func removeNotification() {
-        notificationCenter.removeAllPendingNotificationRequests()
+    private func requestAuthorization() {
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        notificationCenter.requestAuthorization(options: options) { [weak self] (granted, error) in
+            guard granted, error != nil else { return }
+            self?.delegate?.setValueIsNotify()
+            self?.scheduleNotification()
+        }
     }
     
     func directToSettings(_ completionHandler: @escaping UndefinedAction) {
         notificationCenter.getNotificationSettings { settings in
-            if settings.alertSetting == .disabled {
-                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.delegate?.setValueIsNotify()
-                        completionHandler()
-                        UIApplication.shared.open(settingsURL)
-                    }
-                }
+            guard settings.alertSetting == .disabled,
+                  let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.delegate?.setValueIsNotify()
+                completionHandler()
+                UIApplication.shared.open(settingsURL)
             }
         }
     }
     
-    private func dispatchNotification() {
+    private func scheduleNotification() {
         let identifier = "notification"
         let title = "News"
         let body = "10 articles on the topic of Business were published"
@@ -72,7 +69,6 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
         notificationCenter.add(request) { error in
             print(error?.localizedDescription as Any)
-            print("???")
         }
     }
     
@@ -88,15 +84,25 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
             print(error?.localizedDescription as Any)
         }
     }
+    
+    func removeNotification() {
+        notificationCenter.removeAllPendingNotificationRequests()
+        notificationCenter.removeAllDeliveredNotifications()
+    }
 }
 
 extension LocalNotification: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, 
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let id = notification.request.identifier
+        print(#function, "Notification ID = \(id)")
         completionHandler([.list, .banner, .sound])
-        print(#function)
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print(#function)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, 
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let id = response.notification.request.identifier
+        print(#function, "Notification ID = \(id)")
+        completionHandler()
     }
 }
