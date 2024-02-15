@@ -1,11 +1,8 @@
-# Business-NEWs
-The Business-NEWs app brings you top business headlines from TechCrunch right now, all articles published by the Wall Street Journal in the last 6 months.
-
 ## Hi there, I'm Vladislav :relaxed:
 
 ### Business news
 
-_Welcome to short guide about my project._
+_Welcome to short guide about my project. The Business-NEWs app brings you top business headlines from TechCrunch right now, all articles published by the Wall Street Journal in the last 6 months._
 
 Setting the window's `rootViewController`, represented by the TabBarController() object, happens in the SceneDelegate. 
 
