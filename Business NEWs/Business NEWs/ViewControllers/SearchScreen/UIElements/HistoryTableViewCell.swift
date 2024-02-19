@@ -8,12 +8,11 @@
 import Foundation
 import UIKit
 
-
 class HistoryTableViewCell: UITableViewCell {
     static let identifier = HistoryTableViewCell.description()
     
-    var didDelete: () -> () = {}
-    var didRevert: () -> () = {}
+    var didDelete: UndefinedAction = {}
+    var didRevert: UndefinedAction = {}
     
     var searchLabel: UILabel!
     
@@ -46,13 +45,11 @@ class HistoryTableViewCell: UITableViewCell {
     
     @objc
     private func didTapRevert() {
-        print("didTapRevert")
         didRevert()
     }
     
     @objc
     private func didTapDelete() {
-        print("didTapDelete")
         didDelete()
     }
     

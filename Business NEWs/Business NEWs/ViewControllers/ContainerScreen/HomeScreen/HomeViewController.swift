@@ -20,10 +20,6 @@ protocol ArticlesMovementDelegate: AnyObject {
     func scrollToCategory(at index: Int)
 }
 
-protocol SettingViewControllerDelegate: AnyObject {
-    func changeThema()
-}
-
 class HomeViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: HomeViewControllerMenuDelegate?
@@ -55,6 +51,9 @@ class HomeViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(notifyColorChange(notification:)),
+                                               name: .appearanceDidChange, object: nil)
         setupTopMenu()
         setupCategory()
         setupNavBar()
@@ -66,7 +65,6 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         articlesCollectionView.reloadData()
-        changeThema()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +92,7 @@ class HomeViewController: UIViewController {
         articlesCollectionView.isPagingEnabled = true
         articlesCollectionView.showsHorizontalScrollIndicator = false
         articlesCollectionView.bounces = false
+        articlesCollectionView.backgroundColor = .myBackgroundColor
     }
     
     private func setupCategory() {
@@ -138,6 +137,12 @@ class HomeViewController: UIViewController {
         navigationItem.leftBarButtonItem = menuButtonItem
         navigationItem.rightBarButtonItems = [moreButtonItem, searchBarButtonItem]
         navigationItem.title = "Home".localized
+    }
+    
+    @objc
+    private func notifyColorChange(notification: NSNotification) {
+        articlesCollectionView.backgroundColor = .myBackgroundColor
+        changeThemaInCell()
     }
     
     @objc
@@ -254,14 +259,6 @@ extension HomeViewController: HomeViewControllerDelegate {
             let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             self.present(activityViewPopover, animated: true)
         }
-    }
-}
-
-// MARK: - Change color
-extension HomeViewController: SettingViewControllerDelegate {
-    func changeThema() {
-        articlesCollectionView.backgroundColor = .myBackgroundColor
-        changeThemaInCell()
     }
 }
 

@@ -26,7 +26,7 @@ protocol NetworkDataFetcherProtocol {
 class NetworkDataFetcher: NetworkDataFetcherProtocol {
     private typealias ArticlesClousure = (Result<Articles, Error>) -> Void
     private let networkService = NetworkService()
-    private let language = "language=" + SettingManager.shared.language.rawValue
+    private let language = "language=" + SettingManager().language.rawValue
     
     private func fetchTracks(url: String, response: @escaping ArticlesClousure ) {
         networkService.requestFrom(urlWitoutApiKey: url) { result in

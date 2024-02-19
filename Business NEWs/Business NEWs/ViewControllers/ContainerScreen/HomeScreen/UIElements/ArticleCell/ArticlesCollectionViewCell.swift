@@ -158,7 +158,6 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSource {
                 self?.coreDataManager.deleteArticle(id: article.title)
                 : self?.coreDataManager.createArticle(article)
             }
-            //portraitCell.layoutIfNeeded()
             cells.append(portraitCell)
             return portraitCell
         } else {

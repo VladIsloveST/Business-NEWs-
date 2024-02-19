@@ -18,7 +18,7 @@ class AssemblyModule: AssemblyModuleProtocol {
     func assembleHome(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()
         let homeView = HomeViewController()
-        let storageManager = CasheManager.shared
+        let storageManager = CacheManager.shared
         let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
                                   storageManager: storageManager, router: router)
         homeView.presenter = presenter

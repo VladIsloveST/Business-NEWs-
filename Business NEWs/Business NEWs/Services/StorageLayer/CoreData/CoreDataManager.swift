@@ -41,6 +41,7 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
         guard let articleDescription = NSEntityDescription.entity(
             forEntityName: Article.description(), in: context)
         else { return print(CoreDataError.unableToCreateDescription) }
+        
         let article = Article(entity: articleDescription, insertInto: context)
         article.title = articleData.title
         article.author = articleData.author
@@ -62,7 +63,6 @@ final class CoreDataManager: NSObject, CoreDataProtocol {
     }
     
     func deleteArticle(id: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
         guard let article = fetchArticles().first(where: { $0.title == id }) else { return }
         context.delete(article)
         appDelegate.saveContext()

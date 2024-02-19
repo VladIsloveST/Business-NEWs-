@@ -17,8 +17,6 @@ protocol SettingsDelegate: AnyObject {
 
 class SettingsViewController: UIViewController {
     weak var delegate: TabBarControllerDelegate?
-    weak var settingDelegateHome: SettingViewControllerDelegate?
-    weak var settingDelegateSaved: SettingViewControllerDelegate?
     private var settingManager: SettingManagerProtocol!
     var localNotification: LocalNotificatioProtocol!
     
@@ -30,7 +28,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        settingManager = SettingManager.shared
+        settingManager = SettingManager()
         adjustBottomSheet()
         setupTableView()
         setupNavBar()
@@ -68,7 +66,6 @@ class SettingsViewController: UIViewController {
     private func showAlertCloseApp() {
         let message = "Changing your language requires that you exit Business NEWs.".localized
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        
         let action = UIAlertAction(title: "Exit".localized , style: .default) { [weak self] _ in
             guard let self = self else { return }
             
@@ -115,8 +112,7 @@ extension SettingsViewController: UITableViewDataSource {
             case 0:
                 cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
                     self?.settingManager.isDark = isDark
-                    self?.settingDelegateHome?.changeThema()
-                    self?.settingDelegateSaved?.changeThema()
+                    NotificationCenter.default.post(name: .appearanceDidChange, object: nil)
                 }
             case 1:
                 let index = Language.allCases.firstIndex(of: settingManager.language) ?? 0
@@ -165,4 +161,3 @@ extension SettingsViewController: SettingsDelegate {
         settingManager.isNotify = true
     }
 }
-

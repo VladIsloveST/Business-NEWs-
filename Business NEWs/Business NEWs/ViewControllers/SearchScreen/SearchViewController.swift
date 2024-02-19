@@ -13,43 +13,31 @@ class SearchViewController: UIViewController {
     var presenter: SearchViewOutPut!
     private var timer: Timer?
     private var page = 1
-    private var searchResultCollectioView: UICollectionView!
-    private var historyTableView: HistoryTableView!
-    private var containerView: UIView!
-    private var loadingIndicator: ProgressView!
     private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
-    
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder =  " " + "Search".localized + "..."
-        searchBar.sizeToFit()
-        searchBar.backgroundImage = UIImage()
-        return searchBar
-    }()
+    private var searchResultCollectioView: UICollectionView!
+    private var historyTableView: HistoryTableView!
+    private var containerView: UIView!
+    private var loadingIndicator: ProgressView!
+    private var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
-        navigationItem.title = "Search".localized
-        
         setupSearchCollectioView()
         setUpContainerView()
+        setGesture()
         setupHistoryView()
-        setupNavBarButtons()
+        setupNavigationBar()
         setupIndicator()
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowDown))
-        gestureRecognizer.numberOfTapsRequired = 1
-        searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
+        setupSearchBar()
     }
     
     private func createLayout() -> CustomFlowLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(1)))
+                                               heightDimension: .fractionalHeight(0.2)))
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(700)),
@@ -92,6 +80,13 @@ class SearchViewController: UIViewController {
         searchResultCollectioView.contentInset.bottom = 20
     }
     
+    private func setGesture() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
+        gestureRecognizer.numberOfTapsRequired = 1
+        searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
+        gestureRecognizer.cancelsTouchesInView = false
+    }
+    
     private func setupHistoryView() {
         historyTableView = HistoryTableView()
         historyTableView.accessibilityIdentifier = "historyTableView"
@@ -99,6 +94,13 @@ class SearchViewController: UIViewController {
         historyTableView.translatesAutoresizingMaskIntoConstraints = false
         historyTableView.constraint(equalToAnchors: containerView)
         historyTableView.mainCellDelegate = self
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = "Search".localized
+        let backButtonItem = UIBarButtonItem(
+            imageSystemName: "chevron.backward", target: self, action: #selector(handleBack))
+        navigationItem.leftBarButtonItem = backButtonItem
     }
     
     private func setUpContainerView() {
@@ -115,7 +117,15 @@ class SearchViewController: UIViewController {
         containerView.layer.addShadow()
     }
     
-    private func flowUp() {
+    private func setupSearchBar() {
+        searchBar = UISearchBar()
+        searchBar.placeholder =  " " + "Search".localized + "..."
+        searchBar.sizeToFit()
+        searchBar.backgroundImage = UIImage()
+        searchBar.delegate = self
+    }
+    
+    private func flowDown() {
         heightAnchorDown?.constant = historyTableView.contentSize.height
         heightAnchorDown?.isActive = true
         heightAnchorUp?.isActive = false
@@ -126,19 +136,13 @@ class SearchViewController: UIViewController {
     }
     
     @objc
-    private func flowDown() {
+    private func flowUp() {
         heightAnchorDown?.isActive = false
         heightAnchorUp?.isActive = true
         searchResultCollectioView.isScrollEnabled = true
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
-    }
-    
-    private func setupNavBarButtons() {
-        let backButtonItem = UIBarButtonItem(
-            imageSystemName: "chevron.backward", target: self, action: #selector(handleBack))
-        navigationItem.leftBarButtonItem = backButtonItem
     }
     
     @objc
@@ -177,9 +181,9 @@ class SearchViewController: UIViewController {
 // MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text, !text.isEmpty else { return flowUp() }
+        guard let text = searchBar.text, !text.isEmpty else { return flowDown() }
         
-        flowDown()
+        flowUp()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
             self?.presenter.search(line: text.lowercased(), page: 1)
@@ -189,7 +193,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        flowUp()
+        flowDown()
     }
 }
 
@@ -255,8 +259,7 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
         loadingIndicator.isAnimating = false
-        //performBatchUpdates()
-        self.searchResultCollectioView.reloadData() //зникає ???
+        searchResultCollectioView.reloadData()
     }
 }
 
@@ -266,13 +269,13 @@ extension SearchViewController: PopOverTableViewDelegate {
         case .delete:
             self.heightAnchorDown?.constant = self.historyTableView.contentSize.height
         case .revert:
-            searchBar.text = historyTableView.mockData[row]
+            searchBar.text = historyTableView.searchingHistory[row]
         case .search:
-            let selectedRow = historyTableView.mockData[row]
+            let selectedRow = historyTableView.searchingHistory[row]
             loadingIndicator.isAnimating = true
             searchBar.text = selectedRow
             presenter.search(line: selectedRow, page: 1)
-            flowDown()
+            flowUp()
         }
     }
 }
