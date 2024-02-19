@@ -8,17 +8,20 @@
 import UIKit
 
 class CollectionReusableView: UICollectionReusableView {
+    
+    // MARK: - Properties
     static var identifier = "CollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
-    
-    var cellTitleLable: UILabel = {
+
+    private var headerSeparator: UIView!
+    private var cellTitleLable: UILabel = {
         var label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: "Helvetica Neue Bold", size: 22)
         return label
     }()
-    private var headerSeparator = UIView()
     
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super .init(frame: frame)
         backgroundColor = .myBackgroundColor
@@ -29,6 +32,7 @@ class CollectionReusableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     func setup(_ title: String) {
         cellTitleLable.text = title
     }
@@ -41,6 +45,7 @@ class CollectionReusableView: UICollectionReusableView {
             cellTitleLable.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
+        headerSeparator = UIView()
         addSubview(headerSeparator)
         headerSeparator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

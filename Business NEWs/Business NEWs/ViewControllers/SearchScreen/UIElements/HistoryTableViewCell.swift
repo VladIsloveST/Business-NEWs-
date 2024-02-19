@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 class HistoryTableViewCell: UITableViewCell {
-    static let identifier = HistoryTableViewCell.description()
     
+    // MARK: - Properties
+    static let identifier = HistoryTableViewCell.description()
     var didDelete: UndefinedAction = {}
     var didRevert: UndefinedAction = {}
-    
     var searchLabel: UILabel!
     
     private let deleteButton: UIButton = {
@@ -30,6 +30,7 @@ class HistoryTableViewCell: UITableViewCell {
         return button
     }()
     
+    // MARK: - Init Method
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         searchLabel = UILabel()
@@ -43,6 +44,7 @@ class HistoryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private Methods
     @objc
     private func didTapRevert() {
         didRevert()

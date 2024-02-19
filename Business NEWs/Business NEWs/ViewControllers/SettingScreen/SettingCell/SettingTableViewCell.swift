@@ -8,6 +8,8 @@
 import UIKit
 
 class SettingTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
     static let identifier = "SettingTableViewCell"
     private var infoLabel = UILabel()
     private var infoImageView: UIImageView = {
@@ -34,6 +36,7 @@ class SettingTableViewCell: UITableViewCell {
     var languageToggle: UISegmentedControl!
     private var didChangeLanguage: (Int) -> () = { _ in }
     
+    // MARK: - Init Method
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -43,6 +46,7 @@ class SettingTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     private func setupConstraints() {
         contentView.addSubview(infoLabel)
         contentView.addSubview(infoImageView)

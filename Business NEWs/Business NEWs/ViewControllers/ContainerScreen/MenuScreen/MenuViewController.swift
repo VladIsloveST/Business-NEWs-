@@ -24,9 +24,7 @@ struct Section {
     let options: [MenuOptions]
     var isOpened = false
     
-    init(title: String,
-         sectionOptions: [MenuOptions],
-         isOpened: Bool = false) {
+    init(title: String, sectionOptions: [MenuOptions], isOpened: Bool = false) {
         self.title = title
         self.options = sectionOptions
         self.isOpened = isOpened
@@ -39,12 +37,14 @@ protocol MenuViewControllerDelegate: AnyObject {
 
 class MenuViewController: UIViewController {
     
+    // MARK: -  Properties
     weak var delegate: MenuViewControllerDelegate?
+    var size: CGFloat = 0
     private var menuSections: [Section] = []
     private var tableView: UITableView!
     private var menuLabel: UILabel!
-    var size: CGFloat = 0
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -59,6 +59,7 @@ class MenuViewController: UIViewController {
                                  height: view.bounds.size.height)
     }
     
+    // MARK: - Private Methods
     private func setupTableView() {
         tableView = UITableView()
         tableView.delegate = self
@@ -81,9 +82,9 @@ class MenuViewController: UIViewController {
     
     private func setupLable() {
         menuLabel = UILabel()
+        menuLabel.text = "Menu"
         menuLabel.frame = CGRect(x: 20, y: 60, width: 50, height: 20)
         menuLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        menuLabel.text = "Menu"
         view.addSubview(menuLabel)
     }
 }

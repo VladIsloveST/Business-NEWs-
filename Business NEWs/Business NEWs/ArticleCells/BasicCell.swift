@@ -9,6 +9,7 @@ import UIKit
 
 class BasicCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     private var publicationDate = ""
     private var hoursAgo = 24
     var note = " • recently"
@@ -22,12 +23,6 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    @objc
-    private func tappedSelect() {
-        didSelecte()
-        buttonSaving.isSelected = !buttonSaving.isSelected
-    }
-    
     private let buttonShare: UIButton = {
         let button = UIButton(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up.fill")
@@ -35,9 +30,8 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    @objc
-    private func presentShareSheet() { didShare() }
-    
+    private var authorLable = UILabel()
+    private var publishedLable = UILabel()
     private var mainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
@@ -48,10 +42,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    private var authorLable = UILabel()
-    private var publishedLable = UILabel()
-    
+   
     private lazy var lableStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.vertical
@@ -95,6 +86,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(generalStackView)
@@ -106,6 +98,16 @@ class BasicCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Methods
+    @objc
+    private func tappedSelect() {
+        didSelecte()
+        buttonSaving.isSelected = !buttonSaving.isSelected
+    }
+    
+    @objc
+    private func presentShareSheet() { didShare() }
     
     func setupColor() {
         backgroundColor = .cellBackgroundColor

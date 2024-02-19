@@ -9,15 +9,15 @@ import UIKit
 
 class TabBarController: UITabBarController {
   
-    // MARK: - View Lifecycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabBar()
         setupViewControllers()
     }
     
-    // MARK: - Actions
-    fileprivate func configureTabBar() {
+    // MARK: - Private Methods
+    private func configureTabBar() {
         setValue(CustomTabBar(frame: tabBar.frame), forKey: "tabBar")
         delegate = self
         tabBar.tintColor = .label
@@ -31,7 +31,7 @@ class TabBarController: UITabBarController {
         }
     }
     
-    fileprivate func routeToSettings() {
+    private func routeToSettings() {
         if #available(iOS 15.0, *) {
             let settingsVC = SettingsAssembly.assembleSettings()
             (settingsVC as? SettingsViewController)?.delegate = self
@@ -39,7 +39,7 @@ class TabBarController: UITabBarController {
         }
     }
     
-    fileprivate func setupViewControllers() {
+    private func setupViewControllers() {
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
                                 title: "Saved".localized,
@@ -53,7 +53,7 @@ class TabBarController: UITabBarController {
         ]
     }
     
-    fileprivate func createNavController(_ viewController: UIViewController, title: String,
+    private func createNavController(_ viewController: UIViewController, title: String,
                                          systemImageName: String,
                                          selectedImageName: String) -> UIViewController {
         let rootViewController = createTabBarItem(viewController, title: title,
@@ -75,13 +75,10 @@ extension TabBarController: UITabBarControllerDelegate {
     }
 }
 
+// MARK: - TabBarController Delegate
 extension TabBarController: TabBarControllerDelegate {
     func removeFromInactiveState() {
         view.alpha = 1.0
         view.isUserInteractionEnabled = true
     }
 }
-
-
-
-

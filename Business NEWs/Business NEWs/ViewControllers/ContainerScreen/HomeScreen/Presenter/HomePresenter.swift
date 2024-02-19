@@ -8,28 +8,31 @@
 import Foundation
 import UIKit
 
-protocol ViewInPut: AnyObject {
+protocol HomeViewInPut: AnyObject {
     func success()
     func failer(error: NetworkError)
 }
 
 protocol ViewOutPut: AnyObject {
     var typesOfArticles: [[ArticleData]] { get set }
-    init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
+    init(view: HomeViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
          storageManager: Cache, router: RouterProtocol)
     func tapOnTheSearch()
     func getArticlesFromCategory(index: Int, page: Int, isRefreshed: Bool)
 }
 
 class Presenter: ViewOutPut {
-    weak var view: ViewInPut?
+    
+    // MARK: - Properties
+    var typesOfArticles: [[ArticleData]] = Array(repeating: [], count: 8)
+    weak var view: HomeViewInPut?
     private let group = DispatchGroup()
     private let networkDataFetcher: NetworkDataFetcherProtocol
-    var storageManager: Cache?
-    var router: RouterProtocol?
-    var typesOfArticles: [[ArticleData]] = Array(repeating: [], count: 8)
+    private var storageManager: Cache?
+    private var router: RouterProtocol?
     
-    required init(view: ViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
+    // MARK: - Init Method
+    required init(view: HomeViewInPut, networkDataFetcher: NetworkDataFetcherProtocol,
                   storageManager: Cache, router: RouterProtocol) {
         self.view = view
         self.networkDataFetcher = networkDataFetcher
@@ -41,6 +44,7 @@ class Presenter: ViewOutPut {
         }
     }
     
+    // MARK: - Methods
     func tapOnTheSearch() {
         router?.showSearch()
     }

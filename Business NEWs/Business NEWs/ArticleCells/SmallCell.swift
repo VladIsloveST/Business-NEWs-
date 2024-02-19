@@ -9,8 +9,11 @@ import Foundation
 import UIKit
 
 class SmallCell: BasicCollectionViewCell {
+    
+    // MARK: - Properties
     static let identifier = "SmallCell"
     
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super.init(frame: frame)
         setConstraint()
@@ -21,6 +24,7 @@ class SmallCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private Methods
     private func setConstraint() {
         NSLayoutConstraint.activate([
             generalStackView.heightAnchor.constraint(lessThanOrEqualToConstant: frame.height),

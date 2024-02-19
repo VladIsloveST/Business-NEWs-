@@ -8,7 +8,7 @@
 import Foundation
 import NotificationCenter
 
-protocol LocalNotificatioProtocol {
+protocol NotificationManagerProtocol {
     func checkForPermission()
     func directToSettings(_ completionHandler: @escaping UndefinedAction)
     func reopenNotification(language: Language)
@@ -17,7 +17,7 @@ protocol LocalNotificatioProtocol {
 
 
 @objc
-class LocalNotification: NSObject, LocalNotificatioProtocol {
+class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter = UNUserNotificationCenter.current()
     weak var delegate: SettingsDelegate?
     
@@ -91,7 +91,7 @@ class LocalNotification: NSObject, LocalNotificatioProtocol {
     }
 }
 
-extension LocalNotification: UNUserNotificationCenterDelegate {
+extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, 
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let id = notification.request.identifier

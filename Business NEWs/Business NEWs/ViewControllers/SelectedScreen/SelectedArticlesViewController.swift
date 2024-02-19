@@ -9,30 +9,27 @@ import UIKit
 
 class SelectedArticlesViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Private Properties
+    private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
     private var leftConstraint: NSLayoutConstraint!
-        
-    lazy private var savedCollectionView: UICollectionView = {
-        let flowLayout = createLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
-        
     private var searchBar: UISearchBar!
-    private let expandableView = ExpandableView()
+    private var expandableView: ExpandableView!
     private var coreDataManager: CoreDataProtocol!
     private var savedArticles: [Article] = []
     private var searchedArticles: [Article] = []
     private var isSearching = false
     private var timer: Timer?
-    private let currentDateTime = Calendar.current.dateComponents([.day, .hour], from: Date())
-    private var cells = [BasicCollectionViewCell]()
+    private var cells: [BasicCollectionViewCell] = []
+    lazy private var savedCollectionView: UICollectionView = {
+        let flowLayout = createLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notifyColorChange(notification:)),
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyColorChange(notification:)),
                                                name: .appearanceDidChange, object: nil)
         coreDataManager = CoreDataManager.shared
         setupCollectionView()
@@ -84,6 +81,7 @@ class SelectedArticlesViewController: UIViewController {
     
     private func setupSearchBar() {
         searchBar = UISearchBar()
+        expandableView = ExpandableView()
         expandableView.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         leftConstraint = searchBar.leftAnchor.constraint(equalTo: expandableView.leftAnchor, constant: 12)
@@ -115,15 +113,13 @@ class SelectedArticlesViewController: UIViewController {
     }
     
     private func presentShareSheet(url: URL) {
-        DispatchQueue.main.async {
-            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            self.present(activityViewPopover, animated: true)
-        }
+        let activityViewPopover = UIActivityViewController(activityItems: [url], 
+                                                           applicationActivities: nil)
+        self.present(activityViewPopover, animated: true)
     }
 }
 
 // MARK: - Collection View Data Source and Delegate
-
 extension SelectedArticlesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
              return isSearching ? searchedArticles.count : savedArticles.count

@@ -10,11 +10,9 @@ import UIKit
 
 class CustomTabBar: UITabBar {
     
-    // MARK: - Variables
+    // MARK: - Private Properties
     var didTapButton: (UndefinedAction)?
-    
-    lazy var settingsButton: UIButton = {
-        
+    private lazy var settingsButton: UIButton = {
         let button = CustomButtonBehavior()
         button.frame.size = CGSize(width: 90, height: 50)
         button.isSelected = false
@@ -44,7 +42,7 @@ class CustomTabBar: UITabBar {
         settingsButton.center = CGPoint(x: thirdItemPosition , y: 27)
     }
     
-    // MARK: - Actions
+    // MARK: - Private Methods
     @objc
     private func touchUpInsideAction(sender: UIButton) {
         settingsButton.isSelected = false
@@ -54,27 +52,5 @@ class CustomTabBar: UITabBar {
     @objc
     private func touchDownAction(sender: UIButton) {
         settingsButton.isSelected = true
-    }
-}
-
-class CustomButtonBehavior: UIButton {
-    override var isSelected: Bool {
-        didSet {
-            if isSelected {
-                configuration?.baseForegroundColor = .label
-                let selectedConfiguration = UIImage.SymbolConfiguration(pointSize: 19,
-                                                                        weight: .semibold, scale: .large)
-                guard let image = UIImage(systemName: "gearshape.fill",
-                                          withConfiguration: selectedConfiguration) else { return }
-                setImage(image, for: .normal)
-            } else {
-                configuration?.baseForegroundColor = .systemGray
-                let configuration = UIImage.SymbolConfiguration(pointSize: 19,
-                                                                weight: .medium, scale: .large)
-                guard let image = UIImage(systemName: "gearshape",
-                                          withConfiguration: configuration) else { return }
-                setImage(image, for: .normal)
-            }
-        }
     }
 }

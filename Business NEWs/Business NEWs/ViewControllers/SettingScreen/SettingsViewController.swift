@@ -16,15 +16,19 @@ protocol SettingsDelegate: AnyObject {
 }
 
 class SettingsViewController: UIViewController {
-    weak var delegate: TabBarControllerDelegate?
-    private var settingManager: SettingManagerProtocol!
-    var localNotification: LocalNotificatioProtocol!
     
+    // MARK: - Public Properties
+    weak var delegate: TabBarControllerDelegate?
+    var localNotification: NotificationManagerProtocol!
+    
+    // MARK: - Private Properties
+    private var settingManager: SettingManagerProtocol!
     private let namesOfCells = [
         [("Thema", "moon"), ("Language", "globe"), ("Notification", "bell.badge")],
         [("Reviews", "exclamationmark.bubble"), ("About the App", "info.circle")]
     ]
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -34,6 +38,7 @@ class SettingsViewController: UIViewController {
         setupNavBar()
     }
     
+    // MARK: - Private Methods
     private func adjustBottomSheet() {
         let sheet = self.sheetPresentationController
         sheet?.delegate = self
@@ -63,23 +68,24 @@ class SettingsViewController: UIViewController {
         view.addSubview(navBar)
     }
     
+    private func suspendApplication() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                exit(0)
+            }
+        }
+    }
+    
     private func showAlertCloseApp() {
         let message = "Changing your language requires that you exit Business NEWs.".localized
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "Exit".localized , style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            if self.settingManager.isNotify {
+            if let self = self, self.settingManager.isNotify {
                 let language = self.settingManager.language
                 self.localNotification.reopenNotification(language: language)
             }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    exit(0)
-                }
-            }
+            self?.suspendApplication()
         }
         alert.addAction(action)
         self.present(alert, animated: true)
@@ -107,7 +113,7 @@ extension SettingsViewController: UITableViewDataSource {
         let image = namesOfCells[indexPath.section][indexPath.row].1
         if section == 0 {
             cell.configureUIElement(labelText: text, imageName: image, imageColor: .systemBlue)
-
+            
             switch indexPath.row {
             case 0:
                 cell.setupSwitcher(isOn: self.settingManager.isDark) { [weak self] isDark in
@@ -140,7 +146,7 @@ extension SettingsViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - Table View Delegate 
+// MARK: - Table View Delegate
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

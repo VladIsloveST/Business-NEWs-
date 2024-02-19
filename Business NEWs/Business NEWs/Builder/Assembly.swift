@@ -41,7 +41,7 @@ protocol SettingsAssemblyProtocol {
 class SettingsAssembly: SettingsAssemblyProtocol {
     static func assembleSettings() -> UIViewController {
         let settingsView = SettingsViewController()
-        let localNotification = LocalNotification()
+        let localNotification = NotificationManager()
         settingsView.localNotification = localNotification
         localNotification.delegate = settingsView
         return settingsView

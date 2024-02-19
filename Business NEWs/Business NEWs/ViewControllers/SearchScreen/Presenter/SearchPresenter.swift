@@ -13,20 +13,26 @@ protocol SearchViewInPut: AnyObject {
 
 protocol SearchViewOutPut: AnyObject {
     var searchResultArticles: [ArticleData] { get set }
-    init(view: SearchViewInPut, router: RouterProtocol, networkDataFetcher: NetworkDataFetcherProtocol)
+    init(view: SearchViewInPut, 
+         router: RouterProtocol,
+         networkDataFetcher: NetworkDataFetcherProtocol)
     func turnBack()
     func search(line: String, page: Int)
 }
 
 class SearchPresenter: SearchViewOutPut {
+    
+    // MARK: - Private Properties
     var searchResultArticles: [ArticleData] = []
     weak var view: SearchViewInPut?
-    var router: RouterProtocol?
-    var networkDataFetcher: NetworkDataFetcherProtocol?
+    private var router: RouterProtocol?
+    private var networkDataFetcher: NetworkDataFetcherProtocol?
     private var searchingLine = ""
     private let group = DispatchGroup()
     
-    required init(view: SearchViewInPut, 
+    
+    // MARK: - Init Method
+    required init(view: SearchViewInPut,
                   router: RouterProtocol,
                   networkDataFetcher: NetworkDataFetcherProtocol) {
         self.view = view
@@ -34,6 +40,7 @@ class SearchPresenter: SearchViewOutPut {
         self.networkDataFetcher = networkDataFetcher
     }
     
+    // MARK: - Methods
     func turnBack() {
         router?.popToRoot()
     }

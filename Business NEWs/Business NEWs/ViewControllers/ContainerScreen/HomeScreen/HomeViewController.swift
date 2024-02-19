@@ -21,19 +21,18 @@ protocol ArticlesMovementDelegate: AnyObject {
 }
 
 class HomeViewController: UIViewController {
+    
     // MARK: - Properties
     weak var delegate: HomeViewControllerMenuDelegate?
     var presenter: ViewOutPut!
-    var isFirstAppear = true
-    
+    private var isFirstAppear = true
     private var moveToTop: UndefinedAction = {}
-    private var changeThemaInCell: UndefinedAction = {} {
-        didSet {
-            changeThemaInCell()
-        }
-    }
-    
-    let articlesCollectionView: UICollectionView = {
+    private var categoryCollectionView: CategoryCollectionView!
+    private var loadingIndicator: ProgressView!
+    private var topMenu: UIMenu!
+    private var timer: Timer!
+    private var countOfItems = CategoriesOfArticles.allCases.count
+    private let articlesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
@@ -42,17 +41,17 @@ class HomeViewController: UIViewController {
         collectionView.isPrefetchingEnabled = false
         return collectionView
     }()
-    
-    private var categoryCollectionView: CategoryCollectionView!
-    private var loadingIndicator: ProgressView!
-    private var topMenu: UIMenu!
-    private var timer: Timer!
-    var countOfItems = CategoriesOfArticles.allCases.count
+
+    private var changeThemaInCell: UndefinedAction = {} {
+        didSet {
+            changeThemaInCell()
+        }
+    }
   
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notifyColorChange(notification:)),
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyColorChange(notification:)),
                                                name: .appearanceDidChange, object: nil)
         setupTopMenu()
         setupCategory()
@@ -65,10 +64,6 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         articlesCollectionView.reloadData()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         if isFirstAppear {
             Array(4...countOfItems - 1).forEach { index in
                 presenter.getArticlesFromCategory(index: index, page: 1, isRefreshed: false)
@@ -77,6 +72,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Methods
     private func setupCollectionView() {
         articlesCollectionView.delegate = self
         articlesCollectionView.dataSource = self
@@ -106,7 +102,6 @@ class HomeViewController: UIViewController {
         ])
         categoryCollectionView.homeControllerDelegate = self
         categoryCollectionView.contentInset = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
-        //categoryCollectionView.size = view.bounds.width / 22
     }
     
     private func setupIndicator() {
@@ -231,7 +226,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension HomeViewController: ViewInPut {
+// MARK: - Conform ViewInPut
+extension HomeViewController: HomeViewInPut {
     func success() {
         loadingIndicator.isAnimating = false
         self.view.isUserInteractionEnabled = true
@@ -239,13 +235,14 @@ extension HomeViewController: ViewInPut {
     }
     
     func failer(error: NetworkError) {
-        //self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
+        self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         DispatchQueue.main.async {
             self.showAlertWith(message: error.rawValue)
         }
     }
 }
 
+// MARK: - Additional Delegate
 extension HomeViewController: ArticlesMovementDelegate {
     func scrollToCategory(at index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
@@ -255,10 +252,9 @@ extension HomeViewController: ArticlesMovementDelegate {
 
 extension HomeViewController: HomeViewControllerDelegate {
     func presentShareSheet(url: URL) {
-        DispatchQueue.main.async {
-            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            self.present(activityViewPopover, animated: true)
-        }
+        let activityViewPopover = UIActivityViewController(activityItems: [url], 
+                                                           applicationActivities: nil)
+        self.present(activityViewPopover, animated: true)
     }
 }
 

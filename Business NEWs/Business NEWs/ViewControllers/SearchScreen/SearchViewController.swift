@@ -10,11 +10,11 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
+    // MARK: -  Properties
     var presenter: SearchViewOutPut!
+    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     private var timer: Timer?
     private var page = 1
-    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
-    
     private var heightAnchorDown: NSLayoutConstraint?
     private var heightAnchorUp: NSLayoutConstraint?
     private var searchResultCollectioView: UICollectionView!
@@ -23,6 +23,7 @@ class SearchViewController: UIViewController {
     private var loadingIndicator: ProgressView!
     private var searchBar: UISearchBar!
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchCollectioView()
@@ -34,6 +35,7 @@ class SearchViewController: UIViewController {
         setupSearchBar()
     }
     
+    // MARK: - Private Methods
     private func createLayout() -> CustomFlowLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -171,10 +173,9 @@ class SearchViewController: UIViewController {
     }
     
     private func presentShareSheet(url: URL) {
-        DispatchQueue.main.async {
-            let activityViewPopover = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            self.present(activityViewPopover, animated: true)
-        }
+        let activityViewPopover = UIActivityViewController(activityItems: [url],
+                                                           applicationActivities: nil)
+        self.present(activityViewPopover, animated: true)
     }
 }
 
@@ -182,7 +183,6 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text, !text.isEmpty else { return flowDown() }
-        
         flowUp()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] _ in
@@ -256,6 +256,7 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
     }
 }
 
+// MARK: - Conform ViewInPut
 extension SearchViewController: SearchViewInPut {
     func showUpdateData() {
         loadingIndicator.isAnimating = false
@@ -263,6 +264,7 @@ extension SearchViewController: SearchViewInPut {
     }
 }
 
+// MARK: - Additional Delegate
 extension SearchViewController: PopOverTableViewDelegate {
     func selectItem(row: Int,  with action: Action) {
         switch action {

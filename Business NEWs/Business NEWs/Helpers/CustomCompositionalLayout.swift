@@ -12,6 +12,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
     
     private var numberOfItemsInSection = 0
     
+    // MARK: - Init Method
     convenience init(section: NSCollectionLayoutSection, numberOfItemsInSection: Int) {
         self.init(section: section)
         self.numberOfItemsInSection = numberOfItemsInSection
@@ -19,6 +20,7 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
         register(DarkSeparator.self, forDecorationViewOfKind: "darkSeparator")
     }
     
+    // MARK: - Method
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let layoutAttributes = super.layoutAttributesForElements(in: rect) ?? []
         var decorationAttributes: [UICollectionViewLayoutAttributes] = []
@@ -47,6 +49,8 @@ final class CustomFlowLayout: UICollectionViewCompositionalLayout {
 }
 
 private final class DarkSeparator: UICollectionReusableView {
+    
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .lightGray
@@ -56,12 +60,15 @@ private final class DarkSeparator: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Method
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         self.frame = layoutAttributes.frame
     }
 }
 
 private final class LightSeparator: UICollectionReusableView {
+    
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .darkGray
@@ -71,6 +78,7 @@ private final class LightSeparator: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Method
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         self.frame = layoutAttributes.frame
     }

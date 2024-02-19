@@ -9,11 +9,13 @@ import Foundation
 import UIKit
 
 class LargePortraitCell: BasicCollectionViewCell {
-    static let identifier = "LargePortraitCell"
     
-    var imageView = ResizableImageView()
+    // MARK: -  Properties
+    static let identifier = "LargePortraitCell"
+    private var imageView = ResizableImageView()
     private let storageManager = CacheManager.shared
     
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(imageView)
@@ -26,6 +28,7 @@ class LargePortraitCell: BasicCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private Methods
     override func assignCellData(from article: ArticleData, isSaved: Bool, currentDate: DateComponents?) {
         updateImage(from: article.urlToImage)
         super.assignCellData(from: article, isSaved: isSaved, currentDate: currentDate)

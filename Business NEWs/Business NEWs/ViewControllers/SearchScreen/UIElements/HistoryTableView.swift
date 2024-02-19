@@ -29,6 +29,7 @@ class HistoryTableView: UITableView {
         }
     }
     
+    // MARK: - Init Method
     override init(frame: CGRect, style: UITableView.Style) {
         searchingHistory = UserDefaults.standard.stringArray(forKey: key) ?? []
         super.init(frame: frame, style: style)
@@ -39,6 +40,7 @@ class HistoryTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     func added(item: String) {
         searchingHistory.insert(item, at: 0)
         if searchingHistory.count > 10 {

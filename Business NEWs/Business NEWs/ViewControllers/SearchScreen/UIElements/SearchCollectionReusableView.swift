@@ -8,11 +8,14 @@
 import UIKit
 
 class SearchCollectionReusableView: UICollectionReusableView {
+    
+    // MARK: - Properties
     static var identifier = "SearchCollectionReusableView"
     static var kind = "UICollectionElementKindSectionHeader"
-    private let bottomSeparator = UIView()
-    private let contentInsetViewTop = UIView()
+    private var bottomSeparator: UIView!
+    private var contentInsetViewTop: UIView!
     
+    // MARK: - Init Method
     override init(frame: CGRect) {
         super .init(frame: frame)
         backgroundColor = .white
@@ -23,7 +26,9 @@ class SearchCollectionReusableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     private func setupSeparators() {
+        bottomSeparator = UIView()
         addSubview(bottomSeparator)
         bottomSeparator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -33,6 +38,7 @@ class SearchCollectionReusableView: UICollectionReusableView {
         ])
         bottomSeparator.backgroundColor = .black
         
+        contentInsetViewTop = UIView()
         addSubview(contentInsetViewTop)
         contentInsetViewTop.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
