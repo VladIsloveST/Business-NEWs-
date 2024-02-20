@@ -11,9 +11,6 @@ import CoreData
 
 
 extension Article {
-//    @nonobjc public class func fetchRequest() -> NSFetchRequest<Article> {
-//        return NSFetchRequest<Article>(entityName: "Article")
-//    }
 
     @NSManaged public var author: String?
     @NSManaged public var publishedAt: String

@@ -15,21 +15,22 @@ protocol AssemblyModuleProtocol {
 
 class AssemblyModule: AssemblyModuleProtocol {
     
+    // MARK: - Methods
     func assembleHome(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()
-        let homeView = HomeViewController()
         let storageManager = CacheManager.shared
-        let presenter = Presenter(view: homeView, networkDataFetcher: networkDataFetcher,
+        let homePresenter = HomePresenter(networkDataFetcher: networkDataFetcher,
                                   storageManager: storageManager, router: router)
-        homeView.presenter = presenter
+        let homeView = HomeViewController(presenter: homePresenter)
+        homePresenter.setup(view: homeView)
         return homeView
     }
     
     func assembleSearch(router: RouterProtocol) -> UIViewController {
         let networkDataFetcher = NetworkDataFetcher()
-        let searchView = SearchViewController()
-        let searchPresenter = SearchPresenter(view: searchView, router: router, networkDataFetcher: networkDataFetcher)
-        searchView.presenter = searchPresenter
+        let searchPresenter = SearchPresenter(router: router, networkDataFetcher: networkDataFetcher)
+        let searchView = SearchViewController(presenter: searchPresenter)
+        searchPresenter.setup(view: searchView)
         return searchView
     }
 }
@@ -40,10 +41,9 @@ protocol SettingsAssemblyProtocol {
 
 class SettingsAssembly: SettingsAssemblyProtocol {
     static func assembleSettings() -> UIViewController {
-        let settingsView = SettingsViewController()
         let localNotification = NotificationManager()
-        settingsView.localNotification = localNotification
-        localNotification.delegate = settingsView
+        let settingsView = SettingsViewController(localNotification: localNotification)
+        localNotification.setup(delegate: settingsView)
         return settingsView
     }
 }

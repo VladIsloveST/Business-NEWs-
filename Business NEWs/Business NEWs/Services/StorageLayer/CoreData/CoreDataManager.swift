@@ -8,7 +8,7 @@
 import CoreData
 import UIKit
 
-enum CoreDataError: Error {
+private enum CoreDataError: Error {
     case unableToCreateDescription
     case unableToFetchArticlesFromContext
 }

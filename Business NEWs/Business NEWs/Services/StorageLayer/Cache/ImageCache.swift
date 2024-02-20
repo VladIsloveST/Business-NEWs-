@@ -8,9 +8,13 @@
 import Foundation
 import UIKit
 
-class ImageCache: NSObject , NSDiscardableContent {
+class ImageCache: NSObject {
     
-    public var image: UIImage!
+    var image: UIImage!
+}
+
+
+extension ImageCache: NSDiscardableContent {
     
     func beginContentAccess() -> Bool { true }
     func endContentAccess() {}
