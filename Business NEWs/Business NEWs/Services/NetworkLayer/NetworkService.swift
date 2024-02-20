@@ -20,15 +20,19 @@ enum NetworkError: String, Error {
     case internetConnectionError = "The Internet connection appears to be offline."
 }
 
-enum StatusCodeResult<Error> {
+private enum StatusCodeResult<Error> {
     case success
     case failure(Error)
 }
 
 class NetworkService {
+    
+    // MARK: - Properties
     private let baseApiKey = "&apiKey=977e4b83946b42a1aba422dc52cefbb1"
-    //977e4b83946b42a1aba422dc52cefbb1
+    // 977e4b83946b42a1aba422dc52cefbb1
     // b34e284c63fa438a8aa6e99bf561cc01
+    
+    // MARK: - Methods
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> StatusCodeResult<Error> {
         print(response.statusCode)
         switch response.statusCode {

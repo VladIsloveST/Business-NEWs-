@@ -18,8 +18,15 @@ protocol NotificationManagerProtocol {
 
 @objc
 class NotificationManager: NSObject, NotificationManagerProtocol {
+    
+    // MARK: - Properties
+    private weak var delegate: SettingsDelegate?
     private let notificationCenter = UNUserNotificationCenter.current()
-    weak var delegate: SettingsDelegate?
+    
+    // MARK: - Methods
+    func setup(delegate: SettingsDelegate?) {
+        self.delegate = delegate
+    }
     
     func checkForPermission() {
         notificationCenter.delegate = self
@@ -91,6 +98,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 }
 
+// MARK: - UNUserNotificationCenter Delegate
 extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, 
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
