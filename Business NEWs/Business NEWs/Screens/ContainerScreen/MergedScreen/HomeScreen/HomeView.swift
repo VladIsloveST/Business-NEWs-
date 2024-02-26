@@ -245,8 +245,8 @@ extension HomeViewController: HomeViewInPut {
     }
     
     func failer(error: NetworkError) {
-        self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
         DispatchQueue.main.async {
+            self.navigationItem.rightBarButtonItems?.last?.isEnabled = false
             self.showAlertWith(message: error.rawValue)
         }
     }

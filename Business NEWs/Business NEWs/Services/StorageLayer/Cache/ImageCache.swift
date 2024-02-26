@@ -9,10 +9,8 @@ import Foundation
 import UIKit
 
 class ImageCache: NSObject {
-    
     var image: UIImage!
 }
-
 
 extension ImageCache: NSDiscardableContent {
     

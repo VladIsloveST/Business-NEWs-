@@ -1,5 +1,5 @@
 //
-//  TabBar.swift
+//  TabBarController.swift
 //  Business NEWs
 //
 //  Created by Mac on 13.06.2023.
@@ -8,6 +8,19 @@
 import UIKit
 
 class TabBarController: UITabBarController {
+    
+    // MARK: - Private Properties
+    private var viewBuilder: SettingsAssemblyProtocol!
+    
+    // MARK: - Initialization
+    init(viewBuilder: SettingsAssemblyProtocol = SettingsAssembly()) {
+        self.viewBuilder = viewBuilder
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
   
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -33,8 +46,8 @@ class TabBarController: UITabBarController {
     
     private func routeToSettings() {
         if #available(iOS 15.0, *) {
-            let settingsVC = SettingsAssembly.assembleSettings()
-            (settingsVC as? SettingsViewController)?.delegate = self
+            let settingsVC = viewBuilder.assembleSettings()
+            (settingsVC as? SettingsViewController)?.setup(delegate: self)
             present(settingsVC, animated: true)
         }
     }
@@ -43,22 +56,20 @@ class TabBarController: UITabBarController {
         viewControllers = [
             createNavController(SelectedArticlesViewController(),
                                 title: "Saved".localized,
-                                systemImageName: "bookmark",
-                                selectedImageName: "bookmark.fill"),
+                                systemImage: "bookmark",
+                                selectedImage: "bookmark.fill"),
             createTabBarItem(MergedViewController(),
                              title: "Home".localized,
                              imageName: "house",
-                             selectedImageName: "house.fill"),
+                             selectedImage: "house.fill"),
             UIViewController()
         ]
     }
     
     private func createNavController(_ viewController: UIViewController, title: String,
-                                         systemImageName: String,
-                                         selectedImageName: String) -> UIViewController {
+                                         systemImage: String, selectedImage: String) -> UIViewController {
         let rootViewController = createTabBarItem(viewController, title: title,
-                                                  imageName: systemImageName,
-                                                  selectedImageName: selectedImageName)
+                                                  imageName: systemImage, selectedImage: selectedImage)
         let navController = UINavigationController(rootViewController: rootViewController)
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title
@@ -76,7 +87,7 @@ extension TabBarController: UITabBarControllerDelegate {
 }
 
 // MARK: - Additional Delegate
-extension TabBarController: TabBarControllerDelegate {
+extension TabBarController: ReappearanceDelegate {
     func removeFromInactiveState() {
         view.alpha = 1.0
         view.isUserInteractionEnabled = true

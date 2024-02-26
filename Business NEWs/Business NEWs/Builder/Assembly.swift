@@ -36,11 +36,11 @@ class AssemblyModule: AssemblyModuleProtocol {
 }
 
 protocol SettingsAssemblyProtocol {
-    static func assembleSettings() -> UIViewController
+    func assembleSettings() -> UIViewController
 }
 
 class SettingsAssembly: SettingsAssemblyProtocol {
-    static func assembleSettings() -> UIViewController {
+    func assembleSettings() -> UIViewController {
         let localNotification = NotificationManager()
         let settingsView = SettingsViewController(localNotification: localNotification)
         localNotification.setup(delegate: settingsView)

@@ -12,7 +12,6 @@ class SearchViewController: UIViewController {
     
     // MARK: - Private Properties
     private var presenter: SearchViewOutPut!
-    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     private var timer: Timer?
     private var page = 1
     private var heightAnchorDown: NSLayoutConstraint?
@@ -22,6 +21,7 @@ class SearchViewController: UIViewController {
     private var containerView: UIView!
     private var loadingIndicator: ProgressView!
     private var searchBar: UISearchBar!
+    private let currentDateTime = Calendar.current.dateComponents([.hour, .day], from: Date())
     
     // MARK: - Initialization
     init(presenter: SearchViewOutPut) {
@@ -96,7 +96,7 @@ class SearchViewController: UIViewController {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(flowUp))
         gestureRecognizer.numberOfTapsRequired = 1
         searchResultCollectioView.addGestureRecognizer(gestureRecognizer)
-        //gestureRecognizer.cancelsTouchesInView = false ???
+        gestureRecognizer.cancelsTouchesInView = false
     }
     
     private func setupHistoryView() {

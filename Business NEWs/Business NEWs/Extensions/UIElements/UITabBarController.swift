@@ -10,11 +10,11 @@ import UIKit
 
 extension UITabBarController  {
     func createTabBarItem(_ viewController: UIViewController, title: String,
-                          imageName: String, selectedImageName: String) -> UIViewController {
+                          imageName: String, selectedImage: String) -> UIViewController {
         viewController.tabBarItem.title = title
         let image = UIImage(systemName: imageName)
         viewController.tabBarItem.image = image
-        viewController.tabBarItem.selectedImage = UIImage(systemName: selectedImageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18))
+        viewController.tabBarItem.selectedImage = UIImage(systemName: selectedImage, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18))
         return viewController
     }
 }

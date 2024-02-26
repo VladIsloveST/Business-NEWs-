@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TabBarControllerDelegate: AnyObject {
+protocol ReappearanceDelegate: AnyObject {
     func removeFromInactiveState()
 }
 
@@ -17,8 +17,8 @@ protocol SettingsDelegate: AnyObject {
 
 class SettingsViewController: UIViewController {
         
-    // MARK: - Properties
-    weak var delegate: TabBarControllerDelegate?
+    // MARK: - Private Properties
+    private weak var delegate: ReappearanceDelegate?
     private var localNotification: NotificationManagerProtocol!
     private var settingManager: SettingManagerProtocol!
     private let namesOfCells = [
@@ -97,6 +97,10 @@ class SettingsViewController: UIViewController {
         }
         alert.addAction(action)
         self.present(alert, animated: true)
+    }
+    
+    func setup(delegate: ReappearanceDelegate) {
+        self.delegate = delegate
     }
 }
 
