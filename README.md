@@ -65,7 +65,8 @@ The fact is that SettingsViewController appears as a bottom sheet, and not as a 
 
 _The idea is taken from_ __Safari__.
 
-•відео з Safari      • відео BusinessNews
+<img width="368" alt="Safari" src="https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/42e30234-05b3-4423-91e4-e2d5a90c866b">
+<img width="368" alt="Settings" src="https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/da2b9ebf-cee3-4fb1-972e-33e4976c6933">
 
 
 Let's go to each screen in order.
@@ -74,7 +75,8 @@ Let's go to each screen in order.
 
 The SelectedArticleViewController object is responsible for the first element in the TabBar, where saved articles are displayed. Searching with searchBar, which appears animatedly, is also implemented.
 
-•відео 
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/46d16c61-686c-449a-8b5e-3a070a66d242
+
 
 The `coreDataManager` property is of type CoreDataProtocol and is initialized in `viewDidLoad()`. All the logic of interaction with CoreData is implemetnted in the CoreDataManager class. Only the presentation logic is implemented in the SelectedArticleViewController class.
 
@@ -101,6 +103,8 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 - ### SettingsViewController
 
 _App supports dark/light mode, notification settings, language change._
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/f10b98fb-8b65-4741-b201-01bcc813d375
 
 The logic of saving settings is implemented in the SettingsManager class. Settings are stored in UserDefaults.
 
@@ -157,6 +161,8 @@ cell.setupSegmentedControl(selected: index) { [weak self] selectedIndex in
 * ### HomeViewController
 
 _HomeViewController is more complex than the previous two Views._
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/0409b8f1-3683-4923-a19a-34dd17a22ec1
 
 To implement the side menu as a single object with the HomeViewController, create a ContainerViewController that combines the Menu and HomeView.  When Menu appears, HomeView is inactive and its alpha is 0.9. 
 
@@ -240,7 +246,11 @@ extension MenuViewController: UITableViewDelegate {
 
 In the horizontal CollectionView places the vertical ones in which the articles are displayed.
 
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/f1aa3d2a-280a-4e6c-bbf2-03b75f10a4f8
+
 _The idea is taken from_ __Telegram__.
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/84494206-76fe-4f0f-8e78-5f25fd5ebd4f
 
 The logic of downloading and updating articles is carried out in the presenter, where they are put in a multidimensional array. Upon successful upload, the photo is stored in cash for instant display and to avoid re-uploading. The caching logic is implemented in the CashManager class.
 
@@ -275,7 +285,9 @@ private func createLayout() -> CustomFlowLayout {
 
 Separators are added to the CustomFlowLayout class. 
 
-_The idea is taken from_ __CNN__.
+<img width="368" alt="The Economist" src="https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/1e33b41b-281a-41f1-9961-16ee2c8cadc9">
+
+_The idea is taken from_ __The Economist__.
 
 First cell in the group has a dynamic height change depending on the size of the image, which allows you to avoid distortion and cropping of the image. 
 
@@ -315,6 +327,9 @@ cell.fill(articles: articles) { [weak self] (page, isRefreshed) in
 }
 ```
 When refreshing, only the first 12 articles are loaded. 
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/3b26fae3-9cba-409f-85cb-8f4f392b9797
+
 ```swift
 @objc
 private func refresh(sender: UIRefreshControl) {
@@ -335,6 +350,8 @@ extension ArticlesCollectionViewCell: UICollectionViewDataSourcePrefetching {
 }
 ```
 CategoryCollectionView is the last item on this screen that is not considered.
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/6c4fee30-4ddb-49ed-8117-e44cbc7475f1
 
 When switching to another category, the `underlineView` indicator is triggered, which highlights the selected category. The indicator dynamically changes leftAnchor and its length depending on the size of the category name. 
 ```swift
@@ -393,7 +410,15 @@ The logic of loading articles, like in HomeViewController, is placed in the pres
 
 SearchBar is added to CollectionView‘s SupplementaryItem in the `viewForSupplementaryElementOFKind` function.
 
+
+
+https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/29291dbd-0f08-4306-a29c-c6ba0df148e0
+
+
+
 _The idea of displaying the search history is taken from_ __YouTube__, but with the addition of animation.
+
+<img width="368" alt="YouTube" src="https://github.com/VladIsloveST/Business-NEWs-/assets/99729302/2d962f09-8ce7-4fc0-b034-d82736f5e789">
 
 
 After click on the SearchBar, the history appears.
