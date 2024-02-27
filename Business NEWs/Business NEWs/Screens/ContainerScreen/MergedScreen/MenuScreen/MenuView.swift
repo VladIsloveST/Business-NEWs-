@@ -8,15 +8,17 @@
 import UIKit
 
 enum MenuOptions: String {
-    case home = "1.1"
-    case info = "1.2"
-    case appRating = "2.1"
-    case shareApp = "3.1"
-    case settings = "3.2"
-    case homeTest = "3.3"
-    case infoTest = "4.1"
-    case appRatingTest = "5.1"
-    case shareAppTest = "5.2"
+    case business
+    case health
+    case science
+    case sports
+    case technology
+    case relevancy
+    case popularity
+    case today
+    case yesterday
+    case week
+    case month
 }
 
 struct Section {
@@ -40,7 +42,7 @@ class MenuViewController: UIViewController {
     
     // MARK: -  Properties
     weak var delegate: MenuViewControllerDelegate?
-    private var size: CGFloat = 0
+    private var size: CGFloat
     private var menuSections: [Section] = []
     private var tableView: UITableView!
     private var menuLabel: UILabel!
@@ -82,19 +84,20 @@ class MenuViewController: UIViewController {
     
     private func setupTestName() {
         menuSections = [
-            Section(title: "1 row", sectionOptions: [MenuOptions.home, MenuOptions.info]),
-            Section(title: "2 row", sectionOptions: [MenuOptions.appRating]),
-            Section(title: "3 row", sectionOptions: [MenuOptions.shareApp, MenuOptions.settings, MenuOptions.homeTest]),
-            Section(title: "4 row", sectionOptions: [MenuOptions.infoTest]),
-            Section(title: "5 row", sectionOptions: [MenuOptions.appRatingTest, MenuOptions.shareAppTest])
+            Section(title: "◦ category", sectionOptions: [MenuOptions.business,
+                                                        MenuOptions.health, MenuOptions.science,
+                                                        MenuOptions.sports, MenuOptions.technology]),
+            Section(title: "◦ sort by", sectionOptions: [MenuOptions.relevancy, MenuOptions.popularity]),
+            Section(title: "◦ published", sectionOptions: [MenuOptions.today, MenuOptions.yesterday,
+                                                                     MenuOptions.week, MenuOptions.month])
         ]
     }
     
     private func setupLable() {
         menuLabel = UILabel()
         menuLabel.text = "Menu"
-        menuLabel.frame = CGRect(x: 20, y: 60, width: 50, height: 20)
-        menuLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        menuLabel.frame = CGRect(x: 20, y: 60, width: 51, height: 20)
+        menuLabel.font = UIFont.boldSystemFont(ofSize: 19.5)
         view.addSubview(menuLabel)
     }
 }
@@ -118,7 +121,7 @@ extension MenuViewController: UITableViewDataSource {
             cell.textLabel?.font = UIFont.systemFont(ofSize: size)
         } else {
             cell.textLabel?.text = menuSections[indexPath.section].options[indexPath.row - 1].rawValue
-            cell.textLabel?.font = UIFont(name: "Avenir Light Oblique", size: size)
+            cell.textLabel?.font = UIFont(name: "Avenir Light Oblique", size: size - 0.5)
             cell.layoutMargins.left = 30
         }
         return cell

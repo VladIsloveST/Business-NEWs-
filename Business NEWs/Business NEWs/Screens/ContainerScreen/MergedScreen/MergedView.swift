@@ -87,23 +87,27 @@ extension MergedViewController: MenuViewControllerDelegate {
     func didSelect(menuItem: MenuOptions) {
         toggleMenu { 
             switch menuItem {
-            case .home:
+            case .business:
                 break
-            case .info:
+            case .health:
                 break
-            case .appRating:
+            case .science:
                 break
-            case .shareApp:
+            case .sports:
                 break
-            case .settings:
+            case .technology:
                 break
-            case .homeTest:
+            case .relevancy:
                 break
-            case .infoTest:
+            case .popularity:
                 break
-            case .appRatingTest:
+            case .today:
                 break
-            case .shareAppTest:
+            case .yesterday:
+                break
+            case .week:
+                break
+            case .month:
                 break
             }
         }
