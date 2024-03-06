@@ -59,12 +59,13 @@
 		04B8DD0E299678A0003E4786 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04B8DD0C299678A0003E4786 /* LaunchScreen.storyboard */; };
 		04B8DD3A2997C00A003E4786 /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8DD392997C00A003E4786 /* ArticleModel.swift */; };
 		04CDA72C2AA4B1D40069CF98 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CDA72B2AA4B1D40069CF98 /* CacheManager.swift */; };
-		04D1E99D2B83BF7200294464 /* CustomButtonBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D1E99C2B83BF7200294464 /* CustomButtonBehavior.swift */; };
 		04E9DE282B7287AD0064DE4B /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E9DE272B7287AD0064DE4B /* CustomImageView.swift */; };
 		04F6020D2AAD17BA00B59CC6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F6020C2AAD17BA00B59CC6 /* CoreDataManager.swift */; };
 		04F602132AAE364700B59CC6 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 04F602112AAE364700B59CC6 /* CoreDataModel.xcdatamodeld */; };
 		04F6021A2AAF3B8500B59CC6 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F602192AAF3B8500B59CC6 /* UIColor.swift */; };
 		04F6021C2AAF3C3100B59CC6 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F6021B2AAF3C3100B59CC6 /* SettingManager.swift */; };
+		04FD39E42B98D56F00633B6B /* CustomButtonBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD39E32B98D56F00633B6B /* CustomButtonBehavior.swift */; };
+		04FD39E62B98D63B00633B6B /* CustomButtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FD39E52B98D63B00633B6B /* CustomButtom.swift */; };
 		04FFC82F2A4BAA6300E3FF75 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FFC82E2A4BAA6300E3FF75 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,12 +125,13 @@
 		04B8DD0F299678A0003E4786 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04B8DD392997C00A003E4786 /* ArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleModel.swift; sourceTree = "<group>"; };
 		04CDA72B2AA4B1D40069CF98 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
-		04D1E99C2B83BF7200294464 /* CustomButtonBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonBehavior.swift; sourceTree = "<group>"; };
 		04E9DE272B7287AD0064DE4B /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		04F6020C2AAD17BA00B59CC6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		04F602122AAE364700B59CC6 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		04F602192AAF3B8500B59CC6 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		04F6021B2AAF3C3100B59CC6 /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
+		04FD39E32B98D56F00633B6B /* CustomButtonBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonBehavior.swift; sourceTree = "<group>"; };
+		04FD39E52B98D63B00633B6B /* CustomButtom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButtom.swift; sourceTree = "<group>"; };
 		04FFC82E2A4BAA6300E3FF75 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,8 +161,9 @@
 			children = (
 				0404B8622A5DD20600124BA5 /* CustomCompositionalLayout.swift */,
 				04E9DE272B7287AD0064DE4B /* CustomImageView.swift */,
-				04D1E99C2B83BF7200294464 /* CustomButtonBehavior.swift */,
+				04FD39E32B98D56F00633B6B /* CustomButtonBehavior.swift */,
 				043C51CB2A4F4A4300C58F83 /* CustomTabBar.swift */,
+				04FD39E52B98D63B00633B6B /* CustomButtom.swift */,
 				042BB3AB2AC04300000B445B /* CustomType.swift */,
 				04A84B672A319F24008657F0 /* CustomAnimation */,
 			);
@@ -551,6 +554,7 @@
 				0475FC352A5B907D008A3E3E /* SmallCell.swift in Sources */,
 				04A84B6D2A319FC1008657F0 /* ProgressShapeLayer.swift in Sources */,
 				04B8DD032996789E003E4786 /* SelectedArticlesView.swift in Sources */,
+				04FD39E42B98D56F00633B6B /* CustomButtonBehavior.swift in Sources */,
 				043DC5CA2A5767FA002375B2 /* BasicCell.swift in Sources */,
 				04845E322AAF569F00D18977 /* Article+CoreDataProperties.swift in Sources */,
 				04A4B5E92A31014F00DE6887 /* SearchView.swift in Sources */,
@@ -564,9 +568,9 @@
 				04A84B712A31CB05008657F0 /* UIView.swift in Sources */,
 				046F27DE2A4CBB850028C3A4 /* Assembly.swift in Sources */,
 				0447893A2A36592900A29E00 /* HistoryTableViewCell.swift in Sources */,
-				04D1E99D2B83BF7200294464 /* CustomButtonBehavior.swift in Sources */,
 				044789362A34013300A29E00 /* UIBarButtonItem.swift in Sources */,
 				0475FC332A5B8CC5008A3E3E /* LargePortraitCell.swift in Sources */,
+				04FD39E62B98D63B00633B6B /* CustomButtom.swift in Sources */,
 				049941382A39CA25004D27D9 /* MenuView.swift in Sources */,
 				043C51CC2A4F4A4300C58F83 /* CustomTabBar.swift in Sources */,
 				044C8CE62A3869B9005A3D71 /* SettingsView.swift in Sources */,

@@ -13,7 +13,7 @@ class CustomTabBar: UITabBar {
     // MARK: - Properties
     var didTapButton: (UndefinedAction)?
     private lazy var settingsButton: UIButton = {
-        let button = CustomButtonBehavior()
+        let button = CustomTabBarButton()
         button.frame.size = CGSize(width: 90, height: 50)
         button.isSelected = false
         button.tintAdjustmentMode = .normal

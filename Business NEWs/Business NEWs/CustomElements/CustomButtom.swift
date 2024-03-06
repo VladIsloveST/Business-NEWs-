@@ -10,6 +10,6 @@ import UIKit
 
 class CustomButtom: UIButton {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        bounds.insetBy(dx: -10, dy: -10).contains(point)
+        bounds.insetBy(dx: -10, dy: -20).contains(point)
     }
 }

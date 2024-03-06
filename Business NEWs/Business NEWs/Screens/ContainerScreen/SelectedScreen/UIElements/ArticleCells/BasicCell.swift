@@ -16,15 +16,15 @@ class BasicCollectionViewCell: UICollectionViewCell {
     var didShare: UndefinedAction = {}
     var didSelecte: UndefinedAction = {}
     
-    let buttonSaving: UIButton = {
-        let button = UIButton(normalStateImage: "bookmark",
+    let buttonSaving: CustomButtom = {
+        let button = CustomButtom(normalStateImage: "bookmark",
                               selectedStateImage: "bookmark.fill")
         button.addTarget(self, action: #selector(tappedSelect), for: .touchUpInside)
         return button
     }()
     
-    private let buttonShare: UIButton = {
-        let button = UIButton(normalStateImage: "square.and.arrow.up",
+    private let buttonShare: CustomButtom = {
+        let button = CustomButtom(normalStateImage: "square.and.arrow.up",
                               selectedStateImage: "square.and.arrow.up.fill")
         button.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
         return button
@@ -64,7 +64,7 @@ class BasicCollectionViewCell: UICollectionViewCell {
     
     private lazy var horizontalStackView: UIStackView = {
         $0.axis = NSLayoutConstraint.Axis.horizontal
-        $0.alignment = .center
+        $0.alignment = .bottom
         $0.addArrangedSubview(lableStackView)
         $0.addArrangedSubview(buttonStackView)
         $0.spacing = 0
