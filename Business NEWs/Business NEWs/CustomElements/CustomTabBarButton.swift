@@ -13,7 +13,7 @@ private enum ImageName: String {
     case fill = "gearshape.fill"
 }
 
-class CustomButtonBehavior: UIButton {
+class CustomTabBarButton: UIButton {
     
     // MARK: - Property
     override var isSelected: Bool {
