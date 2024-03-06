@@ -33,58 +33,53 @@ class BasicCollectionViewCell: UICollectionViewCell {
     private var authorLable = UILabel()
     private var publishedLable = UILabel()
     private var mainLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
-        label.textColor = .myTextColor
-        label.numberOfLines = 0
-        label.setLineSpacing(lineSpacing: 3)
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+        $0.font = UIFont(name: "Hiragino Mincho ProN W6", size: 20)
+        $0.textColor = .myTextColor
+        $0.numberOfLines = 0
+        $0.setLineSpacing(lineSpacing: 3)
+        $0.textAlignment = .left
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UILabel())
    
     private lazy var lableStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.vertical
-        stackView.alignment = .leading
-        stackView.spacing = 0
-        stackView.addArrangedSubview(authorLable)
-        stackView.addArrangedSubview(publishedLable)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+        $0.axis = NSLayoutConstraint.Axis.vertical
+        $0.alignment = .leading
+        $0.spacing = 0
+        $0.addArrangedSubview(authorLable)
+        $0.addArrangedSubview(publishedLable)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UIStackView())
     
     private lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.alignment = .center
-        stackView.spacing = 23
-        stackView.addArrangedSubview(buttonShare)
-        stackView.addArrangedSubview(buttonSaving)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+        $0.axis = NSLayoutConstraint.Axis.horizontal
+        $0.alignment = .center
+        $0.spacing = 23
+        $0.addArrangedSubview(buttonShare)
+        $0.addArrangedSubview(buttonSaving)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UIStackView())
     
     private lazy var horizontalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.alignment = .center
-        stackView.addArrangedSubview(lableStackView)
-        stackView.addArrangedSubview(buttonStackView)
-        stackView.spacing = 0
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+        $0.axis = NSLayoutConstraint.Axis.horizontal
+        $0.alignment = .center
+        $0.addArrangedSubview(lableStackView)
+        $0.addArrangedSubview(buttonStackView)
+        $0.spacing = 0
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UIStackView())
     
     lazy var generalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = NSLayoutConstraint.Axis.vertical
-        stackView.spacing = 10
-        stackView.addArrangedSubview(mainLabel)
-        stackView.addArrangedSubview(horizontalStackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+        $0.axis = NSLayoutConstraint.Axis.vertical
+        $0.spacing = 10
+        $0.addArrangedSubview(mainLabel)
+        $0.addArrangedSubview(horizontalStackView)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UIStackView())
     
     // MARK: - Initialization
     override init(frame: CGRect) {

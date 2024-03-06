@@ -16,18 +16,16 @@ class HistoryTableViewCell: UITableViewCell {
     var didRevert: UndefinedAction = {}
     private var searchLabel: UILabel!
     private let deleteButton: UIButton = {
-        let button = UIButton()
         let image = UIImage(systemName: "xmark")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        return button
-    }()
+        $0.setImage(image, for: .normal)
+        return $0
+    }(UIButton())
     
     private let revertButton: UIButton = {
-        let button = UIButton()
         let image = UIImage(systemName: "arrow.clockwise")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        return button
-    }()
+        $0.setImage(image, for: .normal)
+        return $0
+    }(UIButton())
     
     // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

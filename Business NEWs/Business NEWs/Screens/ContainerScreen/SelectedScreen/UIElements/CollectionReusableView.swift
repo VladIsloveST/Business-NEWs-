@@ -14,11 +14,10 @@ class CollectionReusableView: UICollectionReusableView {
     // MARK: - Properties
     private var headerSeparator: UIView!
     private var cellTitleLable: UILabel = {
-        var label = UILabel()
-        label.textColor = .black
-        label.font = UIFont(name: "Helvetica Neue Bold", size: 22)
-        return label
-    }()
+        $0.textColor = .black
+        $0.font = UIFont(name: "Helvetica Neue Bold", size: 22)
+        return $0
+    }(UILabel())
     
     // MARK: - Initialization
     override init(frame: CGRect) {

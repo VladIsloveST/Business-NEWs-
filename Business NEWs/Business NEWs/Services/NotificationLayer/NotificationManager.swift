@@ -15,7 +15,6 @@ protocol NotificationManagerProtocol {
     func removeNotification()
 }
 
-
 @objc
 class NotificationManager: NSObject, NotificationManagerProtocol {
     

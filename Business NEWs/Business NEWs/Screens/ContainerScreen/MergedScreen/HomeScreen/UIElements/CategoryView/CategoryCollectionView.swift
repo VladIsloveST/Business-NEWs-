@@ -18,11 +18,10 @@ class CategoryCollectionView: UICollectionView {
     private var leftAnchorConstraint = NSLayoutConstraint()
     private var widthAnchorConstraint = NSLayoutConstraint()
     private let underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.alpha = 0
-        return view
-    }()
+        $0.backgroundColor = .black
+        $0.alpha = 0
+        return $0
+    }(UIView())
      
     // MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {

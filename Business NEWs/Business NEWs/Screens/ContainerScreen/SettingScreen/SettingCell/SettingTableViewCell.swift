@@ -13,22 +13,20 @@ class SettingTableViewCell: UITableViewCell {
     // MARK: - Properties
     private var infoLabel = UILabel()
     private var infoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .center
-        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
-        imageView.layer.cornerRadius = 7
-        imageView.tintColor = .white
-        return imageView
-    }()
+        $0.contentMode = .center
+        $0.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        $0.layer.cornerRadius = 7
+        $0.tintColor = .white
+        return $0
+    }(UIImageView())
     
     private var forwardImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.tintColor = .lightGray
+        $0.tintColor = .lightGray
         let configuration = UIImage.SymbolConfiguration(weight: .bold)
         let image = UIImage(systemName: "chevron.right", withConfiguration: configuration)
-        imageView.image = image
-        return imageView
-    }()
+        $0.image = image
+        return $0
+    }(UIImageView())
     
     var switcher: UISwitch!
     private var didChangeSetup: (Bool) -> () = { _ in }

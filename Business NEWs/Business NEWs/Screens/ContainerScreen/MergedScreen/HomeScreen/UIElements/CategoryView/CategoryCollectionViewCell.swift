@@ -12,13 +12,12 @@ class CategoryCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Private Properties
     private var nameCategoryLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .black
-        label.font = UIFont(name: "Helvetica Neue Medium", size: 18)
-        label.alpha = 0.95
-        return label
-    }()
+        $0.textAlignment = .center
+        $0.textColor = .black
+        $0.font = UIFont(name: "Helvetica Neue Medium", size: 18)
+        $0.alpha = 0.95
+        return $0
+    }(UILabel())
     
     override var isSelected: Bool {
         didSet {
