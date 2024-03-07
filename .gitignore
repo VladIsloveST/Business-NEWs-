@@ -139,7 +139,8 @@ Dependencies/
 ### SwiftPackageManager ###
 Packages
 xcuserdata
-*.xcodeproj
+*.xcodeproj/
+DerivedData/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,objective-c,swiftpackagemanager,cocoapods,carthage
