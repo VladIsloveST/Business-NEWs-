@@ -139,6 +139,7 @@ Dependencies/
 ### SwiftPackageManager ###
 Packages
 xcuserdata
+Business NEWs.xcodeproj/
 *.xcodeproj/
 DerivedData/
 
@@ -146,3 +147,8 @@ DerivedData/
 # End of https://www.toptal.com/developers/gitignore/api/swift,objective-c,swiftpackagemanager,cocoapods,carthage
 
 .DS_Store
+/Business NEWs/Business NEWs.xcodeproj
+Business NEWs/Business NEWs.xcodeproj/project.xcworkspace/xcuserdata/mac.xcuserdatad/UserInterfaceState.xcuserstate
+/Business NEWs/Business NEWs.xcodeproj/project.xcworkspace/xcuserdata/mac.xcuserdatad
+/Business NEWs/Business NEWs.xcodeproj/project.xcworkspace/xcuserdata/mac.xcuserdatad
+/Business NEWs/Business NEWs.xcodeproj/project.xcworkspace/xcuserdata
